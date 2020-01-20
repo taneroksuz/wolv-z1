@@ -27,17 +27,26 @@ package wires;
   };
 
   typedef struct packed{
-    logic [31 : 0] rs1;
-    logic [31 : 0] rs2;
-    logic [31 : 0] imm;
-    logic [4  : 0] shamt;
-    logic [0  : 0] sel;
-    alu_op_type op;
-  } alu_in_type;
+    logic [0 : 0] lsu_lb;
+    logic [0 : 0] lsu_lbu;
+    logic [0 : 0] lsu_lh;
+    logic [0 : 0] lsu_lhu;
+    logic [0 : 0] lsu_lw;
+    logic [0 : 0] lsu_sb;
+    logic [0 : 0] lsu_sh;
+    logic [0 : 0] lsu_sw;
+  } lsu_op_type;
 
-  typedef struct packed{
-    logic [31 : 0] res;
-  } alu_out_type;
+  lsu_op_type init_lsu_op = '{
+    lsu_lb : 0,
+    lsu_lbu : 0,
+    lsu_lh : 0,
+    lsu_lhu : 0,
+    lsu_lw : 0,
+    lsu_sb : 0,
+    lsu_sh : 0,
+    lsu_sw : 0
+  };
 
   typedef struct packed{
     logic [0 : 0] bcu_beq;
@@ -60,6 +69,19 @@ package wires;
   typedef struct packed{
     logic [31 : 0] rs1;
     logic [31 : 0] rs2;
+    logic [31 : 0] imm;
+    logic [4  : 0] shamt;
+    logic [0  : 0] sel;
+    alu_op_type alu_op;
+  } alu_in_type;
+
+  typedef struct packed{
+    logic [31 : 0] res;
+  } alu_out_type;
+
+  typedef struct packed{
+    logic [31 : 0] rs1;
+    logic [31 : 0] rs2;
     bcu_op_type op;
   } bcu_in_type;
 
@@ -71,19 +93,13 @@ package wires;
     logic [31 : 0] rs1;
     logic [31 : 0] imm;
     logic [31 : 0] pc;
+    logic [0  : 0] auipc;
     logic [0  : 0] jal;
     logic [0  : 0] jalr;
     logic [0  : 0] branch;
     logic [0  : 0] load;
     logic [0  : 0] store;
-    logic [0  : 0] mem_lb;
-    logic [0  : 0] mem_lbu;
-    logic [0  : 0] mem_lh;
-    logic [0  : 0] mem_lhu;
-    logic [0  : 0] mem_lw;
-    logic [0  : 0] mem_sb;
-    logic [0  : 0] mem_sh;
-    logic [0  : 0] mem_sw;
+    lsu_op_type lsu_op;
   } agu_in_type;
 
   typedef struct packed{
