@@ -1,4 +1,4 @@
-module functions();
+package functions;
 
   function [31:0] multiplexer;
     input [31:0] data0;
@@ -12,4 +12,4 @@ module functions();
     end
   endfunction
 
-endmodule
+endpackage

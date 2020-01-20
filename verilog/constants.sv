@@ -1,4 +1,4 @@
-module constants();
+package constants;
 
 	parameter [31 : 0] nop                        = 32'h00000013;
 
@@ -108,22 +108,6 @@ module constants();
 	parameter [11 : 0] csr_utimeh                 = 12'hC81;
 	parameter [11 : 0] csr_uinstreth              = 12'hC82;
 
-	parameter [11 : 0] csr_sstatus                = 12'h100;
-	parameter [11 : 0] csr_sisa                   = 12'h101;
-	parameter [11 : 0] csr_sedeleg                = 12'h102;
-	parameter [11 : 0] csr_sideleg                = 12'h103;
-	parameter [11 : 0] csr_sie                    = 12'h104;
-	parameter [11 : 0] csr_stvec                  = 12'h105;
-	parameter [11 : 0] csr_scounteren             = 12'h106;
-
-	parameter [11 : 0] csr_sscratch               = 12'h140;
-	parameter [11 : 0] csr_sepc                   = 12'h141;
-	parameter [11 : 0] csr_scause                 = 12'h142;
-	parameter [11 : 0] csr_stval                  = 12'h143;
-	parameter [11 : 0] csr_sip                    = 12'h144;
-
-	parameter [11 : 0] csr_satp                   = 12'h180;
-
 	parameter [11 : 0] csr_mvendorid              = 12'hF11;
 	parameter [11 : 0] csr_marchid                = 12'hF12;
 	parameter [11 : 0] csr_mimpid                 = 12'hF13;
@@ -205,4 +189,4 @@ module constants();
 	parameter [3  : 0] except_load_page_fault     = 4'hD;
 	parameter [3  : 0] except_store_page_fault    = 4'hF;
 
-endmodule
+endpackage
