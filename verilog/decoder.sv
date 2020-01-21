@@ -1,10 +1,10 @@
 import constants::*;
 import wires::*;
 
-module decode
+module decoder
 (
-  input decode_in_type decode_in,
-  output decode_out_type decode_out
+  input decoder_in_type decoder_in,
+  output decoder_out_type decoder_out
 );
 
   logic [31 : 0] instr;
@@ -22,8 +22,8 @@ module decode
   logic [6  : 0] funct7;
   logic [2  : 0] rm;
 
-  logic [11 : 0] csr_addr;
-  logic [1  : 0] csr_mode;
+  logic [4  : 0] waddr;
+  logic [11 : 0] caddr;
 
   logic [0  : 0] wren;
   logic [0  : 0] rden1;
@@ -53,14 +53,14 @@ module decode
 
   always_comb begin
 
-    instr = decode_in.instr;
+    instr = decoder_in.instr;
 
-    imm_c = signed'({instr[19:15]});
-    imm_i = signed'({instr[31:20]});
-    imm_s = signed'({instr[31:25],instr[11:7]});
-    imm_b = signed'({instr[31],instr[7],instr[30:25],instr[11:8],1'b0});
-    imm_u = signed'({instr[31:12],12'h0});
-    imm_j = signed'({instr[31],instr[19:12],instr[20],instr[30:25],instr[24:21],1'b0});
+    imm_c = {{27{instr[19]}},instr[19:15]};
+    imm_i = {{20{instr[31]}},instr[31:20]};
+    imm_s = {{20{instr[31]}},instr[31:25],instr[11:7]};
+    imm_b = {{19{instr[31]}},instr[31],instr[7],instr[30:25],instr[11:8],1'b0};
+    imm_u = {instr[31:12],12'h0};
+    imm_j = {{11{instr[31]}},instr[31],instr[19:12],instr[20],instr[30:25],instr[24:21],1'b0};
 
     imm = 0;
 
@@ -68,8 +68,8 @@ module decode
     funct3 = instr[14:12];
     funct7 = instr[31:25];
 
-    csr_addr = instr[31:20];
-    csr_mode = instr[29:28];
+    waddr = instr[11:7];
+    caddr = instr[31:20];
 
     wren = 0;
     rden1 = 0;
@@ -159,7 +159,7 @@ module decode
           endcase;
         end
       end
-      opcode_imm | opcode_reg : begin
+      opcode_immediate | opcode_register : begin
         wren = 1;
         rden1 = 1;
         if (opcode[5] == 0) begin
@@ -168,8 +168,8 @@ module decode
             funct_add : alu_op.alu_add = 1;
             funct_sll : alu_op.alu_sll = 1;
             funct_srl : begin
-              alu_op.alu_srl = ~funct7(5);
-              alu_op.alu_sra = funct7(5);
+              alu_op.alu_srl = ~funct7[5];
+              alu_op.alu_sra = funct7[5];
             end
             funct_slt : alu_op.alu_slt = 1;
             funct_sltu : alu_op.alu_sltu = 1;
@@ -183,13 +183,13 @@ module decode
           rden2 = 1;
           case (funct3)
             funct_add : begin
-              alu_op.alu_add = ~funct7(5);
-              alu_op.alu_sub = funct7(5);
+              alu_op.alu_add = ~funct7[5];
+              alu_op.alu_sub = funct7[5];
             end
             funct_sll : alu_op.alu_sll = 1;
             funct_srl : begin
-              alu_op.alu_srl = ~funct7(5);
-              alu_op.alu_sra = funct7(5);
+              alu_op.alu_srl = ~funct7[5];
+              alu_op.alu_sra = funct7[5];
             end
             funct_slt : alu_op.alu_slt = 1;
             funct_sltu : alu_op.alu_sltu = 1;
@@ -209,7 +209,7 @@ module decode
       opcode_system : begin
         imm = imm_c;
         if (funct3 == 0) begin
-          case (csr_addr)
+          case (caddr)
             csr_ecall : ecall = 1;
             csr_ebreak : ebreak = 1;
             csr_mret : mret = 1;
@@ -227,35 +227,43 @@ module decode
       default : valid = 0;
     endcase;
 
-    if (instr == nop) begin
-      int_op = 0;
+    case (funct3)
+      1 | 5 : csr_rden = csr_rden & |waddr;
+      2 | 6 : csr_wren = csr_wren & |waddr;
+      3 | 7 : csr_wren = csr_wren & |waddr;
+    endcase
+
+    if (waddr == 0) begin
+      wren = 0;
     end
 
-    decode_out.imm = imm;
-    decode_out.csr_addr = csr_addr;
-    decode_out.csr_mode = csr_mode;
-    decode_out.wren = wren;
-    decode_out.rden1 = rden1;
-    decode_out.rden2 = rden2;
-    decode_out.csr_wren = csr_wren;
-    decode_out.csr_rden = csr_rden;
-    decode_out.auipc = auipc;
-    decode_out.lui = lui;
-    decode_out.jal = jal;
-    decode_out.jalr = jalr;
-    decode_out.branch = branch;
-    decode_out.load = load;
-    decode_out.store = store;
-    decode_out.csr = csr;
-    decode_out.alu_op = alu_op;
-    decode_out.bcu_op = bcu_op;
-    decode_out.lsu_op = lsu_op;
-    decode_out.fence = fence;
-    decode_out.ecall = ecall;
-    decode_out.ebreak = ebreak;
-    decode_out.mret = mret;
-    decode_out.wfi = wfi;
-    decode_out.valid = valid;
+    if (instr == nop) begin
+      alu_op.alu_add = 0;
+    end
+
+    decoder_out.imm = imm;
+    decoder_out.wren = wren;
+    decoder_out.rden1 = rden1;
+    decoder_out.rden2 = rden2;
+    decoder_out.csr_wren = csr_wren;
+    decoder_out.csr_rden = csr_rden;
+    decoder_out.auipc = auipc;
+    decoder_out.lui = lui;
+    decoder_out.jal = jal;
+    decoder_out.jalr = jalr;
+    decoder_out.branch = branch;
+    decoder_out.load = load;
+    decoder_out.store = store;
+    decoder_out.csr = csr;
+    decoder_out.alu_op = alu_op;
+    decoder_out.bcu_op = bcu_op;
+    decoder_out.lsu_op = lsu_op;
+    decoder_out.fence = fence;
+    decoder_out.ecall = ecall;
+    decoder_out.ebreak = ebreak;
+    decoder_out.mret = mret;
+    decoder_out.wfi = wfi;
+    decoder_out.valid = valid;
 
   end
 

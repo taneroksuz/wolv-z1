@@ -14,8 +14,6 @@ package constants;
 	parameter [6  : 0] opcode_store               = 7'b0100011;
 	parameter [6  : 0] opcode_immediate           = 7'b0010011;
 	parameter [6  : 0] opcode_register            = 7'b0110011;
-	parameter [6  : 0] opcode_immediate_32        = 7'b0011011;
-	parameter [6  : 0] opcode_register_32         = 7'b0111011;
 	parameter [6  : 0] opcode_fence               = 7'b0001111;
 	parameter [6  : 0] opcode_system              = 7'b1110011;
 	parameter [6  : 0] opcode_fp                  = 7'b1010011;

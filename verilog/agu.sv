@@ -33,18 +33,18 @@ module agu
 
     sel = agu_in.auipc | agu_in.jal | agu_in.branch;
 
-    address = multiplexer(agu_in.rs1, agu_in.pc, sel) + agu_in.imm;
+    address = multiplexer(agu_in.rdata1, agu_in.pc, sel) + agu_in.imm;
     address[0] = address[0] & ~agu_in.jalr;
 
-    if (imem_acc == 1) begin
+    if (imem_access == 1) begin
       case (address[1:0])
         0 : byteenable = 4'hF;
         default : misalign = 1;
       endcase
     end
 
-    if (dmem_acc == 1) begin
-      if (agu_in.lsu_op_sb == 1 || agu_in.lsu_op_lb == 1 || agu_in.lsu_op_lbu == 1) begin
+    if (dmem_access == 1) begin
+      if (agu_in.lsu_op.lsu_sb == 1 || agu_in.lsu_op.lsu_lb == 1 || agu_in.lsu_op.lsu_lbu == 1) begin
         case (address[1:0])
           0 : byteenable = 4'h1;
           1 : byteenable = 4'h2;
@@ -53,14 +53,14 @@ module agu
           default : misalign = 1;
         endcase
       end
-      if (agu_in.lsu_op_sb == 1 || agu_in.lsu_op_lb == 1 || agu_in.lsu_op_lbu == 1) begin
+      if (agu_in.lsu_op.lsu_sb == 1 || agu_in.lsu_op.lsu_lb == 1 || agu_in.lsu_op.lsu_lbu == 1) begin
         case (address[1:0])
           0 : byteenable = 4'h3;
           2 : byteenable = 4'hC;
           default : misalign = 1;
         endcase
       end
-      if (agu_in.lsu_op_sw == 1 || agu_in.lsu_op_lw == 1) begin
+      if (agu_in.lsu_op.lsu_sw == 1 || agu_in.lsu_op.lsu_lw == 1) begin
         case (address[1:0])
           0 : byteenable = 4'hF;
           default : misalign = 1;
@@ -88,12 +88,12 @@ module agu
       end
     end
 
-		agu_out.address = address;
-		agu_out.byteenable = byteenable;
+    agu_out.address = address;
+    agu_out.byteenable = byteenable;
 
-		agu_out.exc = exc;
-		agu_out.etval = etval;
-		agu_out.ecause = ecause;
+    agu_out.exception = exception;
+    agu_out.ecause = ecause;
+    agu_out.etval = etval;
 
   end
 

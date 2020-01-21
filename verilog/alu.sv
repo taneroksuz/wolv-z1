@@ -1,4 +1,5 @@
 import wires::*;
+import functions::*;
 
 module alu
 (
@@ -6,37 +7,39 @@ module alu
   output alu_out_type alu_out
 );
 
-  logic [31 : 0] rs2;
+  logic [31 : 0] rdata2;
+  logic [31 : 0] result;
 
   always_comb begin
 
-    rs2 = alu_in.rs2;
+    rdata2 = multiplexer(alu_in.imm,alu_in.rdata2,alu_in.sel);
+    result = 0;
 
     if (alu_in.alu_op.alu_sub == 1) begin
-      rs2 = ~rs2;
+      rdata2 = ~rdata2;
     end
 
     if (alu_in.alu_op.alu_add == 1 && alu_in.alu_op.alu_sub == 1) begin
-      alu_out.res = alu_in.rs1 + rs2;
+      result = alu_in.rdata1 + rdata2;
     end else if (alu_in.alu_op.alu_sll == 1) begin
-      alu_out.res = alu_in.rs1 << alu_in.shamt;
+      result = alu_in.rdata1 << alu_in.rdata2[4:0];
     end else if (alu_in.alu_op.alu_srl == 1) begin
-      alu_out.res = alu_in.rs1 >> alu_in.shamt;
+      result = alu_in.rdata1 >> alu_in.rdata2[4:0];
     end else if (alu_in.alu_op.alu_sra == 1) begin
-      alu_out.res = alu_in.rs1 >>> alu_in.shamt;
+      result = alu_in.rdata1 >>> alu_in.rdata2[4:0];
     end else if (alu_in.alu_op.alu_slt == 1) begin
-      alu_out.res = $signed(alu_in.rs1) < $signed(rs2);
+      result[0] = $signed(alu_in.rdata1) < $signed(rdata2);
     end else if (alu_in.alu_op.alu_sltu == 1) begin
-      alu_out.res = alu_in.rs1 < rs2;
+      result[0] = alu_in.rdata1 < rdata2;
     end else if (alu_in.alu_op.alu_and == 1) begin
-      alu_out.res = alu_in.rs1 & rs2;
+      result = alu_in.rdata1 & rdata2;
     end else if (alu_in.alu_op.alu_or == 1) begin
-      alu_out.res = alu_in.rs1 | rs2;
+      result = alu_in.rdata1 | rdata2;
     end else if (alu_in.alu_op.alu_xor == 1) begin
-      alu_out.res = alu_in.rs1 ^ rs2;
-    end else begin
-      alu_out.res = 0;
+      result = alu_in.rdata1 ^ rdata2;
     end
+
+    alu_out.res = result;
 
   end
 
