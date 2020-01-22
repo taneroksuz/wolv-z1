@@ -10,6 +10,7 @@ module execute_stage
   output lsu_in_type lsu_in,
   output register_in_type register_in,
   output forwarding_in_type forwarding_in,
+  output csr_in_type csr_in,
   input mem_out_type dmem_out,
   input execute_in_type d,
   output execute_out_type q
@@ -47,6 +48,7 @@ module execute_stage
     v.ebreak = d.d.ebreak;
     v.mret = d.d.mret;
     v.wfi = d.d.wfi;
+    v.valid = d.d.valid;
     v.rdata1 = d.d.rdata1;
     v.rdata2 = d.d.rdata2;
     v.address = d.d.address;
@@ -73,6 +75,12 @@ module execute_stage
     alu_in.alu_op = v.alu_op;
 
     v.wdata = alu_out.res;
+
+    if (v.auipc == 1) begin
+      v.wdata = v.address;
+    end else if (v.lui == 1) begin
+      v.wdata = v.imm;
+    end
 
     lsu_in.ldata = dmem_out.mem_rdata;
     lsu_in.byteenable = v.byteenable;
@@ -117,6 +125,10 @@ module execute_stage
     forwarding_in.execute_waddr = v.waddr;
     forwarding_in.execute_wdata = v.wdata;
 
+    csr_in.valid = v.valid;
+    csr_in.csr_wren = v.csr_wren;
+    csr_in.csr_waddr = v.caddr;
+
     rin = v;
 
     q.pc = r.pc;
@@ -144,6 +156,7 @@ module execute_stage
     q.ebreak = r.ebreak;
     q.mret = r.mret;
     q.wfi = r.wfi;
+    q.valid = r.valid;
     q.exception = r.exception;
     q.alu_op = r.alu_op;
     q.bcu_op = r.bcu_op;
@@ -156,7 +169,7 @@ module execute_stage
   end
 
   always_ff @(posedge clk) begin
-    if (rst) begin
+    if (rst == 0) begin
       r <= init_execute_reg;
     end else begin
       r <= rin;

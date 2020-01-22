@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RISCV_PATH=/opt/riscv
-FLAG="--with-arch=rv32imfc --with-abi=ilp32f"
+FLAG="--with-arch=rv32i --with-abi=ilp32"
 
 if [ -d "$RISCV_PATH" ]
 then

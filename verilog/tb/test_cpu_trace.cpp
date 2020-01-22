@@ -34,7 +34,7 @@ int main(int argc, char **argv, char **env)
   top->trace (vcd, 99);
   vcd->open (wave);
 
-  top->clk = 0;
+  top->clk = 1;
   top->rst = 0;
 
   i = 0;

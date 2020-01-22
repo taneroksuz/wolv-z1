@@ -454,6 +454,62 @@ package wires;
   };
 
   typedef struct packed{
+    logic [31 : 0] mstatus;
+    logic [31 : 0] misa;
+    logic [31 : 0] medeleg;
+    logic [31 : 0] mideleg;
+    logic [31 : 0] mie;
+    logic [31 : 0] mtvec;
+    logic [31 : 0] mcounteren;
+    logic [31 : 0] mscratch;
+    logic [31 : 0] mepc;
+    logic [31 : 0] mcause;
+    logic [31 : 0] mtval;
+    logic [31 : 0] mip;
+    logic [63 : 0] mcycle;
+    logic [63 : 0] minstret;
+  } csr_machine_reg_type;
+
+  csr_machine_reg_type init_csr_machine_reg = '{
+    mstatus : 0,
+    misa : 0,
+    medeleg : 0,
+    mideleg : 0,
+    mie : 0,
+    mtvec : 0,
+    mcounteren : 0,
+    mscratch : 0,
+    mepc : 0,
+    mcause : 0,
+    mtval : 0,
+    mip : 0,
+    mcycle : 0,
+    minstret : 0
+  };
+
+  typedef struct packed{
+    logic [0  : 0] valid;
+    logic [0  : 0] csr_wren;
+    logic [0  : 0] csr_rden;
+    logic [11 : 0] csr_waddr;
+    logic [11 : 0] csr_raddr;
+    logic [31 : 0] csr_wdata;
+    logic [0  : 0] mret;
+    logic [0  : 0] exception;
+    logic [3  : 0] ecause;
+    logic [31 : 0] epc;
+    logic [31 : 0] etval;
+  } csr_in_type;
+
+  typedef struct packed{
+    logic [0  : 0] exception;
+    logic [0  : 0] mret;
+    logic [31 : 0] mtvec;
+    logic [31 : 0] mepc;
+    logic [31 : 0] csr_rdata;
+  } csr_out_type;
+
+  typedef struct packed{
     logic [0  : 0] register_rden1;
     logic [0  : 0] register_rden2;
     logic [4  : 0] register_raddr1;

@@ -99,23 +99,26 @@ module decoder
     lsu_op = init_lsu_op;
 
     case (opcode)
-      opcode_lui | opcode_auipc : begin
+      opcode_lui : begin
         imm = imm_u;
         wren = 1;
-        auipc = opcode[5];
-        lui = ~opcode[5];
+        lui = 1;
       end
-      opcode_jal | opcode_jalr : begin
+      opcode_auipc : begin
+        imm = imm_u;
         wren = 1;
-        if (opcode[3] == 0) begin
-          imm = imm_i;
-          jalr = 1;
-          rden1 = 1;
-        end
-        if (opcode[3] == 1) begin
-          imm = imm_j;
-          jal = 1;
-        end
+        auipc = 1;
+      end
+      opcode_jal : begin
+        wren = 1;
+        imm = imm_j;
+        jal = 1;
+      end
+      opcode_jalr : begin
+        imm = imm_i;
+        wren = 1;
+        rden1 = 1;
+        jalr = 1;
       end
       opcode_branch : begin
         imm = imm_b;
@@ -132,73 +135,72 @@ module decoder
           default : valid = 0;
         endcase
       end
-      opcode_load | opcode_store : begin
-        rden1 = 1;
-        if (opcode[5] == 0) begin
-          imm = imm_i;
-          wren = 1;
-          load = 1;
-          case (funct3)
-            funct_lb : lsu_op.lsu_lb = 1;
-            funct_lh : lsu_op.lsu_lh = 1;
-            funct_lw : lsu_op.lsu_lw = 1;
-            funct_lbu : lsu_op.lsu_lbu = 1;
-            funct_lhu : lsu_op.lsu_lhu = 1;
-            default : valid = 0;
-          endcase;
-        end
-        if (opcode[5] == 1) begin
-          imm = imm_s;
-          rden2 = 1;
-          store = 1;
-          case (funct3)
-            funct_sb : lsu_op.lsu_sb = 1;
-            funct_sh : lsu_op.lsu_sh = 1;
-            funct_sw : lsu_op.lsu_sw = 1;
-            default : valid = 0;
-          endcase;
-        end
-      end
-      opcode_immediate | opcode_register : begin
+      opcode_load : begin
+        imm = imm_i;
         wren = 1;
         rden1 = 1;
-        if (opcode[5] == 0) begin
-          imm = imm_i;
-          case (funct3)
-            funct_add : alu_op.alu_add = 1;
-            funct_sll : alu_op.alu_sll = 1;
-            funct_srl : begin
-              alu_op.alu_srl = ~funct7[5];
-              alu_op.alu_sra = funct7[5];
-            end
-            funct_slt : alu_op.alu_slt = 1;
-            funct_sltu : alu_op.alu_sltu = 1;
-            funct_and : alu_op.alu_and = 1;
-            funct_or : alu_op.alu_or = 1;
-            funct_xor : alu_op.alu_xor = 1;
-            default : valid = 0;
-          endcase;
-        end
-        if (opcode[5] == 1) begin
-          rden2 = 1;
-          case (funct3)
-            funct_add : begin
-              alu_op.alu_add = ~funct7[5];
-              alu_op.alu_sub = funct7[5];
-            end
-            funct_sll : alu_op.alu_sll = 1;
-            funct_srl : begin
-              alu_op.alu_srl = ~funct7[5];
-              alu_op.alu_sra = funct7[5];
-            end
-            funct_slt : alu_op.alu_slt = 1;
-            funct_sltu : alu_op.alu_sltu = 1;
-            funct_and : alu_op.alu_and = 1;
-            funct_or : alu_op.alu_or = 1;
-            funct_xor : alu_op.alu_xor = 1;
-            default : valid = 0;
-          endcase;
-        end
+        load = 1;
+        case (funct3)
+          funct_lb : lsu_op.lsu_lb = 1;
+          funct_lh : lsu_op.lsu_lh = 1;
+          funct_lw : lsu_op.lsu_lw = 1;
+          funct_lbu : lsu_op.lsu_lbu = 1;
+          funct_lhu : lsu_op.lsu_lhu = 1;
+          default : valid = 0;
+        endcase;
+      end
+      opcode_store : begin
+        imm = imm_s;
+        rden1 = 1;
+        rden2 = 1;
+        store = 1;
+        case (funct3)
+          funct_sb : lsu_op.lsu_sb = 1;
+          funct_sh : lsu_op.lsu_sh = 1;
+          funct_sw : lsu_op.lsu_sw = 1;
+          default : valid = 0;
+        endcase;
+      end
+      opcode_immediate : begin
+        wren = 1;
+        rden1 = 1;
+        imm = imm_i;
+        case (funct3)
+          funct_add : alu_op.alu_add = 1;
+          funct_sll : alu_op.alu_sll = 1;
+          funct_srl : begin
+            alu_op.alu_srl = ~funct7[5];
+            alu_op.alu_sra = funct7[5];
+          end
+          funct_slt : alu_op.alu_slt = 1;
+          funct_sltu : alu_op.alu_sltu = 1;
+          funct_and : alu_op.alu_and = 1;
+          funct_or : alu_op.alu_or = 1;
+          funct_xor : alu_op.alu_xor = 1;
+          default : valid = 0;
+        endcase;
+      end
+      opcode_register : begin
+        wren = 1;
+        rden1 = 1;
+        rden2 = 1;
+        case (funct3)
+          funct_add : begin
+            alu_op.alu_add = ~funct7[5];
+            alu_op.alu_sub = funct7[5];
+          end
+          funct_sll : alu_op.alu_sll = 1;
+          funct_srl : begin
+            alu_op.alu_srl = ~funct7[5];
+            alu_op.alu_sra = funct7[5];
+          end
+          funct_slt : alu_op.alu_slt = 1;
+          funct_sltu : alu_op.alu_sltu = 1;
+          funct_and : alu_op.alu_and = 1;
+          funct_or : alu_op.alu_or = 1;
+          funct_xor : alu_op.alu_xor = 1;
+          default : valid = 0;
+        endcase;
       end
       opcode_fence : begin
         if (funct3 == 1)
@@ -228,9 +230,12 @@ module decoder
     endcase;
 
     case (funct3)
-      1 | 5 : csr_rden = csr_rden & |waddr;
-      2 | 6 : csr_wren = csr_wren & |waddr;
-      3 | 7 : csr_wren = csr_wren & |waddr;
+      1 : csr_rden = csr_rden & |waddr;
+      2 : csr_wren = csr_wren & |waddr;
+      3 : csr_wren = csr_wren & |waddr;
+      5 : csr_rden = csr_rden & |waddr;
+      6 : csr_wren = csr_wren & |waddr;
+      7 : csr_wren = csr_wren & |waddr;
     endcase
 
     if (waddr == 0) begin

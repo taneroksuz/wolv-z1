@@ -29,10 +29,10 @@ tests += $$($(1)_tests)
 endef
 
 $(eval $(call compile_template,rv32ui,$(src_dir),$(bld_dir)))
-$(eval $(call compile_template,rv32uc,$(src_dir),$(bld_dir)))
-$(eval $(call compile_template,rv32um,$(src_dir),$(bld_dir)))
-$(eval $(call compile_template,rv32uf,$(src_dir),$(bld_dir)))
 $(eval $(call compile_template,rv32mi,$(src_dir),$(bld_dir)))
+# $(eval $(call compile_template,rv32uc,$(src_dir),$(bld_dir)))
+# $(eval $(call compile_template,rv32um,$(src_dir),$(bld_dir)))
+# $(eval $(call compile_template,rv32uf,$(src_dir),$(bld_dir)))
 
 all: $(tests)
 

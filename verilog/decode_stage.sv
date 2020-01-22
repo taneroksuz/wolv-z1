@@ -14,6 +14,8 @@ module decode_stage
   output bcu_in_type bcu_in,
   input register_out_type register_out,
   output register_in_type register_in,
+  input csr_out_type csr_out,
+  output csr_in_type csr_in,
   input forwarding_out_type forwarding_out,
   output forwarding_in_type forwarding_in,
   output mem_in_type dmem_in,
@@ -124,6 +126,20 @@ module decode_stage
       v.ecause = except_illegal_instruction;
       v.etval = v.instr;
     end
+    if (v.ebreak == 1) begin
+      v.exception = 1;
+      v.ecause = except_breakpoint;
+      v.etval = v.instr;
+    end
+    if (v.ecall == 1) begin
+      v.exception = 1;
+      v.ecause = except_env_call_mach;
+      v.etval = v.instr;
+    end
+
+    if (d.d.csr_wren == 1) begin
+      v.stall = 1;
+    end
 
     if ((v.stall | v.clear) == 1) begin
       v.wren = 0;
@@ -141,12 +157,19 @@ module decode_stage
       v.ebreak = 0;
       v.mret = 0;
       v.wfi = 0;
+      v.valid = 0;
       v.exception = 0;
     end
 
     if (v.clear == 1) begin
       v.stall = 0;
     end
+
+    csr_in.mret = v.mret;
+    csr_in.exception = v.exception;
+    csr_in.ecause = v.ecause;
+    csr_in.epc = v.pc;
+    csr_in.etval = v.etval;
 
     rin = v;
 
@@ -175,6 +198,7 @@ module decode_stage
     q.ebreak = r.ebreak;
     q.mret = r.mret;
     q.wfi = r.wfi;
+    q.valid = r.valid;
     q.jump = r.jump;
     q.rdata1 = r.rdata1;
     q.rdata2 = r.rdata2;
@@ -191,7 +215,7 @@ module decode_stage
   end
 
   always_ff @(posedge clk) begin
-    if (rst) begin
+    if (rst == 0) begin
       r <= init_decode_reg;
     end else begin
       r <= rin;

@@ -25,7 +25,7 @@ module register
   end
 
   always_ff @(posedge clk) begin
-    if (rst) begin
+    if (rst == 0) begin
       for (i=0; i<32; i=i+1)
         reg_file[i] <= 0;
     end else begin

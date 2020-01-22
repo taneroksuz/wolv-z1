@@ -19,7 +19,7 @@ module alu
       rdata2 = ~rdata2;
     end
 
-    if (alu_in.alu_op.alu_add == 1 && alu_in.alu_op.alu_sub == 1) begin
+    if (alu_in.alu_op.alu_add == 1 || alu_in.alu_op.alu_sub == 1) begin
       result = alu_in.rdata1 + rdata2;
     end else if (alu_in.alu_op.alu_sll == 1) begin
       result = alu_in.rdata1 << alu_in.rdata2[4:0];

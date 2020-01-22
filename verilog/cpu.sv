@@ -25,6 +25,8 @@ module cpu
   decoder_out_type decoder_out;
   forwarding_in_type forwarding_in;
   forwarding_out_type forwarding_out;
+  csr_in_type csr_in;
+  csr_out_type csr_out;
   register_in_type register_in;
   register_out_type register_out;
   fetch_in_type fetch_in;
@@ -92,6 +94,14 @@ module cpu
     .register_out (register_out)
   );
 
+  csr csr_comp
+  (
+    .rst (rst),
+    .clk (clk),
+    .csr_in (csr_in),
+    .csr_out (csr_out)
+  );
+
   arbiter arbiter_comp
   (
     .rst (rst),
@@ -113,6 +123,7 @@ module cpu
   (
     .rst (rst),
     .clk (clk),
+    .csr_out (csr_out),
     .imem_out (imem_out),
     .imem_in (imem_in),
     .d (fetch_in),
@@ -133,6 +144,8 @@ module cpu
     .register_in (register_in),
     .forwarding_out (forwarding_out),
     .forwarding_in (forwarding_in),
+    .csr_out (csr_out),
+    .csr_in (csr_in),
     .dmem_in (dmem_in),
     .d (decode_in),
     .q (decode_out)
@@ -148,6 +161,7 @@ module cpu
     .lsu_in (lsu_in),
     .register_in (register_in),
     .forwarding_in (forwarding_in),
+    .csr_in (csr_in),
     .dmem_out (dmem_out),
     .d (execute_in),
     .q (execute_out)

@@ -8,6 +8,7 @@
 ../../verilog/lsu.sv
 ../../verilog/decoder.sv
 ../../verilog/register.sv
+../../verilog/csr.sv
 ../../verilog/forwarding.sv
 ../../verilog/fetch_stage.sv
 ../../verilog/decode_stage.sv

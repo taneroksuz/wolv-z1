@@ -2,8 +2,8 @@ default: none
 
 VERILATOR ?= /opt/verilator/bin/verilator
 RISCV ?= /opt/riscv/bin
-MARCH ?= rv32imfc
-MABI ?= ilp32f
+MARCH ?= rv32i
+MABI ?= ilp32
 ITER ?= 1
 CSMITH ?= /opt/csmith
 CSMITH_INCL ?= $(shell ls -d $(CSMITH)/include/csmith-* | head -n1)

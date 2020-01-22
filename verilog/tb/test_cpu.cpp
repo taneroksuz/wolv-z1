@@ -21,7 +21,7 @@ int main(int argc, char **argv, char **env)
 
   Vtest_cpu* top = new Vtest_cpu;
 
-  top->clk = 0;
+  top->clk = 1;
   top->rst = 0;
 
   i = 0;
