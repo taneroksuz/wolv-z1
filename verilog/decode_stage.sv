@@ -117,12 +117,6 @@ module decode_stage
     v.ecause = agu_out.ecause;
     v.etval = agu_out.etval;
 
-    dmem_in.mem_valid = v.load | v.store;
-    dmem_in.mem_instr = 0;
-    dmem_in.mem_addr = v.address;
-    dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
-    dmem_in.mem_wstrb = (v.load == 1) ? 0 : v.byteenable;
-
     if (v.valid == 0) begin
       v.exception = 1;
       v.ecause = except_illegal_instruction;
@@ -167,6 +161,12 @@ module decode_stage
     if (v.clear == 1) begin
       v.stall = 0;
     end
+
+    dmem_in.mem_valid = v.load | v.store;
+    dmem_in.mem_instr = 0;
+    dmem_in.mem_addr = v.address;
+    dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
+    dmem_in.mem_wstrb = (v.load == 1) ? 0 : v.byteenable;
 
     csr_in.mret = v.mret;
     csr_in.exception = v.exception;

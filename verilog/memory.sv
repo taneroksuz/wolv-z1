@@ -61,6 +61,9 @@ module memory
         if (memory_wstrb[0] == 1) begin
           $write("%c",memory_wdata[7:0]);
         end
+      end else if (memory_addr >= 2**memory_depth) begin
+        $display("ADDRESS EXCEEDS MEMORY");
+        $finish;
       end else begin
         if (memory_wstrb[0] == 1)
           memory_block[memory_addr[(memory_depth+1):2]][7:0] <= memory_wdata[7:0];

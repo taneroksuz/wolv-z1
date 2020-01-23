@@ -69,6 +69,8 @@ int sc_main(int argc, char* argv[])
     sc_start(1,SC_NS);
   }
 
+  cout << "End of simulation is " << sc_time_stamp() << endl;
+
   test_cpu->final();
 
 #if VM_TRACE
