@@ -28,7 +28,6 @@ module execute_stage
     v.pc = d.d.pc;
     v.npc = d.d.npc;
     v.imm = d.d.imm;
-    v.shamt = d.d.shamt;
     v.wren = d.d.wren;
     v.rden1 = d.d.rden1;
     v.rden2 = d.d.rden2;
@@ -76,7 +75,6 @@ module execute_stage
     alu_in.rdata1 = v.rdata1;
     alu_in.rdata2 = v.rdata2;
     alu_in.imm = v.imm;
-    alu_in.shamt = v.shamt;
     alu_in.sel = v.rden2;
     alu_in.alu_op = v.alu_op;
 
@@ -152,38 +150,6 @@ module execute_stage
 
     rin = v;
 
-    q.pc = r.pc;
-    q.npc = r.npc;
-    q.imm = r.imm;
-    q.wren = r.wren;
-    q.rden1 = r.rden1;
-    q.rden2 = r.rden2;
-    q.cwren = r.cwren;
-    q.crden = r.crden;
-    q.waddr = r.waddr;
-    q.raddr1 = r.raddr1;
-    q.raddr2 = r.raddr2;
-    q.caddr = r.caddr;
-    q.auipc = r.auipc;
-    q.lui = r.lui;
-    q.jal = r.jal;
-    q.jalr = r.jalr;
-    q.branch = r.branch;
-    q.load = r.load;
-    q.store = r.store;
-    q.csr = r.csr;
-    q.fence = r.fence;
-    q.ecall = r.ecall;
-    q.ebreak = r.ebreak;
-    q.mret = r.mret;
-    q.wfi = r.wfi;
-    q.valid = r.valid;
-    q.exception = r.exception;
-    q.alu_op = r.alu_op;
-    q.bcu_op = r.bcu_op;
-    q.lsu_op = r.lsu_op;
-    q.ecause = r.ecause;
-    q.etval = r.etval;
     q.stall = r.stall;
     q.clear = r.clear;
 

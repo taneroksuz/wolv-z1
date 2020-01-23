@@ -33,8 +33,10 @@ module csr
         csr_mcycleh : csr_out.cdata = csr_machine_reg.mcycle[63:32];
         csr_minstret : csr_out.cdata = csr_machine_reg.minstret[31:0];
         csr_minstreth : csr_out.cdata = csr_machine_reg.minstret[63:32];
-        default :;
+        default : csr_out.cdata = 0;
       endcase
+    end else begin
+      csr_out.cdata = 0;
     end
 
     csr_out.exception = exception;

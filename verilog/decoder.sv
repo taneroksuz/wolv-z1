@@ -17,11 +17,8 @@ module decoder
   logic [31 : 0] imm_j;
   logic [31 : 0] imm;
 
-  logic [4  : 0] shamt;
-
   logic [6  : 0] opcode;
   logic [2  : 0] funct3;
-  logic [6  : 0] funct7;
   logic [2  : 0] rm;
 
   logic [4  : 0] waddr;
@@ -78,11 +75,8 @@ module decoder
 
     imm = 0;
 
-    shamt = instr[24:20];
-
     opcode = instr[6:0];
     funct3 = instr[14:12];
-    funct7 = instr[31:25];
 
     waddr = instr[11:7];
     raddr1 = instr[19:15];
@@ -197,8 +191,8 @@ module decoder
           funct_add : alu_op.alu_add = 1;
           funct_sll : alu_op.alu_sll = 1;
           funct_srl : begin
-            alu_op.alu_srl = ~funct7[5];
-            alu_op.alu_sra = funct7[5];
+            alu_op.alu_srl = ~instr[30];
+            alu_op.alu_sra = instr[30];
           end
           funct_slt : alu_op.alu_slt = 1;
           funct_sltu : alu_op.alu_sltu = 1;
@@ -214,13 +208,13 @@ module decoder
         rden2 = 1;
         case (funct3)
           funct_add : begin
-            alu_op.alu_add = ~funct7[5];
-            alu_op.alu_sub = funct7[5];
+            alu_op.alu_add = ~instr[30];
+            alu_op.alu_sub = instr[30];
           end
           funct_sll : alu_op.alu_sll = 1;
           funct_srl : begin
-            alu_op.alu_srl = ~funct7[5];
-            alu_op.alu_sra = funct7[5];
+            alu_op.alu_srl = ~instr[30];
+            alu_op.alu_sra = instr[30];
           end
           funct_slt : alu_op.alu_slt = 1;
           funct_sltu : alu_op.alu_sltu = 1;
@@ -292,7 +286,6 @@ module decoder
     end
 
     decoder_out.imm = imm;
-    decoder_out.shamt = shamt;
     decoder_out.wren = wren;
     decoder_out.rden1 = rden1;
     decoder_out.rden2 = rden2;

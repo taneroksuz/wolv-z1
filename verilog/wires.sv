@@ -88,7 +88,6 @@ package wires;
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
     logic [31 : 0] imm;
-    logic [4  : 0] shamt;
     logic [0  : 0] sel;
     alu_op_type alu_op;
   } alu_in_type;
@@ -156,9 +155,6 @@ package wires;
 
   typedef struct packed{
     logic [31 : 0] imm;
-    logic [4  : 0] shamt;
-    logic [11 : 0] caddr;
-    logic [1  : 0] cmode;
     logic wren;
     logic rden1;
     logic rden2;
@@ -231,7 +227,6 @@ package wires;
     logic [31 : 0] pc;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
-    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
@@ -276,7 +271,6 @@ package wires;
     logic [31 : 0] instr;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
-    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
@@ -322,7 +316,6 @@ package wires;
     instr : 0,
     npc : 0,
     imm : 0,
-    shamt : 0,
     wren : 0,
     rden1 : 0,
     rden2 : 0,
@@ -364,45 +357,6 @@ package wires;
   };
 
   typedef struct packed{
-    logic [31 : 0] pc;
-    logic [31 : 0] npc;
-    logic [31 : 0] imm;
-    logic [0  : 0] wren;
-    logic [0  : 0] rden1;
-    logic [0  : 0] rden2;
-    logic [0  : 0] cwren;
-    logic [0  : 0] crden;
-    logic [4  : 0] waddr;
-    logic [4  : 0] raddr1;
-    logic [4  : 0] raddr2;
-    logic [11 : 0] caddr;
-    logic [0  : 0] auipc;
-    logic [0  : 0] lui;
-    logic [0  : 0] jal;
-    logic [0  : 0] jalr;
-    logic [0  : 0] branch;
-    logic [0  : 0] load;
-    logic [0  : 0] store;
-    logic [0  : 0] csr;
-    logic [0  : 0] fence;
-    logic [0  : 0] ecall;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] mret;
-    logic [0  : 0] wfi;
-    logic [0  : 0] valid;
-    logic [31 : 0] rdata1;
-    logic [31 : 0] rdata2;
-    logic [31 : 0] wdata;
-    logic [31 : 0] ldata;
-    logic [31 : 0] sdata;
-    logic [31 : 0] address;
-    logic [3  : 0] byteenable;
-    alu_op_type alu_op;
-    bcu_op_type bcu_op;
-    lsu_op_type lsu_op;
-    logic [0  : 0] exception;
-    logic [3  : 0] ecause;
-    logic [31 : 0] etval;
     logic [0  : 0] stall;
     logic [0  : 0] clear;
   } execute_out_type;
@@ -411,7 +365,6 @@ package wires;
     logic [31 : 0] pc;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
-    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
@@ -458,7 +411,6 @@ package wires;
     pc : 0,
     npc : 0,
     imm : 0,
-    shamt : 0,
     wren : 0,
     rden1 : 0,
     rden2 : 0,

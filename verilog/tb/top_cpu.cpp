@@ -2,7 +2,7 @@
 #include <verilated.h>
 #include <verilated_vcd_sc.h>
 
-#include "Vtest_cpu.h"
+#include "Vtop_cpu.h"
 
 #include <iostream>
 #include <stdlib.h>
@@ -34,10 +34,10 @@ int sc_main(int argc, char* argv[])
   sc_clock clk ("clk", 1,SC_NS, 0.5, 0.5,SC_NS, false);
   sc_signal<bool> rst;
 
-  Vtest_cpu* test_cpu = new Vtest_cpu("test_cpu");
+  Vtop_cpu* top_cpu = new Vtop_cpu("top_cpu");
 
-  test_cpu->clk (clk);
-  test_cpu->rst (rst);
+  top_cpu->clk (clk);
+  top_cpu->rst (rst);
 
 #if VM_TRACE
   Verilated::traceEverOn(true);
@@ -45,7 +45,7 @@ int sc_main(int argc, char* argv[])
 
 #if VM_TRACE
   VerilatedVcdSc* dump = new VerilatedVcdSc;
-  test_cpu->trace(dump, 99);
+  top_cpu->trace(dump, 99);
   dump->open(dumpfile);
 #endif
 
@@ -71,7 +71,7 @@ int sc_main(int argc, char* argv[])
 
   cout << "End of simulation is " << sc_time_stamp() << endl;
 
-  test_cpu->final();
+  top_cpu->final();
 
 #if VM_TRACE
   if (dump)
@@ -81,8 +81,8 @@ int sc_main(int argc, char* argv[])
   }
 #endif
 
-  delete test_cpu;
-  test_cpu = NULL;
+  delete top_cpu;
+  top_cpu = NULL;
 
   return 0;
 }

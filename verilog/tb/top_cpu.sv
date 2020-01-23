@@ -1,7 +1,7 @@
 timeunit 1ns;
 timeprecision 1ps;
 
-module test_cpu
+module top_cpu
 (
   input logic rst,
   input logic clk

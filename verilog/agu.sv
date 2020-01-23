@@ -36,6 +36,8 @@ module agu
     address = multiplexer(agu_in.rdata1, agu_in.pc, sel) + agu_in.imm;
     address[0] = address[0] & ~agu_in.jalr;
 
+    byteenable = 0;
+
     if (imem_access == 1) begin
       case (address[1:0])
         0 : byteenable = 4'hF;

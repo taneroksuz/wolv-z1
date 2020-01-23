@@ -52,7 +52,6 @@ module decode_stage
     decoder_in.instr = v.instr;
 
     v.imm = decoder_out.imm;
-    v.shamt = decoder_out.shamt;
     v.wren = decoder_out.wren;
     v.rden1 = decoder_out.rden1;
     v.rden2 = decoder_out.rden2;
@@ -184,7 +183,6 @@ module decode_stage
     q.pc = r.pc;
     q.npc = r.npc;
     q.imm = r.imm;
-    q.shamt = r.shamt;
     q.wren = r.wren;
     q.rden1 = r.rden1;
     q.rden2 = r.rden2;
