@@ -1,2 +1,2 @@
-integer size = 8
-pointer size = 8
+integer size = 4
+pointer size = 4

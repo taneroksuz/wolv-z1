@@ -1,6 +1,7 @@
 default: none
 
 VERILATOR ?= /opt/verilator/bin/verilator
+SYSTEMC ?= /opt/systemc
 RISCV ?= /opt/riscv/bin
 MARCH ?= rv32i
 MABI ?= ilp32
@@ -31,6 +32,6 @@ generate_torture:
 	soft/torture.sh ${RISCV} ${MARCH} ${MABI} ${PYTHON} ${OFFSET} ${BASEDIR}
 
 simulate:
-	sim/run.sh ${BASEDIR} ${VERILATOR} ${TEST} ${CYCLES} ${WAVE}
+	sim/run.sh ${BASEDIR} ${VERILATOR} ${TEST} ${CYCLES} ${WAVE} ${SYSTEMC}
 
 all: generate_isa generate_dhrystone generate_coremark generate_csmith generate_torture simulate

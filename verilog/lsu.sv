@@ -6,7 +6,6 @@ module lsu
   output lsu_out_type lsu_out
 );
 
-  logic [31:0] sdata;
   logic [31:0] ldata;
   logic [7:0]  data_b;
   logic [15:0] data_h;
@@ -55,6 +54,8 @@ module lsu
     if (lsu_in.lsu_op.lsu_lhu == 1) begin
       ldata = {16'b0,data_h};
     end
+
+    lsu_out.res = ldata;
 
   end
 

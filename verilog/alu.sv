@@ -15,18 +15,16 @@ module alu
     rdata2 = multiplexer(alu_in.imm,alu_in.rdata2,alu_in.sel);
     result = 0;
 
-    if (alu_in.alu_op.alu_sub == 1) begin
-      rdata2 = ~rdata2;
-    end
-
-    if (alu_in.alu_op.alu_add == 1 || alu_in.alu_op.alu_sub == 1) begin
+    if (alu_in.alu_op.alu_add == 1) begin
       result = alu_in.rdata1 + rdata2;
+    end else if (alu_in.alu_op.alu_sub == 1) begin
+      result = alu_in.rdata1 - rdata2;
     end else if (alu_in.alu_op.alu_sll == 1) begin
-      result = alu_in.rdata1 << alu_in.rdata2[4:0];
+      result = alu_in.rdata1 << rdata2[4:0];
     end else if (alu_in.alu_op.alu_srl == 1) begin
-      result = alu_in.rdata1 >> alu_in.rdata2[4:0];
+      result = alu_in.rdata1 >> rdata2[4:0];
     end else if (alu_in.alu_op.alu_sra == 1) begin
-      result = alu_in.rdata1 >>> alu_in.rdata2[4:0];
+      result = $signed(alu_in.rdata1) >>> rdata2[4:0];
     end else if (alu_in.alu_op.alu_slt == 1) begin
       result[0] = $signed(alu_in.rdata1) < $signed(rdata2);
     end else if (alu_in.alu_op.alu_sltu == 1) begin

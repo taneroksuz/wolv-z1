@@ -38,8 +38,10 @@ module memory
       if (ok == 1) begin
         if (memory_wdata == 32'h1) begin
           $display("TEST SUCCEEDED");
+          $finish;
         end else begin
-          $display("TEST FAILED AT %d",memory_wdata);
+          $display("TEST FAILED");
+          $finish;
         end
       end
     end
@@ -55,14 +57,20 @@ module memory
 
       check(memory_block,memory_addr,memory_wdata,memory_wstrb);
 
-      if (memory_wstrb[0] == 1)
-        memory_block[memory_addr[(memory_depth+1):2]][7:0] <= memory_wdata[7:0];
-      if (memory_wstrb[1] == 1)
-        memory_block[memory_addr[(memory_depth+1):2]][15:8] <= memory_wdata[15:8];
-      if (memory_wstrb[2] == 1)
-        memory_block[memory_addr[(memory_depth+1):2]][23:16] <= memory_wdata[23:16];
-      if (memory_wstrb[3] == 1)
-        memory_block[memory_addr[(memory_depth+1):2]][31:24] <= memory_wdata[31:24];
+      if (memory_addr == 32'h100000) begin
+        if (memory_wstrb[0] == 1) begin
+          $write("%c",memory_wdata[7:0]);
+        end
+      end else begin
+        if (memory_wstrb[0] == 1)
+          memory_block[memory_addr[(memory_depth+1):2]][7:0] <= memory_wdata[7:0];
+        if (memory_wstrb[1] == 1)
+          memory_block[memory_addr[(memory_depth+1):2]][15:8] <= memory_wdata[15:8];
+        if (memory_wstrb[2] == 1)
+          memory_block[memory_addr[(memory_depth+1):2]][23:16] <= memory_wdata[23:16];
+        if (memory_wstrb[3] == 1)
+          memory_block[memory_addr[(memory_depth+1):2]][31:24] <= memory_wdata[31:24];
+      end
 
       rdata <= memory_block[memory_addr[(memory_depth+1):2]];
       ready <= 1;

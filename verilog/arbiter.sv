@@ -16,7 +16,7 @@ module arbiter(
   input logic [0   : 0] memory_ready
 );
 
-  parameter [0:0] instruction_access = 0;
+  parameter [0:0] instr_access = 0;
   parameter [0:0] data_access = 1;
 
   logic [0:0] access_type;
@@ -24,16 +24,16 @@ module arbiter(
 
   always_comb begin
 
-    access_type = dmem_in.mem_valid == 1 ? data_access : instruction_access;
+    access_type = dmem_in.mem_valid == 1 ? data_access : instr_access;
 
-    memory_valid = (access_type == instruction_access) ? imem_in.mem_valid : dmem_in.mem_valid;
-    memory_instr = (access_type == instruction_access) ? imem_in.mem_instr : dmem_in.mem_instr;
-    memory_addr = (access_type == instruction_access) ? imem_in.mem_addr : dmem_in.mem_addr;
-    memory_wdata = (access_type == instruction_access) ? imem_in.mem_wdata : dmem_in.mem_wdata;
-    memory_wstrb = (access_type == instruction_access) ? imem_in.mem_wstrb : dmem_in.mem_wstrb;
+    memory_valid = (access_type == instr_access) ? imem_in.mem_valid : dmem_in.mem_valid;
+    memory_instr = (access_type == instr_access) ? imem_in.mem_instr : dmem_in.mem_instr;
+    memory_addr = (access_type == instr_access) ? imem_in.mem_addr : dmem_in.mem_addr;
+    memory_wdata = (access_type == instr_access) ? imem_in.mem_wdata : dmem_in.mem_wdata;
+    memory_wstrb = (access_type == instr_access) ? imem_in.mem_wstrb : dmem_in.mem_wstrb;
 
-    imem_out.mem_rdata = (release_type == instruction_access) ? memory_rdata : 0;
-    imem_out.mem_ready = (release_type == instruction_access) ? memory_ready : 0;
+    imem_out.mem_rdata = (release_type == instr_access) ? memory_rdata : 0;
+    imem_out.mem_ready = (release_type == instr_access) ? memory_ready : 0;
 
     dmem_out.mem_rdata = (release_type == data_access) ? memory_rdata : 0;
     dmem_out.mem_ready = (release_type == data_access) ? memory_ready : 0;
@@ -41,16 +41,16 @@ module arbiter(
   end
 
   always_ff @(posedge clk) begin
-    if (rst) begin
-      release_type <= instruction_access;
+    if (rst == 0) begin
+      release_type <= instr_access;
     end else begin
-      if (release_type == instruction_access) begin
+      if (release_type == instr_access) begin
         if (access_type == data_access) begin
           release_type <= data_access;
         end
       end else if (release_type == data_access) begin
-        if (memory_ready == 1 & access_type == instruction_access) begin
-          release_type <= instruction_access;
+        if (memory_ready == 1 & access_type == instr_access) begin
+          release_type <= instr_access;
         end
       end
     end

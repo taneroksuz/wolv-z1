@@ -52,11 +52,12 @@ module decode_stage
     decoder_in.instr = v.instr;
 
     v.imm = decoder_out.imm;
+    v.shamt = decoder_out.shamt;
     v.wren = decoder_out.wren;
     v.rden1 = decoder_out.rden1;
     v.rden2 = decoder_out.rden2;
-    v.csr_wren = decoder_out.csr_wren;
-    v.csr_rden = decoder_out.csr_rden;
+    v.cwren = decoder_out.cwren;
+    v.crden = decoder_out.crden;
     v.auipc = decoder_out.auipc;
     v.lui = decoder_out.lui;
     v.jal = decoder_out.jal;
@@ -68,6 +69,7 @@ module decode_stage
     v.alu_op = decoder_out.alu_op;
     v.bcu_op = decoder_out.bcu_op;
     v.lsu_op = decoder_out.lsu_op;
+    v.csr_op = decoder_out.csr_op;
     v.fence = decoder_out.fence;
     v.ecall = decoder_out.ecall;
     v.ebreak = decoder_out.ebreak;
@@ -137,13 +139,13 @@ module decode_stage
       v.etval = v.instr;
     end
 
-    if (d.d.csr_wren == 1) begin
+    if (d.d.cwren == 1) begin
       v.stall = 1;
     end
 
     if ((v.stall | v.clear) == 1) begin
       v.wren = 0;
-      v.csr_wren = 0;
+      v.cwren = 0;
       v.auipc = 0;
       v.lui = 0;
       v.jal = 0;
@@ -158,6 +160,7 @@ module decode_stage
       v.mret = 0;
       v.wfi = 0;
       v.valid = 0;
+      v.jump = 0;
       v.exception = 0;
     end
 
@@ -171,16 +174,22 @@ module decode_stage
     csr_in.epc = v.pc;
     csr_in.etval = v.etval;
 
+    csr_in.crden = v.crden;
+    csr_in.craddr = v.caddr;
+
+    v.cdata = csr_out.cdata;
+
     rin = v;
 
     q.pc = r.pc;
     q.npc = r.npc;
     q.imm = r.imm;
+    q.shamt = r.shamt;
     q.wren = r.wren;
     q.rden1 = r.rden1;
     q.rden2 = r.rden2;
-    q.csr_wren = r.csr_wren;
-    q.csr_rden = r.csr_rden;
+    q.cwren = r.cwren;
+    q.crden = r.crden;
     q.waddr = r.waddr;
     q.raddr1 = r.raddr1;
     q.raddr2 = r.raddr2;
@@ -202,11 +211,13 @@ module decode_stage
     q.jump = r.jump;
     q.rdata1 = r.rdata1;
     q.rdata2 = r.rdata2;
+    q.cdata = r.cdata;
     q.address = r.address;
     q.byteenable = r.byteenable;
     q.alu_op = r.alu_op;
     q.bcu_op = r.bcu_op;
     q.lsu_op = r.lsu_op;
+    q.csr_op = r.csr_op;
     q.exception = r.exception;
     q.ecause = r.ecause;
     q.etval = r.etval;

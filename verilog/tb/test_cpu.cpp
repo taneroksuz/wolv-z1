@@ -1,47 +1,86 @@
+#include <systemc.h>
+#include <verilated.h>
+#include <verilated_vcd_sc.h>
+
 #include "Vtest_cpu.h"
-#include "verilated.h"
-#include "verilated_vcd_c.h"
+
 #include <iostream>
 #include <stdlib.h>
-
-vluint64_t main_time = 0;
-
-double sc_time_stamp()
-{
-  return main_time;
-}
+#include <string.h>
+#include <sys/stat.h>
 
 using namespace std;
 
-int main(int argc, char **argv, char **env)
+int sc_main(int argc, char* argv[])
 {
-  int i;
-  char *p;
   Verilated::commandArgs(argc, argv);
 
-  Vtest_cpu* top = new Vtest_cpu;
+  long long unsigned time;
+  string filename;
+  char *p;
+  const char *dumpfile;
 
-  top->clk = 1;
-  top->rst = 0;
-
-  i = 0;
-  while (1)
+  if (argc>1)
   {
-    top->rst = (i > 10);
-    top->clk = !top->clk;
-    top->eval ();
-    if (Verilated::gotFinish())
-    {
-      exit(0);
-    }
-    i++;
-    main_time++;
-
-    if (argc == 2 && main_time == 2*strtol(argv[1], &p, 20))
-    {
-      exit(0);
-    }
+    time = strtol(argv[1], &p, 10);
+  }
+  if (argc>2)
+  {
+    filename = string(argv[2]);
+    filename = filename + ".vcd";
+    dumpfile = filename.c_str();
   }
 
-  exit(0);
+  sc_clock clk ("clk", 1,SC_NS, 0.5, 0.5,SC_NS, false);
+  sc_signal<bool> rst;
+
+  Vtest_cpu* test_cpu = new Vtest_cpu("test_cpu");
+
+  test_cpu->clk (clk);
+  test_cpu->rst (rst);
+
+#if VM_TRACE
+  Verilated::traceEverOn(true);
+#endif
+
+#if VM_TRACE
+  VerilatedVcdSc* dump = new VerilatedVcdSc;
+  test_cpu->trace(dump, 99);
+  dump->open(dumpfile);
+#endif
+
+  while (!Verilated::gotFinish())
+  {
+#if VM_TRACE
+    if (dump) dump->flush();
+#endif
+    if (VL_TIME_Q() > 0 && VL_TIME_Q() < 10)
+    {
+      rst = !1;
+    }
+    else if (VL_TIME_Q() > 0)
+    {
+      rst = !0;
+    }
+    if (VL_TIME_Q() > time)
+    {
+      break;
+    }
+    sc_start(1,SC_NS);
+  }
+
+  test_cpu->final();
+
+#if VM_TRACE
+  if (dump)
+  {
+    dump->close();
+    dump = NULL;
+  }
+#endif
+
+  delete test_cpu;
+  test_cpu = NULL;
+
+  return 0;
 }

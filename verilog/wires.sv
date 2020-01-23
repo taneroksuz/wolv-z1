@@ -67,9 +67,28 @@ package wires;
   };
 
   typedef struct packed{
+    logic [0 : 0] csrrw;
+    logic [0 : 0] csrrs;
+    logic [0 : 0] csrrc;
+    logic [0 : 0] csrrwi;
+    logic [0 : 0] csrrsi;
+    logic [0 : 0] csrrci;
+  } csr_op_type;
+
+  csr_op_type init_csr_op = '{
+    csrrw : 0,
+    csrrs : 0,
+    csrrc : 0,
+    csrrwi : 0,
+    csrrsi : 0,
+    csrrci : 0
+  };
+
+  typedef struct packed{
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
     logic [31 : 0] imm;
+    logic [4  : 0] shamt;
     logic [0  : 0] sel;
     alu_op_type alu_op;
   } alu_in_type;
@@ -120,18 +139,31 @@ package wires;
   } lsu_out_type;
 
   typedef struct packed{
+    logic [31 : 0] cdata;
+    logic [31 : 0] rdata1;
+    logic [31 : 0] imm;
+    logic [0  : 0] sel;
+    csr_op_type csr_op;
+
+    } csr_alu_in_type;
+  typedef struct packed{
+    logic [31 : 0] cdata;
+  } csr_alu_out_type;
+
+  typedef struct packed{
     logic [31 : 0] instr;
   } decoder_in_type;
 
   typedef struct packed{
     logic [31 : 0] imm;
-    logic [11 : 0] csr_addr;
-    logic [1  : 0] csr_mode;
+    logic [4  : 0] shamt;
+    logic [11 : 0] caddr;
+    logic [1  : 0] cmode;
     logic wren;
     logic rden1;
     logic rden2;
-    logic csr_wren;
-    logic csr_rden;
+    logic cwren;
+    logic crden;
     logic auipc;
     logic lui;
     logic jal;
@@ -143,6 +175,7 @@ package wires;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
+    csr_op_type csr_op;
     logic fence;
     logic ecall;
     logic ebreak;
@@ -198,11 +231,12 @@ package wires;
     logic [31 : 0] pc;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
+    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
-    logic [0  : 0] csr_wren;
-    logic [0  : 0] csr_rden;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
     logic [4  : 0] waddr;
     logic [4  : 0] raddr1;
     logic [4  : 0] raddr2;
@@ -224,11 +258,13 @@ package wires;
     logic [0  : 0] jump;
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
+    logic [31 : 0] cdata;
     logic [31 : 0] address;
     logic [3  : 0] byteenable;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
+    csr_op_type csr_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -240,11 +276,12 @@ package wires;
     logic [31 : 0] instr;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
+    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
-    logic [0  : 0] csr_wren;
-    logic [0  : 0] csr_rden;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
     logic [4  : 0] waddr;
     logic [4  : 0] raddr1;
     logic [4  : 0] raddr2;
@@ -266,11 +303,13 @@ package wires;
     logic [0  : 0] jump;
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
+    logic [31 : 0] cdata;
     logic [31 : 0] address;
     logic [3  : 0] byteenable;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
+    csr_op_type csr_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -283,11 +322,12 @@ package wires;
     instr : 0,
     npc : 0,
     imm : 0,
+    shamt : 0,
     wren : 0,
     rden1 : 0,
     rden2 : 0,
-    csr_wren : 0,
-    csr_rden : 0,
+    cwren : 0,
+    crden : 0,
     waddr : 0,
     raddr1 : 0,
     raddr2 : 0,
@@ -309,11 +349,13 @@ package wires;
     jump : 0,
     rdata1 : 0,
     rdata2 : 0,
+    cdata : 0,
     address : 0,
     byteenable : 0,
     alu_op : init_alu_op,
     bcu_op : init_bcu_op,
     lsu_op : init_lsu_op,
+    csr_op : init_csr_op,
     exception : 0,
     ecause : 0,
     etval : 0,
@@ -328,8 +370,8 @@ package wires;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
-    logic [0  : 0] csr_wren;
-    logic [0  : 0] csr_rden;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
     logic [4  : 0] waddr;
     logic [4  : 0] raddr1;
     logic [4  : 0] raddr2;
@@ -369,11 +411,12 @@ package wires;
     logic [31 : 0] pc;
     logic [31 : 0] npc;
     logic [31 : 0] imm;
+    logic [4  : 0] shamt;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
-    logic [0  : 0] csr_wren;
-    logic [0  : 0] csr_rden;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
     logic [4  : 0] waddr;
     logic [4  : 0] raddr1;
     logic [4  : 0] raddr2;
@@ -394,6 +437,7 @@ package wires;
     logic [0  : 0] valid;
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
+    logic [31 : 0] cdata;
     logic [31 : 0] wdata;
     logic [31 : 0] ldata;
     logic [31 : 0] sdata;
@@ -402,6 +446,7 @@ package wires;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
+    csr_op_type csr_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -413,11 +458,12 @@ package wires;
     pc : 0,
     npc : 0,
     imm : 0,
+    shamt : 0,
     wren : 0,
     rden1 : 0,
     rden2 : 0,
-    csr_wren : 0,
-    csr_rden : 0,
+    cwren : 0,
+    crden : 0,
     waddr : 0,
     raddr1 : 0,
     raddr2 : 0,
@@ -438,6 +484,7 @@ package wires;
     valid : 0,
     rdata1 : 0,
     rdata2 : 0,
+    cdata : 0,
     wdata : 0,
     ldata : 0,
     sdata : 0,
@@ -446,6 +493,7 @@ package wires;
     alu_op : init_alu_op,
     bcu_op : init_bcu_op,
     lsu_op : init_lsu_op,
+    csr_op : init_csr_op,
     exception : 0,
     ecause : 0,
     etval : 0,
@@ -489,11 +537,11 @@ package wires;
 
   typedef struct packed{
     logic [0  : 0] valid;
-    logic [0  : 0] csr_wren;
-    logic [0  : 0] csr_rden;
-    logic [11 : 0] csr_waddr;
-    logic [11 : 0] csr_raddr;
-    logic [31 : 0] csr_wdata;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
+    logic [11 : 0] cwaddr;
+    logic [11 : 0] craddr;
+    logic [31 : 0] cdata;
     logic [0  : 0] mret;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
@@ -506,7 +554,7 @@ package wires;
     logic [0  : 0] mret;
     logic [31 : 0] mtvec;
     logic [31 : 0] mepc;
-    logic [31 : 0] csr_rdata;
+    logic [31 : 0] cdata;
   } csr_out_type;
 
   typedef struct packed{

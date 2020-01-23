@@ -21,6 +21,8 @@ module cpu
   bcu_out_type bcu_out;
   lsu_in_type lsu_in;
   lsu_out_type lsu_out;
+  csr_alu_in_type csr_alu_in;
+  csr_alu_out_type csr_alu_out;
   decoder_in_type decoder_in;
   decoder_out_type decoder_out;
   forwarding_in_type forwarding_in;
@@ -72,6 +74,12 @@ module cpu
   (
     .lsu_in (lsu_in),
     .lsu_out (lsu_out)
+  );
+
+  csr_alu csr_alu_comp
+  (
+    .csr_alu_in (csr_alu_in),
+    .csr_alu_out (csr_alu_out)
   );
 
   forwarding forwarding_comp
@@ -159,6 +167,8 @@ module cpu
     .alu_in (alu_in),
     .lsu_out (lsu_out),
     .lsu_in (lsu_in),
+    .csr_alu_out (csr_alu_out),
+    .csr_alu_in (csr_alu_in),
     .register_in (register_in),
     .forwarding_in (forwarding_in),
     .csr_in (csr_in),

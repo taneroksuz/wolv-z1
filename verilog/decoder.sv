@@ -17,20 +17,23 @@ module decoder
   logic [31 : 0] imm_j;
   logic [31 : 0] imm;
 
+  logic [4  : 0] shamt;
+
   logic [6  : 0] opcode;
   logic [2  : 0] funct3;
   logic [6  : 0] funct7;
   logic [2  : 0] rm;
 
   logic [4  : 0] waddr;
+  logic [4  : 0] raddr1;
   logic [11 : 0] caddr;
 
   logic [0  : 0] wren;
   logic [0  : 0] rden1;
   logic [0  : 0] rden2;
 
-  logic [0  : 0] csr_wren;
-  logic [0  : 0] csr_rden;
+  logic [0  : 0] cwren;
+  logic [0  : 0] crden;
 
   logic [0  : 0] auipc;
   logic [0  : 0] lui;
@@ -50,6 +53,17 @@ module decoder
   alu_op_type alu_op;
   bcu_op_type bcu_op;
   lsu_op_type lsu_op;
+  csr_op_type csr_op;
+
+  logic [0  : 0] nonzero_waddr;
+  logic [0  : 0] nonzero_raddr1;
+
+  logic [0  : 0] nonzero_imm_c;
+  logic [0  : 0] nonzero_imm_i;
+  logic [0  : 0] nonzero_imm_s;
+  logic [0  : 0] nonzero_imm_b;
+  logic [0  : 0] nonzero_imm_u;
+  logic [0  : 0] nonzero_imm_j;
 
   always_comb begin
 
@@ -64,19 +78,22 @@ module decoder
 
     imm = 0;
 
+    shamt = instr[24:20];
+
     opcode = instr[6:0];
     funct3 = instr[14:12];
     funct7 = instr[31:25];
 
     waddr = instr[11:7];
+    raddr1 = instr[19:15];
     caddr = instr[31:20];
 
     wren = 0;
     rden1 = 0;
     rden2 = 0;
 
-    csr_wren = 0;
-    csr_rden = 0;
+    cwren = 0;
+    crden = 0;
 
     auipc = 0;
     lui = 0;
@@ -97,26 +114,37 @@ module decoder
     alu_op = init_alu_op;
     bcu_op = init_bcu_op;
     lsu_op = init_lsu_op;
+    csr_op = init_csr_op;
+
+    nonzero_waddr = |waddr;
+    nonzero_raddr1 = |raddr1;
+
+    nonzero_imm_c = |imm_c;
+    nonzero_imm_i = |imm_i;
+    nonzero_imm_s = |imm_s;
+    nonzero_imm_b = |imm_b;
+    nonzero_imm_u = |imm_u;
+    nonzero_imm_j = |imm_j;
 
     case (opcode)
       opcode_lui : begin
         imm = imm_u;
-        wren = 1;
+        wren = nonzero_waddr;
         lui = 1;
       end
       opcode_auipc : begin
         imm = imm_u;
-        wren = 1;
+        wren = nonzero_waddr;
         auipc = 1;
       end
       opcode_jal : begin
-        wren = 1;
+        wren = nonzero_waddr;
         imm = imm_j;
         jal = 1;
       end
       opcode_jalr : begin
         imm = imm_i;
-        wren = 1;
+        wren = nonzero_waddr;
         rden1 = 1;
         jalr = 1;
       end
@@ -137,7 +165,7 @@ module decoder
       end
       opcode_load : begin
         imm = imm_i;
-        wren = 1;
+        wren = nonzero_waddr;
         rden1 = 1;
         load = 1;
         case (funct3)
@@ -162,7 +190,7 @@ module decoder
         endcase;
       end
       opcode_immediate : begin
-        wren = 1;
+        wren = nonzero_waddr;
         rden1 = 1;
         imm = imm_i;
         case (funct3)
@@ -181,7 +209,7 @@ module decoder
         endcase;
       end
       opcode_register : begin
-        wren = 1;
+        wren = nonzero_waddr;
         rden1 = 1;
         rden2 = 1;
         case (funct3)
@@ -203,10 +231,7 @@ module decoder
         endcase;
       end
       opcode_fence : begin
-        if (funct3 == 1)
-          fence = 1;
-        else
-          valid = 0;
+        fence = 1;
       end
       opcode_system : begin
         imm = imm_c;
@@ -218,40 +243,61 @@ module decoder
             csr_wfi : wfi = 1;
             default : valid = 0;
           endcase
-        end else begin
-          wren = 1;
+        end else if (funct3 == 1) begin
+          wren = nonzero_waddr;
           rden1 = 1;
-          csr_wren = 1;
-          csr_rden = 1;
+          cwren = 1;
+          crden = nonzero_waddr;
+          csr_op.csrrw = 1;
+          csr = 1;
+        end else if (funct3 == 2) begin
+          wren = nonzero_waddr;
+          rden1 = 1;
+          cwren = nonzero_waddr;
+          crden = 1;
+          csr_op.csrrs = 1;
+          csr = 1;
+        end else if (funct3 == 3) begin
+          wren = nonzero_waddr;
+          rden1 = 1;
+          cwren = nonzero_waddr;
+          crden = 1;
+          csr_op.csrrc = 1;
+          csr = 1;
+        end else if (funct3 == 5) begin
+          wren = nonzero_waddr;
+          cwren = 1;
+          crden = nonzero_waddr;
+          csr_op.csrrwi = 1;
+          csr = 1;
+        end else if (funct3 == 6) begin
+          wren = nonzero_waddr;
+          cwren = nonzero_imm_c;
+          crden = 1;
+          csr_op.csrrsi = 1;
+          csr = 1;
+        end else if (funct3 == 7) begin
+          wren = nonzero_waddr;
+          cwren = nonzero_imm_c;
+          crden = 1;
+          csr_op.csrrci = 1;
           csr = 1;
         end
       end
       default : valid = 0;
     endcase;
 
-    case (funct3)
-      1 : csr_rden = csr_rden & |waddr;
-      2 : csr_wren = csr_wren & |waddr;
-      3 : csr_wren = csr_wren & |waddr;
-      5 : csr_rden = csr_rden & |waddr;
-      6 : csr_wren = csr_wren & |waddr;
-      7 : csr_wren = csr_wren & |waddr;
-    endcase
-
-    if (waddr == 0) begin
-      wren = 0;
-    end
-
     if (instr == nop) begin
       alu_op.alu_add = 0;
     end
 
     decoder_out.imm = imm;
+    decoder_out.shamt = shamt;
     decoder_out.wren = wren;
     decoder_out.rden1 = rden1;
     decoder_out.rden2 = rden2;
-    decoder_out.csr_wren = csr_wren;
-    decoder_out.csr_rden = csr_rden;
+    decoder_out.cwren = cwren;
+    decoder_out.crden = crden;
     decoder_out.auipc = auipc;
     decoder_out.lui = lui;
     decoder_out.jal = jal;
@@ -263,6 +309,7 @@ module decoder
     decoder_out.alu_op = alu_op;
     decoder_out.bcu_op = bcu_op;
     decoder_out.lsu_op = lsu_op;
+    decoder_out.csr_op = csr_op;
     decoder_out.fence = fence;
     decoder_out.ecall = ecall;
     decoder_out.ebreak = ebreak;

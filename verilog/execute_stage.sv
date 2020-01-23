@@ -8,6 +8,8 @@ module execute_stage
   output alu_in_type alu_in,
   input lsu_out_type lsu_out,
   output lsu_in_type lsu_in,
+  input csr_alu_out_type csr_alu_out,
+  output csr_alu_in_type csr_alu_in,
   output register_in_type register_in,
   output forwarding_in_type forwarding_in,
   output csr_in_type csr_in,
@@ -26,11 +28,12 @@ module execute_stage
     v.pc = d.d.pc;
     v.npc = d.d.npc;
     v.imm = d.d.imm;
+    v.shamt = d.d.shamt;
     v.wren = d.d.wren;
     v.rden1 = d.d.rden1;
     v.rden2 = d.d.rden2;
-    v.csr_wren = d.d.csr_wren;
-    v.csr_rden = d.d.csr_rden;
+    v.cwren = d.d.cwren;
+    v.crden = d.d.crden;
     v.waddr = d.d.waddr;
     v.raddr1 = d.d.raddr1;
     v.raddr2 = d.d.raddr2;
@@ -51,11 +54,13 @@ module execute_stage
     v.valid = d.d.valid;
     v.rdata1 = d.d.rdata1;
     v.rdata2 = d.d.rdata2;
+    v.cdata = d.d.cdata;
     v.address = d.d.address;
     v.byteenable = d.d.byteenable;
     v.alu_op = d.d.alu_op;
     v.bcu_op = d.d.bcu_op;
     v.lsu_op = d.d.lsu_op;
+    v.csr_op = d.d.csr_op;
     v.exception = d.d.exception;
     v.ecause = d.d.ecause;
     v.etval = d.d.etval;
@@ -71,6 +76,7 @@ module execute_stage
     alu_in.rdata1 = v.rdata1;
     alu_in.rdata2 = v.rdata2;
     alu_in.imm = v.imm;
+    alu_in.shamt = v.shamt;
     alu_in.sel = v.rden2;
     alu_in.alu_op = v.alu_op;
 
@@ -80,7 +86,21 @@ module execute_stage
       v.wdata = v.address;
     end else if (v.lui == 1) begin
       v.wdata = v.imm;
+    end else if (v.jal == 1) begin
+      v.wdata = v.npc;
+    end else if (v.jalr == 1) begin
+      v.wdata = v.npc;
+    end else if (v.crden == 1) begin
+      v.wdata = v.cdata;
     end
+
+    csr_alu_in.cdata = v.cdata;
+    csr_alu_in.rdata1 = v.rdata1;
+    csr_alu_in.imm = v.imm;
+    csr_alu_in.sel = v.rden1;
+    csr_alu_in.csr_op = v.csr_op;
+
+    v.cdata = csr_alu_out.cdata;
 
     lsu_in.ldata = dmem_out.mem_rdata;
     lsu_in.byteenable = v.byteenable;
@@ -97,7 +117,7 @@ module execute_stage
 
     if ((v.stall | v.clear) == 1) begin
       v.wren = 0;
-      v.csr_wren = 0;
+      v.cwren = 0;
       v.auipc = 0;
       v.lui = 0;
       v.jal = 0;
@@ -126,8 +146,9 @@ module execute_stage
     forwarding_in.execute_wdata = v.wdata;
 
     csr_in.valid = v.valid;
-    csr_in.csr_wren = v.csr_wren;
-    csr_in.csr_waddr = v.caddr;
+    csr_in.cwren = v.cwren;
+    csr_in.cwaddr = v.caddr;
+    csr_in.cdata = v.cdata;
 
     rin = v;
 
@@ -137,8 +158,8 @@ module execute_stage
     q.wren = r.wren;
     q.rden1 = r.rden1;
     q.rden2 = r.rden2;
-    q.csr_wren = r.csr_wren;
-    q.csr_rden = r.csr_rden;
+    q.cwren = r.cwren;
+    q.crden = r.crden;
     q.waddr = r.waddr;
     q.raddr1 = r.raddr1;
     q.raddr2 = r.raddr2;
