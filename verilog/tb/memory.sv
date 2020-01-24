@@ -57,7 +57,7 @@ module memory
 
       check(memory_block,memory_addr,memory_wdata,memory_wstrb);
 
-      if (memory_addr == 32'h100000) begin
+      if (memory_addr == uart_base_addr) begin
         if (memory_wstrb[0] == 1) begin
           $write("%c",memory_wdata[7:0]);
         end

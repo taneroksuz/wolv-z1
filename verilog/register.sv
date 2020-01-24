@@ -26,8 +26,7 @@ module register
 
   always_ff @(posedge clk) begin
     if (rst == 0) begin
-      for (i=0; i<32; i=i+1)
-        reg_file[i] <= 0;
+      reg_file <= '{default:'0};
     end else begin
       if (register_in.wren == 1) begin
         reg_file[register_in.waddr] <= register_in.wdata;
