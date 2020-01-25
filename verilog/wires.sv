@@ -393,7 +393,6 @@ package wires;
     logic [31 : 0] cdata;
     logic [31 : 0] wdata;
     logic [31 : 0] ldata;
-    logic [31 : 0] sdata;
     logic [31 : 0] address;
     logic [3  : 0] byteenable;
     alu_op_type alu_op;
@@ -439,7 +438,6 @@ package wires;
     cdata : 0,
     wdata : 0,
     ldata : 0,
-    sdata : 0,
     address : 0,
     byteenable : 0,
     alu_op : init_alu_op,

@@ -18,9 +18,9 @@ module bram
   logic [31 : 0] rdata;
   logic [0  : 0] ready;
 
-  // initial begin
-  //   $readmemh("bram.dat", bram_block, 0, 2**bram_depth-1);
-  // end
+  initial begin
+    $readmemh("bram.dat", bram_block, 0, 2**bram_depth-1);
+  end
 
   always_ff @(posedge clk) begin
 

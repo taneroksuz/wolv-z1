@@ -9,7 +9,6 @@ module register
 );
 
   logic [31:0] reg_file[0:31];
-  integer i;
 
   always_comb begin
     if (register_in.rden1 == 1) begin

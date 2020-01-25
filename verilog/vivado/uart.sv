@@ -147,7 +147,7 @@ module uart
       r_rx <= init_rx_register;
     end else begin
       r_tx <= rin_tx;
-      r_rx <= rin_tx;
+      r_rx <= rin_rx;
     end
   end
 
