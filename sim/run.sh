@@ -58,6 +58,15 @@ then
       echo "${filename}"
     	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
     done
+  elif [ "$4" = 'mi' ]
+  then
+    for filename in $DIR/build/isa/dat/rv32mi*.dat; do
+      cp $filename memory.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      echo "${filename}"
+    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
+    done
   else
     cp $DIR/$4 memory.dat
     filename=${3##*/}
@@ -90,6 +99,15 @@ else
   elif [ "$4" = 'ui' ]
   then
     for filename in $DIR/build/isa/dat/rv32ui*.dat; do
+      cp $filename memory.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      echo "${filename}"
+    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
+    done
+  elif [ "$4" = 'mi' ]
+  then
+    for filename in $DIR/build/isa/dat/rv32mi*.dat; do
       cp $filename memory.dat
       filename=${filename##*/}
       filename=${filename%.dat}
