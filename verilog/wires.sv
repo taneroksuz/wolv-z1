@@ -155,29 +155,29 @@ package wires;
 
   typedef struct packed{
     logic [31 : 0] imm;
-    logic wren;
-    logic rden1;
-    logic rden2;
-    logic cwren;
-    logic crden;
-    logic auipc;
-    logic lui;
-    logic jal;
-    logic jalr;
-    logic branch;
-    logic load;
-    logic store;
-    logic csr;
+    logic [0  : 0] wren;
+    logic [0  : 0] rden1;
+    logic [0  : 0] rden2;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
+    logic [0  : 0] auipc;
+    logic [0  : 0] lui;
+    logic [0  : 0] jal;
+    logic [0  : 0] jalr;
+    logic [0  : 0] branch;
+    logic [0  : 0] load;
+    logic [0  : 0] store;
+    logic [0  : 0] csr;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
     csr_op_type csr_op;
-    logic fence;
-    logic ecall;
-    logic ebreak;
-    logic mret;
-    logic wfi;
-    logic valid;
+    logic [0  : 0] fence;
+    logic [0  : 0] ecall;
+    logic [0  : 0] ebreak;
+    logic [0  : 0] mret;
+    logic [0  : 0] wfi;
+    logic [0  : 0] valid;
   } decoder_out_type;
 
   typedef struct packed{
