@@ -40,7 +40,7 @@ module decode_stage
       v = r;
     end
 
-    v.clear = d.d.jump | d.e.clear;
+    v.clear = d.d.jump | d.d.exception | d.d.mret | d.e.clear;
 
     v.stall = 0;
 
@@ -116,6 +116,11 @@ module decode_stage
     v.ecause = agu_out.ecause;
     v.etval = agu_out.etval;
 
+    if (v.exception == 1) begin
+      v.load = 0;
+      v.store = 0;
+      v.wren = 0;
+    end
     if (v.valid == 0) begin
       v.exception = 1;
       v.ecause = except_illegal_instruction;
