@@ -1,3 +1,6 @@
+timeunit 1ns;
+timeprecision 1ps;
+
 import wires::*;
 
 module arbiter(
@@ -26,11 +29,19 @@ module arbiter(
 
     access_type = dmem_in.mem_valid == 1 ? data_access : instr_access;
 
-    memory_valid = (access_type == instr_access) ? imem_in.mem_valid : dmem_in.mem_valid;
-    memory_instr = (access_type == instr_access) ? imem_in.mem_instr : dmem_in.mem_instr;
-    memory_addr = (access_type == instr_access) ? imem_in.mem_addr : dmem_in.mem_addr;
-    memory_wdata = (access_type == instr_access) ? imem_in.mem_wdata : dmem_in.mem_wdata;
-    memory_wstrb = (access_type == instr_access) ? imem_in.mem_wstrb : dmem_in.mem_wstrb;
+    if (release_type == data_access && memory_ready == 0) begin
+      memory_valid = 0;
+      memory_instr = 0;
+      memory_addr = 0;
+      memory_wdata = 0;
+      memory_wstrb = 0;
+    end else begin
+      memory_valid = (access_type == instr_access) ? imem_in.mem_valid : dmem_in.mem_valid;
+      memory_instr = (access_type == instr_access) ? imem_in.mem_instr : dmem_in.mem_instr;
+      memory_addr = (access_type == instr_access) ? imem_in.mem_addr : dmem_in.mem_addr;
+      memory_wdata = (access_type == instr_access) ? imem_in.mem_wdata : dmem_in.mem_wdata;
+      memory_wstrb = (access_type == instr_access) ? imem_in.mem_wstrb : dmem_in.mem_wstrb;
+    end
 
     imem_out.mem_rdata = (release_type == instr_access) ? memory_rdata : 0;
     imem_out.mem_ready = (release_type == instr_access) ? memory_ready : 0;

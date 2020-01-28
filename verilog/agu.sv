@@ -1,3 +1,6 @@
+timeunit 1ns;
+timeprecision 1ps;
+
 import constants::*;
 import wires::*;
 import functions::*;
