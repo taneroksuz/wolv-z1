@@ -10,10 +10,6 @@ module register
 
   logic [31:0] reg_file[0:31];
 
-  initial begin
-    reg_file = '{default:'0};
-  end
-
   always_comb begin
     if (register_in.rden1 == 1) begin
       register_out.rdata1 = reg_file[register_in.raddr1];
