@@ -117,9 +117,17 @@ module decode_stage
     v.etval = agu_out.etval;
 
     if (v.exception == 1) begin
-      v.load = 0;
-      v.store = 0;
-      v.wren = 0;
+      if (v.load == 1) begin
+        v.load = 0;
+        v.wren = 0;
+      end else if (v.store == 1) begin
+        v.store = 0;
+      end else if (v.jump == 1) begin
+        v.jump = 0;
+        v.wren = 0;
+      end else begin
+        v.exception = 0;
+      end
     end
     if (v.valid == 0) begin
       v.exception = 1;

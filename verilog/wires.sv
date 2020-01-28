@@ -470,7 +470,7 @@ package wires;
 
   csr_machine_reg_type init_csr_machine_reg = '{
     mstatus : 0,
-    misa : 0,
+    misa : 32'b01000000000000000000000100000000,
     medeleg : 0,
     mideleg : 0,
     mie : 0,

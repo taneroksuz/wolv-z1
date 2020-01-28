@@ -189,10 +189,14 @@ module decoder
         imm = imm_i;
         case (funct3)
           funct_add : alu_op.alu_add = 1;
-          funct_sll : alu_op.alu_sll = 1;
+          funct_sll : begin
+            alu_op.alu_sll = 1;
+            valid = ~instr[25];
+          end
           funct_srl : begin
             alu_op.alu_srl = ~instr[30];
             alu_op.alu_sra = instr[30];
+            valid = ~instr[25];
           end
           funct_slt : alu_op.alu_slt = 1;
           funct_sltu : alu_op.alu_sltu = 1;
