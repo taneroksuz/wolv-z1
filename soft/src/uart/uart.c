@@ -17,13 +17,6 @@ int main()
   unsigned char sec1,sec0;
   unsigned long cycle;
 
-  putch('0');
-  putch('0');
-  putch(':');
-  putch('0');
-  putch('0');
-  putch('\n');
-
   cycle = read_csr(mcycle);
 
   while (1)
@@ -31,6 +24,24 @@ int main()
     if ((read_csr(mcycle) - cycle) >= CYCLES_PER_SECONDS)
     {
       cycle = read_csr(mcycle);
+      min1 = '0' + min / 10;
+      min0 = '0' + min % 10;
+      sec1 = '0' + sec / 10;
+      sec0 = '0' + sec % 10;
+      putch(27);
+      putch('[');
+      putch('2');
+      putch('J');
+      putch(27);
+      putch('[');
+      putch('H');
+      putch(min1);
+      putch(min0);
+      putch(':');
+      putch(sec1);
+      putch(sec0);
+      putch('\r');
+      putch('\n');
       sec = sec + 1;
       if ((sec % 60) == 0)
       {
@@ -41,23 +52,6 @@ int main()
       {
         min = 0;
       }
-      min1 = '0' + min / 10;
-      min0 = '0' + min % 10;
-      sec1 = '0' + sec / 10;
-      sec0 = '0' + sec % 10;
-      // putch(27);
-      // putch('[');
-      // putch('2');
-      // putch('J');
-      // putch(27);
-      // putch('[');
-      // putch('H');
-      putch(min1);
-      putch(min0);
-      putch(':');
-      putch(sec1);
-      putch(sec0);
-      putch('\n');
     }
   }
 }
