@@ -21,14 +21,14 @@ module uart
 
   typedef struct packed{
     logic [3  : 0] state_tx;
-    logic [8  : 0] data_tx;
+    logic [9  : 0] data_tx;
     logic [31 : 0] counter_tx;
     logic [0  : 0] ready_tx;
   } register_tx_type;
 
   register_tx_type init_tx_register = '{
     state_tx : 0,
-    data_tx : 9'h1FF,
+    data_tx : 10'h3FF,
     counter_tx : 0,
     ready_tx : 0
   };
@@ -37,7 +37,7 @@ module uart
     logic [0  : 0] state_re;
     logic [3  : 0] state_rx;
     logic [7  : 0] data_re;
-    logic [7  : 0] data_rx;
+    logic [8  : 0] data_rx;
     logic [31 : 0] counter_rx;
     logic [0  : 0] ready_re;
     logic [0  : 0] ready_rx;
@@ -65,7 +65,7 @@ module uart
     v_tx.ready_tx = 0;
 
     if (uart_valid == 1 && |uart_wstrb == 1) begin
-      v_tx.data_tx = {uart_wdata[7:0],1'b0};
+      v_tx.data_tx = {1'b1,uart_wdata[7:0],1'b0};
       v_tx.state_tx = 1;
     end
 
@@ -73,7 +73,7 @@ module uart
       0 : begin
         v_tx.counter_tx = 0;
       end
-      9 : begin
+      10 : begin
         if (r_tx.counter_tx > clks_per_bit) begin
           v_tx.state_tx = 0;
           v_tx.counter_tx = 0;
