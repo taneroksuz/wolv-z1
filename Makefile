@@ -2,7 +2,7 @@ default: none
 
 VERILATOR ?= /opt/verilator/bin/verilator
 SYSTEMC ?= /opt/systemc
-RISCV ?= /opt/riscv/bin
+RISCV ?= /opt/riscv32/bin
 MARCH ?= rv32i
 MABI ?= ilp32
 ITER ?= 1
@@ -11,7 +11,7 @@ CSMITH_INCL ?= $(shell ls -d $(CSMITH)/include/csmith-* | head -n1)
 GCC ?= /usr/bin/gcc
 PYTHON ?= /usr/bin/python2
 BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-OFFSET ?= 0x40000 # Number of dwords in blockram (address range is OFFSET * 8)
+OFFSET ?= 0x10000 # Number of dwords in blockram (address range is OFFSET * 8)
 TEST ?= dhrystone
 CYCLES ?= 10000000
 WAVE ?= "" # "wave" for saving dump file
