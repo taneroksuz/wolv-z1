@@ -68,10 +68,12 @@ module decode_stage
     v.load = decoder_out.load;
     v.store = decoder_out.store;
     v.csr = decoder_out.csr;
+    v.muldiv = decoder_out.muldiv;
     v.alu_op = decoder_out.alu_op;
     v.bcu_op = decoder_out.bcu_op;
     v.lsu_op = decoder_out.lsu_op;
     v.csr_op = decoder_out.csr_op;
+    v.muldiv_op = decoder_out.muldiv_op;
     v.fence = decoder_out.fence;
     v.ecall = decoder_out.ecall;
     v.ebreak = decoder_out.ebreak;
@@ -150,6 +152,8 @@ module decode_stage
 
     if (d.d.cwren == 1) begin
       v.stall = 1;
+    end else if (d.d.muldiv == 1) begin
+      v.stall = 1;
     end
 
     if ((v.stall | v.clear) == 1) begin
@@ -163,6 +167,7 @@ module decode_stage
       v.load = 0;
       v.store = 0;
       v.csr = 0;
+      v.muldiv = 0;
       v.fence = 0;
       v.ecall = 0;
       v.ebreak = 0;
@@ -216,6 +221,7 @@ module decode_stage
     q.load = r.load;
     q.store = r.store;
     q.csr = r.csr;
+    q.muldiv = r.muldiv;
     q.fence = r.fence;
     q.ecall = r.ecall;
     q.ebreak = r.ebreak;
@@ -232,6 +238,7 @@ module decode_stage
     q.bcu_op = r.bcu_op;
     q.lsu_op = r.lsu_op;
     q.csr_op = r.csr_op;
+    q.muldiv_op = r.muldiv_op;
     q.exception = r.exception;
     q.ecause = r.ecause;
     q.etval = r.etval;

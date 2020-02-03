@@ -27,6 +27,28 @@ package wires;
   };
 
   typedef struct packed{
+    logic [0 : 0] muldiv_mul;
+    logic [0 : 0] muldiv_mulh;
+    logic [0 : 0] muldiv_mulhsu;
+    logic [0 : 0] muldiv_mulhu;
+    logic [0 : 0] muldiv_div;
+    logic [0 : 0] muldiv_divu;
+    logic [0 : 0] muldiv_rem;
+    logic [0 : 0] muldiv_remu;
+  } muldiv_op_type;
+
+  muldiv_op_type init_muldiv_op = '{
+    muldiv_mul : 0,
+    muldiv_mulh : 0,
+    muldiv_mulhsu : 0,
+    muldiv_mulhu : 0,
+    muldiv_div : 0,
+    muldiv_divu : 0,
+    muldiv_rem : 0,
+    muldiv_remu : 0
+  };
+
+  typedef struct packed{
     logic [0 : 0] lsu_lb;
     logic [0 : 0] lsu_lbu;
     logic [0 : 0] lsu_lh;
@@ -95,6 +117,52 @@ package wires;
   typedef struct packed{
     logic [31 : 0] res;
   } alu_out_type;
+
+  typedef struct packed{
+    logic [31 : 0] rdata1;
+    logic [31 : 0] rdata2;
+    logic [0  : 0] enable;
+    muldiv_op_type muldiv_op;
+  } muldiv_in_type;
+
+  typedef struct packed{
+    logic [31 : 0] result;
+    logic [0  : 0] ready;
+  } muldiv_out_type;
+
+  typedef struct packed{
+    logic [31 : 0] op1;
+    logic [31 : 0] op2;
+    logic [0  : 0] op1_signed;
+    logic [0  : 0] op2_signed;
+    logic [0  : 0] op1_neg;
+    logic [5  : 0] counter;
+    logic [64 : 0] result;
+    logic [0  : 0] mul_op;
+    logic [0  : 0] div_op;
+    logic [0  : 0] negativ;
+    logic [0  : 0] divisionbyzero;
+    logic [0  : 0] overflow;
+    logic [0  : 0] ready;
+    muldiv_op_type muldiv_op;
+  } muldiv_reg_type;
+
+  muldiv_reg_type init_muldiv_reg = '{
+    op1 : 0,
+    op2 : 0,
+    op1_signed : 0,
+    op2_signed : 0,
+    op1_neg : 0,
+    counter : 0,
+    result : 0,
+    mul_op : 0,
+    div_op : 0,
+    negativ : 0,
+    divisionbyzero : 0,
+    overflow : 0,
+    ready : 0,
+    muldiv_op : init_muldiv_op
+  };
 
   typedef struct packed{
     logic [31 : 0] rdata1;
@@ -168,10 +236,12 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] csr;
+    logic [0  : 0] muldiv;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
     csr_op_type csr_op;
+    muldiv_op_type muldiv_op;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -244,6 +314,7 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] csr;
+    logic [0  : 0] muldiv;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -260,6 +331,7 @@ package wires;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
     csr_op_type csr_op;
+    muldiv_op_type muldiv_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -288,6 +360,7 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] csr;
+    logic [0  : 0] muldiv;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -304,6 +377,7 @@ package wires;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
     csr_op_type csr_op;
+    muldiv_op_type muldiv_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -333,6 +407,7 @@ package wires;
     load : 0,
     store : 0,
     csr : 0,
+    muldiv : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -349,6 +424,7 @@ package wires;
     bcu_op : init_bcu_op,
     lsu_op : init_lsu_op,
     csr_op : init_csr_op,
+    muldiv_op : init_muldiv_op,
     exception : 0,
     ecause : 0,
     etval : 0,
@@ -382,6 +458,7 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] csr;
+    logic [0  : 0] muldiv;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -399,6 +476,7 @@ package wires;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
     csr_op_type csr_op;
+    muldiv_op_type muldiv_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -427,6 +505,7 @@ package wires;
     load : 0,
     store : 0,
     csr : 0,
+    muldiv : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -444,6 +523,7 @@ package wires;
     bcu_op : init_bcu_op,
     lsu_op : init_lsu_op,
     csr_op : init_csr_op,
+    muldiv_op : init_muldiv_op,
     exception : 0,
     ecause : 0,
     etval : 0,

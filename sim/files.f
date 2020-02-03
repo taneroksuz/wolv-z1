@@ -6,6 +6,7 @@
 ../../verilog/bcu.sv
 ../../verilog/lsu.sv
 ../../verilog/csr_alu.sv
+../../verilog/muldiv.sv
 ../../verilog/decoder.sv
 ../../verilog/register.sv
 ../../verilog/csr.sv

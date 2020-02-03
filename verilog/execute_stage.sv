@@ -13,6 +13,8 @@ module execute_stage
   output lsu_in_type lsu_in,
   input csr_alu_out_type csr_alu_out,
   output csr_alu_in_type csr_alu_in,
+  input muldiv_out_type muldiv_out,
+  output muldiv_in_type muldiv_in,
   output register_in_type register_in,
   output forwarding_in_type forwarding_in,
   output csr_in_type csr_in,
@@ -48,6 +50,7 @@ module execute_stage
     v.load = d.d.load;
     v.store = d.d.store;
     v.csr = d.d.csr;
+    v.muldiv = d.d.muldiv;
     v.fence = d.d.fence;
     v.ecall = d.d.ecall;
     v.ebreak = d.d.ebreak;
@@ -63,6 +66,7 @@ module execute_stage
     v.bcu_op = d.d.bcu_op;
     v.lsu_op = d.d.lsu_op;
     v.csr_op = d.d.csr_op;
+    v.muldiv_op = d.d.muldiv_op;
     v.exception = d.d.exception;
     v.ecause = d.d.ecause;
     v.etval = d.d.etval;
@@ -103,17 +107,33 @@ module execute_stage
 
     v.cdata = csr_alu_out.cdata;
 
+    muldiv_in.rdata1 = v.rdata1;
+    muldiv_in.rdata2 = v.rdata2;
+    muldiv_in.enable = v.muldiv & ~(d.e.clear | d.e.stall);
+    muldiv_in.muldiv_op = v.muldiv_op;
+
     lsu_in.ldata = dmem_out.mem_rdata;
     lsu_in.byteenable = v.byteenable;
     lsu_in.lsu_op = v.lsu_op;
 
     v.ldata = lsu_out.res;
 
-    if (dmem_out.mem_ready == 0) begin
-      v.stall = v.load | v.store;
-    end else if (dmem_out.mem_ready == 1) begin
-      v.wren = v.load & |v.waddr;
-      v.wdata = v.ldata;
+    if (v.muldiv == 1) begin
+      if (muldiv_out.ready == 0) begin
+        v.stall = 1;
+      end else if (muldiv_out.ready == 1) begin
+        v.wren = |v.waddr;
+        v.wdata = muldiv_out.result;
+      end
+    end
+
+    if (v.load == 1 | v.store == 1) begin
+      if (dmem_out.mem_ready == 0) begin
+        v.stall = 1;
+      end else if (dmem_out.mem_ready == 1) begin
+        v.wren = v.load & |v.waddr;
+        v.wdata = v.ldata;
+      end
     end
 
     if ((v.stall | v.clear) == 1) begin

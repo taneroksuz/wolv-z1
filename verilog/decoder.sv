@@ -43,6 +43,7 @@ module decoder
   logic [0  : 0] load;
   logic [0  : 0] store;
   logic [0  : 0] csr;
+  logic [0  : 0] muldiv;
   logic [0  : 0] fence;
   logic [0  : 0] ecall;
   logic [0  : 0] ebreak;
@@ -54,6 +55,8 @@ module decoder
   bcu_op_type bcu_op;
   lsu_op_type lsu_op;
   csr_op_type csr_op;
+
+  muldiv_op_type muldiv_op;
 
   logic [0  : 0] nonzero_waddr;
   logic [0  : 0] nonzero_raddr1;
@@ -101,6 +104,7 @@ module decoder
     load = 0;
     store = 0;
     csr = 0;
+    muldiv = 0;
     fence = 0;
     ecall = 0;
     ebreak = 0;
@@ -112,6 +116,8 @@ module decoder
     bcu_op = init_bcu_op;
     lsu_op = init_lsu_op;
     csr_op = init_csr_op;
+
+    muldiv_op = init_muldiv_op;
 
     nonzero_waddr = |waddr;
     nonzero_raddr1 = |raddr1;
@@ -213,23 +219,38 @@ module decoder
         wren = nonzero_waddr;
         rden1 = 1;
         rden2 = 1;
-        case (funct3)
-          funct_add : begin
-            alu_op.alu_add = ~instr[30];
-            alu_op.alu_sub = instr[30];
-          end
-          funct_sll : alu_op.alu_sll = 1;
-          funct_srl : begin
-            alu_op.alu_srl = ~instr[30];
-            alu_op.alu_sra = instr[30];
-          end
-          funct_slt : alu_op.alu_slt = 1;
-          funct_sltu : alu_op.alu_sltu = 1;
-          funct_and : alu_op.alu_and = 1;
-          funct_or : alu_op.alu_or = 1;
-          funct_xor : alu_op.alu_xor = 1;
-          default : valid = 0;
-        endcase;
+        if (instr[25] == 0) begin
+          case (funct3)
+            funct_add : begin
+              alu_op.alu_add = ~instr[30];
+              alu_op.alu_sub = instr[30];
+            end
+            funct_sll : alu_op.alu_sll = 1;
+            funct_srl : begin
+              alu_op.alu_srl = ~instr[30];
+              alu_op.alu_sra = instr[30];
+            end
+            funct_slt : alu_op.alu_slt = 1;
+            funct_sltu : alu_op.alu_sltu = 1;
+            funct_and : alu_op.alu_and = 1;
+            funct_or : alu_op.alu_or = 1;
+            funct_xor : alu_op.alu_xor = 1;
+            default : valid = 0;
+          endcase;
+        end else if (instr[25] == 1) begin
+          muldiv = 1;
+          case (funct3)
+            funct_mul : muldiv_op.muldiv_mul = 1;
+            funct_mulh : muldiv_op.muldiv_mulh = 1;
+            funct_mulhsu : muldiv_op.muldiv_mulhsu = 1;
+            funct_mulhu : muldiv_op.muldiv_mulhu = 1;
+            funct_div : muldiv_op.muldiv_div = 1;
+            funct_divu : muldiv_op.muldiv_divu = 1;
+            funct_rem : muldiv_op.muldiv_rem = 1;
+            funct_remu : muldiv_op.muldiv_remu = 1;
+            default : valid = 0;
+          endcase;
+        end
       end
       opcode_fence : begin
         fence = 1;
@@ -306,10 +327,12 @@ module decoder
     decoder_out.load = load;
     decoder_out.store = store;
     decoder_out.csr = csr;
+    decoder_out.muldiv = muldiv;
     decoder_out.alu_op = alu_op;
     decoder_out.bcu_op = bcu_op;
     decoder_out.lsu_op = lsu_op;
     decoder_out.csr_op = csr_op;
+    decoder_out.muldiv_op = muldiv_op;
     decoder_out.fence = fence;
     decoder_out.ecall = ecall;
     decoder_out.ebreak = ebreak;

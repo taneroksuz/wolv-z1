@@ -33,6 +33,15 @@ package constants;
 	parameter [2  : 0] funct_or                   = 3'b110;
 	parameter [2  : 0] funct_and                  = 3'b111;
 
+	parameter [2  : 0] funct_mul                  = 3'b000;
+	parameter [2  : 0] funct_mulh                 = 3'b001;
+	parameter [2  : 0] funct_mulhsu               = 3'b010;
+	parameter [2  : 0] funct_mulhu                = 3'b011;
+	parameter [2  : 0] funct_div                  = 3'b100;
+	parameter [2  : 0] funct_divu                 = 3'b101;
+	parameter [2  : 0] funct_rem                  = 3'b110;
+	parameter [2  : 0] funct_remu                  = 3'b111;
+
 	parameter [2  : 0] funct_beq                  = 3'b000;
 	parameter [2  : 0] funct_bne                  = 3'b001;
 	parameter [2  : 0] funct_blt                  = 3'b100;

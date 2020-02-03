@@ -26,6 +26,8 @@ module cpu
   lsu_out_type lsu_out;
   csr_alu_in_type csr_alu_in;
   csr_alu_out_type csr_alu_out;
+  muldiv_in_type muldiv_in;
+  muldiv_out_type muldiv_out;
   decoder_in_type decoder_in;
   decoder_out_type decoder_out;
   forwarding_in_type forwarding_in;
@@ -83,6 +85,14 @@ module cpu
   (
     .csr_alu_in (csr_alu_in),
     .csr_alu_out (csr_alu_out)
+  );
+
+  muldiv muldiv_comp
+  (
+    .rst (rst),
+    .clk (clk),
+    .muldiv_in (muldiv_in),
+    .muldiv_out (muldiv_out)
   );
 
   forwarding forwarding_comp
@@ -172,6 +182,8 @@ module cpu
     .lsu_in (lsu_in),
     .csr_alu_out (csr_alu_out),
     .csr_alu_in (csr_alu_in),
+    .muldiv_out (muldiv_out),
+    .muldiv_in (muldiv_in),
     .register_in (register_in),
     .forwarding_in (forwarding_in),
     .csr_in (csr_in),
