@@ -10,6 +10,8 @@
 ../../verilog/decoder.sv
 ../../verilog/register.sv
 ../../verilog/csr.sv
+../../verilog/compress.sv
+../../verilog/prefetch.sv
 ../../verilog/forwarding.sv
 ../../verilog/fetch_stage.sv
 ../../verilog/decode_stage.sv

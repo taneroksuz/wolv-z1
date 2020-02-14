@@ -1,4 +1,4 @@
-package constants;
+package parameters;
 
 	parameter [31 : 0] nop                        = 32'h00000013;
 
@@ -84,6 +84,28 @@ package constants;
 	parameter [4  : 0] funct_fconv_f2i            = 5'b11000;
 	parameter [4  : 0] funct_fconv_i2f            = 5'b11010;
 	parameter [4  : 0] funct_fconv_f2f            = 5'b01000;
+
+	parameter [2  : 0] c0_addispn                 = 3'b000;
+	parameter [2  : 0] c0_lw                      = 3'b010;
+	parameter [2  : 0] c0_sw                      = 3'b110;
+
+	parameter [2  : 0] c1_addi                    = 3'b000;
+	parameter [2  : 0] c1_jal                     = 3'b001;
+	parameter [2  : 0] c1_li                      = 3'b010;
+	parameter [2  : 0] c1_lui                     = 3'b011;
+	parameter [2  : 0] c1_alu                     = 3'b100;
+	parameter [2  : 0] c1_j                       = 3'b101;
+	parameter [2  : 0] c1_beqz                    = 3'b110;
+	parameter [2  : 0] c1_bnez                    = 3'b111;
+
+	parameter [2  : 0] c2_slli                    = 3'b000;
+	parameter [2  : 0] c2_lwsp                    = 3'b010;
+	parameter [2  : 0] c2_alu                     = 3'b100;
+	parameter [2  : 0] c2_swsp                    = 3'b110;
+
+	parameter [1  : 0] opcode_c0                  = 2'b00;
+	parameter [1  : 0] opcode_c1                  = 2'b01;
+	parameter [1  : 0] opcode_c2                  = 2'b10;
 
 	parameter [11 : 0] csr_ecall                  = 12'h000;
 	parameter [11 : 0] csr_ebreak                 = 12'h001;

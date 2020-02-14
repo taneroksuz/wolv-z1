@@ -131,7 +131,7 @@ module uart
       end
     endcase;
 
-    if (r_rx.state_re == 1 && r_rx.ready_rx) begin
+    if (r_rx.state_re == 1 && r_rx.ready_rx == 1) begin
       v_rx.state_re = 0;
       v_rx.ready_re = 1;
       v_rx.data_re = r_rx.data_rx;

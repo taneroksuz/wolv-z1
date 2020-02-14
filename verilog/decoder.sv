@@ -22,7 +22,6 @@ module decoder
 
   logic [6  : 0] opcode;
   logic [2  : 0] funct3;
-  logic [2  : 0] rm;
 
   logic [4  : 0] waddr;
   logic [4  : 0] raddr1;
@@ -96,7 +95,6 @@ module decoder
     crden = 0;
 
     auipc = 0;
-    lui = 0;
     lui = 0;
     jal = 0;
     jalr = 0;
