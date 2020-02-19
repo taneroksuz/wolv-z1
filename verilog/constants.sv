@@ -1,4 +1,4 @@
-package parameters;
+package constants;
 
 	parameter [31 : 0] nop                        = 32'h00000013;
 
