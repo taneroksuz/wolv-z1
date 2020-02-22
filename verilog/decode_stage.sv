@@ -134,17 +134,16 @@ module decode_stage
         v.exception = 0;
       end
     end
+
     if (v.valid == 0) begin
       v.exception = 1;
       v.ecause = except_illegal_instruction;
       v.etval = v.instr;
-    end
-    if (v.ebreak == 1) begin
+    end else if (v.ebreak == 1) begin
       v.exception = 1;
       v.ecause = except_breakpoint;
       v.etval = v.instr;
-    end
-    if (v.ecall == 1) begin
+    end else if (v.ecall == 1) begin
       v.exception = 1;
       v.ecause = except_env_call_mach;
       v.etval = v.instr;

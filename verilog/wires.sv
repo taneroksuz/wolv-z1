@@ -635,4 +635,19 @@ package wires;
     logic [31 : 0] mem_rdata;
   } mem_out_type;
 
+  typedef struct packed{
+    logic [31:0] pc;
+    logic [31:0] npc;
+    logic [0:0] jump;
+    logic [0:0] fence;
+    logic [31:0] rdata;
+    logic [0:0] ready;
+  } prefetch_in_type;
+
+  typedef struct packed{
+    logic [31:0] fpc;
+    logic [31:0] instr;
+    logic [0:0] stall;
+  } prefetch_out_type;
+
 endpackage

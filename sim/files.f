@@ -1,3 +1,4 @@
+../../verilog/tb/configure.sv
 ../../verilog/constants.sv
 ../../verilog/functions.sv
 ../../verilog/wires.sv
@@ -18,6 +19,5 @@
 ../../verilog/execute_stage.sv
 ../../verilog/arbiter.sv
 ../../verilog/cpu.sv
-../../verilog/tb/configure.sv
 ../../verilog/tb/memory.sv
 ../../verilog/tb/top_cpu.sv
