@@ -122,6 +122,7 @@ module compress
             wren = 1;
             rden1 = 1;
             alu_op.alu_add = 1;
+            valid = nonzero_imm_w;
           end
           c0_lw : begin
             imm = imm_lswr;

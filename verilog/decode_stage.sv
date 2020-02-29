@@ -178,10 +178,6 @@ module decode_stage
       v.stall = 1;
     end else if (d.d.muldiv == 1) begin
       v.stall = 1;
-    end else if (d.d.load == 1 &&
-        ((v.rden1 == 1 && d.d.waddr == v.raddr1) ||
-        (v.rden2 == 1 && d.d.waddr == v.raddr2))) begin
-      v.stall = 1;
     end
 
     if ((v.stall | v.clear) == 1) begin
