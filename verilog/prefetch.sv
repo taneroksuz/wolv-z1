@@ -63,7 +63,7 @@ module prefetch
     v.pc = prefetch_in.pc;
     v.npc = prefetch_in.npc;
 
-    if (pfetch_in.fence == 1) begin
+    if (prefetch_in.fence == 1) begin
       v.fpc = {v.pc[31:2],2'b00};
     end
 
@@ -88,7 +88,7 @@ module prefetch
         v.wrbuf = 1;
         v.fpc = v.fpc + 4;
       end
-    end else if (prefetch_in.mem_ready == 0) begin
+    end else if (prefetch_in.ready == 0) begin
       if (v.wren == 1) begin
         v.wrdis = 1;
       end
@@ -104,8 +104,9 @@ module prefetch
           if (v.wrdis == 1) begin
             v.stall = 1;
           end else begin
-            v.instr = {prefetch_in.mem_rdata[15:0],prefetch_buffer[v.rid]};
+            v.instr = {prefetch_in.rdata[15:0],prefetch_buffer[v.rid]};
           end
+        end else begin
           v.instr = {prefetch_buffer[0],prefetch_buffer[v.rid]};
         end
       end else begin
@@ -113,7 +114,7 @@ module prefetch
           if (v.wrdis == 1) begin
             v.stall = 1;
           end else begin
-            v.instr = {prefetch_in.mem_rdata[15:0],prefetch_buffer[v.rid]};
+            v.instr = {prefetch_in.rdata[15:0],prefetch_buffer[v.rid]};
           end
         end else begin
           v.instr = {prefetch_buffer[v.rid+1],prefetch_buffer[v.rid]};
@@ -123,12 +124,14 @@ module prefetch
       if (v.pc[1] == 0) begin
         v.instr = prefetch_in.rdata[31:0];
       end else if (v.pc[1] == 1) begin
-        if (&prefetch_in.rdata[17:16] == 0) begin
+        if (&(prefetch_in.rdata[17:16]) == 0) begin
           v.instr = {16'h0,prefetch_in.rdata[31:16]};
         end else begin
           v.stall = 1;
         end
       end
+    end else if (prefetch_in.ready == 0) begin
+      v.stall = 1;
     end
 
     prefetch_out.fpc = v.fpc;
@@ -144,8 +147,8 @@ module prefetch
       r <= init_reg;
     end else begin
       if (rin.wrbuf == 1) begin
-        prefetch_buffer[rin.wid] <= prefetch_in.mem_rdata[15:0];
-        prefetch_buffer[rin.wid+1] <= prefetch_in.mem_rdata[31:16];
+        prefetch_buffer[rin.wid] <= prefetch_in.rdata[15:0];
+        prefetch_buffer[rin.wid+1] <= prefetch_in.rdata[31:16];
       end
       r <= rin;
     end

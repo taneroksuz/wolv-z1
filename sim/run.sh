@@ -49,6 +49,15 @@ then
   then
     cp $DIR/build/uart/dat/uart.dat memory.dat
   	obj_dir/Vtop_cpu $CYCLES uart 2> /dev/null
+  elif [ "$4" = 'uc' ]
+  then
+    for filename in $DIR/build/isa/dat/rv32uc*.dat; do
+      cp $filename memory.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      echo "${filename}"
+    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
+    done
   elif [ "$4" = 'ui' ]
   then
     for filename in $DIR/build/isa/dat/rv32ui*.dat; do
@@ -105,6 +114,15 @@ else
   then
     cp $DIR/build/uart/dat/uart.dat memory.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
+  elif [ "$4" = 'uc' ]
+  then
+    for filename in $DIR/build/isa/dat/rv32uc*.dat; do
+      cp $filename memory.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      echo "${filename}"
+    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
+    done
   elif [ "$4" = 'ui' ]
   then
     for filename in $DIR/build/isa/dat/rv32ui*.dat; do

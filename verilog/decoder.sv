@@ -251,7 +251,9 @@ module decoder
         end
       end
       opcode_fence : begin
-        fence = 1;
+        if (funct3 == 1) begin
+          fence = 1;
+        end
       end
       opcode_system : begin
         imm = imm_c;

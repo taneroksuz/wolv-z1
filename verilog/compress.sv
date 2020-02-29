@@ -9,20 +9,20 @@ module compress
   output compress_out_type compress_out
 );
 
-  logic [31:0] instr;
+  logic [31 : 0] instr;
 
-  logic [31:0] imm_lwsp;
-  logic [31:0] imm_swsp;
-  logic [31:0] imm_lswr;
+  logic [31 : 0] imm_lwsp;
+  logic [31 : 0] imm_swsp;
+  logic [31 : 0] imm_lswr;
 
-  logic [31:0] imm_j;
-  logic [31:0] imm_b;
-  logic [31:0] imm_w;
-  logic [31:0] imm_i;
-  logic [31:0] imm_u;
-  logic [31:0] imm_p;
+  logic [31 : 0] imm_j;
+  logic [31 : 0] imm_b;
+  logic [31 : 0] imm_w;
+  logic [31 : 0] imm_i;
+  logic [31 : 0] imm_u;
+  logic [31 : 0] imm_p;
 
-  logic [31:0] imm;
+  logic [31 : 0] imm;
 
   logic [1  : 0] opcode;
   logic [2  : 0] funct3;
@@ -92,7 +92,6 @@ module compress
     rden1 = 0;
     rden2 = 0;
 
-    auipc = 0;
     lui = 0;
     jal = 0;
     jalr = 0;
@@ -162,7 +161,7 @@ module compress
           c1_li : begin
             imm = imm_i;
             wren = 1;
-            alu_op = alu_add;
+            alu_op.alu_add = 1;
           end
           c1_lui : begin
             if (raddr1 == 2) begin
@@ -322,6 +321,25 @@ module compress
       end
       default : valid = 0;
     endcase
+
+    compress_out.imm = imm;
+    compress_out.waddr =waddr;
+    compress_out.raddr1 =raddr1;
+    compress_out.raddr2 =raddr2;
+    compress_out.wren = wren;
+    compress_out.rden1 = rden1;
+    compress_out.rden2 = rden2;
+    compress_out.lui = lui;
+    compress_out.jal = jal;
+    compress_out.jalr = jalr;
+    compress_out.branch = branch;
+    compress_out.load = load;
+    compress_out.store = store;
+    compress_out.alu_op = alu_op;
+    compress_out.bcu_op = bcu_op;
+    compress_out.lsu_op = lsu_op;
+    compress_out.ebreak = ebreak;
+    compress_out.valid = valid;
 
   end
 

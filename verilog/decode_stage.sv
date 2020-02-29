@@ -11,6 +11,8 @@ module decode_stage
   input logic clk,
   input decoder_out_type decoder_out,
   output decoder_in_type decoder_in,
+  input compress_out_type compress_out,
+  output compress_in_type compress_in,
   input agu_out_type agu_out,
   output agu_in_type agu_in,
   input bcu_out_type bcu_out,
@@ -80,6 +82,29 @@ module decode_stage
     v.mret = decoder_out.mret;
     v.wfi = decoder_out.wfi;
     v.valid = decoder_out.valid;
+
+    compress_in.instr = v.instr;
+
+    if (compress_out.valid == 1) begin
+      v.imm = compress_out.imm;
+      v.waddr = compress_out.waddr;
+      v.raddr1 = compress_out.raddr1;
+      v.raddr2 = compress_out.raddr2;
+      v.wren = compress_out.wren;
+      v.rden1 = compress_out.rden1;
+      v.rden2 = compress_out.rden2;
+      v.lui = compress_out.lui;
+      v.jal = compress_out.jal;
+      v.jalr = compress_out.jalr;
+      v.branch = compress_out.branch;
+      v.load = compress_out.load;
+      v.store = compress_out.store;
+      v.alu_op = compress_out.alu_op;
+      v.bcu_op = compress_out.bcu_op;
+      v.lsu_op = compress_out.lsu_op;
+      v.ebreak = compress_out.ebreak;
+      v.valid = compress_out.valid;
+    end
 
     v.npc = v.pc + ((v.instr[1:0] == 2'b11) ? 4 : 2);
 
@@ -152,6 +177,10 @@ module decode_stage
     if (d.d.cwren == 1) begin
       v.stall = 1;
     end else if (d.d.muldiv == 1) begin
+      v.stall = 1;
+    end else if (d.d.load == 1 &&
+        ((v.rden1 == 1 && d.d.waddr == v.raddr1) ||
+        (v.rden2 == 1 && d.d.waddr == v.raddr2))) begin
       v.stall = 1;
     end
 

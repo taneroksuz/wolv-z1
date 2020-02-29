@@ -251,6 +251,32 @@ package wires;
   } decoder_out_type;
 
   typedef struct packed{
+    logic [31 : 0] instr;
+  } compress_in_type;
+
+  typedef struct packed{
+    logic [31 : 0] imm;
+    logic [4  : 0] waddr;
+    logic [4  : 0] raddr1;
+    logic [4  : 0] raddr2;
+    logic [0  : 0] wren;
+    logic [0  : 0] rden1;
+    logic [0  : 0] rden2;
+    logic [0  : 0] auipc;
+    logic [0  : 0] lui;
+    logic [0  : 0] jal;
+    logic [0  : 0] jalr;
+    logic [0  : 0] branch;
+    logic [0  : 0] load;
+    logic [0  : 0] store;
+    alu_op_type alu_op;
+    bcu_op_type bcu_op;
+    lsu_op_type lsu_op;
+    logic [0  : 0] ebreak;
+    logic [0  : 0] valid;
+  } compress_out_type;
+
+  typedef struct packed{
     logic [0  : 0] rden1;
     logic [4  : 0] raddr1;
     logic [0  : 0] rden2;
@@ -276,6 +302,8 @@ package wires;
   typedef struct packed{
     logic [31 : 0] pc;
     logic [31 : 0] instr;
+    logic [0  : 0] spec;
+    logic [0  : 0] clear;
     logic [0  : 0] valid;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
@@ -286,6 +314,8 @@ package wires;
   fetch_reg_type init_fetch_reg = '{
     pc : 0,
     instr : 0,
+    spec : 0,
+    clear : 0,
     valid : 0,
     exception : 0,
     ecause : 0,

@@ -30,6 +30,8 @@ module cpu
   muldiv_out_type muldiv_out;
   decoder_in_type decoder_in;
   decoder_out_type decoder_out;
+  compress_in_type compress_in;
+  compress_out_type compress_out;
   forwarding_in_type forwarding_in;
   forwarding_out_type forwarding_out;
   csr_in_type csr_in;
@@ -42,6 +44,8 @@ module cpu
   fetch_out_type fetch_out;
   decode_out_type decode_out;
   execute_out_type execute_out;
+  prefetch_in_type prefetch_in;
+  prefetch_out_type prefetch_out;
   mem_in_type imem_in;
   mem_out_type imem_out;
   mem_in_type dmem_in;
@@ -107,6 +111,12 @@ module cpu
     .decoder_out (decoder_out)
   );
 
+  compress compress_comp
+  (
+    .compress_in (compress_in),
+    .compress_out (compress_out)
+  );
+
   register register_comp
   (
     .rst (rst),
@@ -140,11 +150,21 @@ module cpu
     .memory_ready (memory_ready)
   );
 
+  prefetch prefetch_comp
+  (
+    .rst (rst),
+    .clk (clk),
+    .prefetch_in (prefetch_in),
+    .prefetch_out (prefetch_out)
+  );
+
   fetch_stage fetch_stage_comp
   (
     .rst (rst),
     .clk (clk),
     .csr_out (csr_out),
+    .prefetch_out (prefetch_out),
+    .prefetch_in (prefetch_in),
     .imem_out (imem_out),
     .imem_in (imem_in),
     .d (fetch_in),
@@ -157,6 +177,8 @@ module cpu
     .clk (clk),
     .decoder_out (decoder_out),
     .decoder_in (decoder_in),
+    .compress_out (compress_out),
+    .compress_in (compress_in),
     .agu_out (agu_out),
     .agu_in (agu_in),
     .bcu_out (bcu_out),
