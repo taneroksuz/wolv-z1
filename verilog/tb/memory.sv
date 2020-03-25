@@ -48,7 +48,7 @@ module memory
   endtask
 
   initial begin
-    $readmemh("memory.dat", memory_block, 0, 2**memory_depth-1);
+    $readmemh("memory.dat", memory_block);
   end
 
   always_ff @(posedge clk) begin
