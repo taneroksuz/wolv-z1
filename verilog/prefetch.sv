@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import configure::*;
 import constants::*;
 import wires::*;
@@ -12,6 +9,8 @@ module prefetch
   input prefetch_in_type prefetch_in,
   output prefetch_out_type prefetch_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [15 : 0] prefetch_buffer[0:2**prefetch_depth-1];
 

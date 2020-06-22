@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module execute_stage
@@ -22,6 +19,8 @@ module execute_stage
   input execute_in_type d,
   output execute_out_type q
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   execute_reg_type r,rin;
   execute_reg_type v;

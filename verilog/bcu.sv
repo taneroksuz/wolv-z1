@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module bcu
@@ -8,6 +5,8 @@ module bcu
   input bcu_in_type bcu_in,
   output bcu_out_type bcu_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   always_comb begin
 

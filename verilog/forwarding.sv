@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module forwarding
@@ -8,6 +5,8 @@ module forwarding
   input forwarding_in_type forwarding_in,
   output forwarding_out_type forwarding_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31:0] res1;
   logic [31:0] res2;

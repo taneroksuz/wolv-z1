@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import configure::*;
 
 module top_cpu
@@ -10,6 +7,8 @@ module top_cpu
   input logic rx,
   output logic tx
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;

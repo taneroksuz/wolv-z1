@@ -12,6 +12,8 @@ module memory
   output logic [31 : 0] memory_rdata,
   output logic [0  : 0] memory_ready
 );
+	timeunit 1ns;
+	timeprecision 1ps;
 
   logic [31 : 0] memory_block[0:2**memory_depth-1];
 

@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import constants::*;
 import wires::*;
 
@@ -11,6 +8,8 @@ module csr
   input csr_in_type csr_in,
   output csr_out_type csr_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   csr_machine_reg_type csr_machine_reg;
 

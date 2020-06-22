@@ -1,11 +1,10 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 module top_cpu
 (
   input logic rst,
   input logic clk
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;

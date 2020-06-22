@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module register
@@ -10,6 +7,8 @@ module register
   input register_in_type register_in,
   output register_out_type register_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31:0] reg_file[0:31];
 

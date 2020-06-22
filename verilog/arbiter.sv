@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module arbiter(
@@ -18,6 +15,8 @@ module arbiter(
   input logic [31  : 0] memory_rdata,
   input logic [0   : 0] memory_ready
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   parameter [0:0] instr_access = 0;
   parameter [0:0] data_access = 1;

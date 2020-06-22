@@ -1,4 +1,6 @@
 package wires;
+	timeunit 1ns;
+	timeprecision 1ps;
 
   typedef struct packed{
     logic [0 : 0] alu_add;

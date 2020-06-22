@@ -1,7 +1,4 @@
 import constants::*;
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 import functions::*;
 
@@ -27,6 +24,8 @@ module decode_stage
   input decode_in_type d,
   output decode_out_type q
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   decode_reg_type r,rin;
   decode_reg_type v;

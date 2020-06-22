@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import constants::*;
 import wires::*;
 
@@ -16,6 +13,8 @@ module fetch_stage
   input fetch_in_type d,
   output fetch_out_type q
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   fetch_reg_type r,rin;
   fetch_reg_type v;

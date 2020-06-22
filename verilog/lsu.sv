@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module lsu
@@ -8,6 +5,8 @@ module lsu
   input lsu_in_type lsu_in,
   output lsu_out_type lsu_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31:0] ldata;
   logic [7:0]  data_b;

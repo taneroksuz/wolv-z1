@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 import functions::*;
 
@@ -9,6 +6,8 @@ module alu
   input alu_in_type alu_in,
   output alu_out_type alu_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31 : 0] rdata2;
   logic [31 : 0] result;

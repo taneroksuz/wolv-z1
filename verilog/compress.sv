@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module compress
@@ -8,6 +5,8 @@ module compress
   input compress_in_type compress_in,
   output compress_out_type compress_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31 : 0] instr;
 

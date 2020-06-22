@@ -12,6 +12,8 @@ module bram
   output logic [31 : 0] bram_rdata,
   output logic [0  : 0] bram_ready
 );
+	timeunit 1ns;
+	timeprecision 1ps;
 
   logic [31 : 0] bram_block[0:2**bram_depth-1];
 

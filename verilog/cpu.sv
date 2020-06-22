@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module cpu
@@ -15,6 +12,8 @@ module cpu
   input logic [31  : 0] memory_rdata,
   input logic [0   : 0] memory_ready
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   agu_in_type agu_in;
   agu_out_type agu_out;

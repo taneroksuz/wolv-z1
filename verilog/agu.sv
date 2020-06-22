@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import constants::*;
 import wires::*;
 import functions::*;
@@ -10,6 +7,9 @@ module agu
   input agu_in_type agu_in,
   output agu_out_type agu_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
+
   logic [0  : 0] misalign;
 
   logic [0  : 0] exception;

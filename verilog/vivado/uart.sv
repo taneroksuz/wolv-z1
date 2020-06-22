@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import configure::*;
 import wires::*;
 
@@ -18,6 +15,8 @@ module uart
   input logic uart_rx,
   output logic uart_tx
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   typedef struct packed{
     logic [3  : 0] state_tx;

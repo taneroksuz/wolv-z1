@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import wires::*;
 
 module muldiv
@@ -10,6 +7,8 @@ module muldiv
   input muldiv_in_type muldiv_in,
   output muldiv_out_type muldiv_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   muldiv_reg_type r,rin;
   muldiv_reg_type v;

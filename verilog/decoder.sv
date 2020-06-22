@@ -1,6 +1,3 @@
-timeunit 1ns;
-timeprecision 1ps;
-
 import constants::*;
 import wires::*;
 
@@ -9,6 +6,8 @@ module decoder
   input decoder_in_type decoder_in,
   output decoder_out_type decoder_out
 );
+  timeunit 1ns;
+  timeprecision 1ps;
 
   logic [31 : 0] instr;
 
