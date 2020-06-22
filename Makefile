@@ -13,7 +13,7 @@ PYTHON ?= /usr/bin/python2
 BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 OFFSET ?= 0x10000 # Number of dwords in blockram (address range is OFFSET * 8)
 TEST ?= dhrystone
-CYCLES ?= 10000000
+CYCLES ?= 10000000000
 WAVE ?= "" # "wave" for saving dump file
 
 generate_isa:

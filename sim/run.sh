@@ -19,7 +19,7 @@ if [[ "$5" = [0-9]* ]];
 then
   CYCLES="$5"
 else
-  CYCLES=10000000
+  CYCLES=10000000000
 fi
 
 cd ${DIR}/sim/work
