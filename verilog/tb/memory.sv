@@ -31,9 +31,6 @@ module memory
       if (|memory_block[1024] == 0 & memory_addr[(memory_depth+1):2] == 1024  & |memory_wstrb == 1) begin
         ok = 1;
       end
-      if (|memory_block[2048] == 0 & memory_addr[(memory_depth+1):2] == 2048  & |memory_wstrb == 1) begin
-        ok = 1;
-      end
       if (|memory_block[3072] == 0 & memory_addr[(memory_depth+1):2] == 3072  & |memory_wstrb == 1) begin
         ok = 1;
       end
