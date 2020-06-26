@@ -34,7 +34,16 @@ module top_cpu
 
   always_comb begin
 
-    if (memory_addr == timer_base_addr) begin
+    if (memory_addr == mtimecmp) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtimecmp4) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtime) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtime4) begin
       bram_valid = 0;
       timer_valid = memory_valid;
     end else begin

@@ -32,7 +32,7 @@ module timer
     end else begin
       ready <= 0;
       if (timer_valid == 1) begin
-        if (timer_addr[3:0] == 0) begin
+        if (timer_addr[3:2] == 0) begin
           if (|timer_wstrb == 0) begin
             rdata <= timer_cmp[31:0];
             ready <= 1;
@@ -54,7 +54,7 @@ module timer
               ready <= 1;
             end
           end
-        end else if (timer_addr[3:0] == 4) begin
+        end else if (timer_addr[3:2] == 1) begin
           if (|timer_wstrb == 0) begin
             rdata <= timer_cmp[63:32];
             ready <= 1;
@@ -76,12 +76,12 @@ module timer
               ready <= 1;
             end
           end
-        end else if (timer_addr[3:0] == 8) begin
+        end else if (timer_addr[3:2] == 2) begin
           if (|timer_wstrb == 0) begin
             rdata <= timer[31:0];
             ready <= 1;
           end
-        end else if (timer_addr[3:0] == 12) begin
+        end else if (timer_addr[3:2] == 3) begin
           if (|timer_wstrb == 0) begin
             rdata <= timer[63:32];
             ready <= 1;

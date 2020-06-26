@@ -127,6 +127,12 @@ module csr
         csr_machine_reg.minstret <= csr_machine_reg.minstret + 1;
       end
 
+      if (timer_irpt == 1) begin
+        csr_machine_reg.mip[7] <= 1;
+      end else begin
+        csr_machine_reg.mip[7] <= 0;
+      end
+
       csr_machine_reg.mcycle <= csr_machine_reg.mcycle + 1;
 
       if (csr_in.exception == 1) begin
@@ -136,8 +142,7 @@ module csr
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {28'b0,csr_in.ecause};
         exception <= 1;
-      end else if (timer_irpt == 1 &&
-                   csr_machine_reg.mstatus[3] == 1 &&
+      end else if (csr_machine_reg.mstatus[3] == 1 &&
                    csr_machine_reg.mie[7] == 1 &&
                    csr_machine_reg.mip[7] == 1) begin
         csr_machine_reg.mstatus[7] <= csr_machine_reg.mstatus[3];
@@ -145,6 +150,7 @@ module csr
         csr_machine_reg.mepc <= csr_in.epc;
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {1'b1,27'b0,interrupt_mach_timer};
+        exception <= 1;
       end else begin
         exception <= 0;
       end

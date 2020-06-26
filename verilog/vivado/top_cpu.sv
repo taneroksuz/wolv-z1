@@ -49,9 +49,18 @@ module top_cpu
     if (memory_addr == uart_base_addr) begin
       bram_valid = 0;
       uart_valid = memory_valid;
-    end else if (memory_addr == timer_base_addr) begin
+    end else if (memory_addr == mtimecmp) begin
       bram_valid = 0;
-      uart_valid = memory_valid;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtimecmp4) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtime) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
+    end else if (memory_addr == mtime4) begin
+      bram_valid = 0;
+      timer_valid = memory_valid;
     end else begin
       bram_valid = memory_valid;
       uart_valid = 0;
