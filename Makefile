@@ -16,9 +16,6 @@ TEST ?= dhrystone
 CYCLES ?= 10000000000
 WAVE ?= "" # "wave" for saving dump file
 
-generate_isa:
-	soft/isa.sh ${RISCV} ${MARCH} ${MABI} ${PYTHON} ${OFFSET} ${BASEDIR}
-
 generate_compliance:
 	soft/compliance.sh ${RISCV} ${MARCH} ${MABI} ${PYTHON} ${OFFSET} ${BASEDIR}
 

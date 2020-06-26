@@ -10,7 +10,8 @@ module cpu
   output logic [31 : 0] memory_wdata,
   output logic [3  : 0] memory_wstrb,
   input logic [31  : 0] memory_rdata,
-  input logic [0   : 0] memory_ready
+  input logic [0   : 0] memory_ready,
+  input logic [0   :0] timer_irpt
 );
   timeunit 1ns;
   timeprecision 1ps;
@@ -129,7 +130,8 @@ module cpu
     .rst (rst),
     .clk (clk),
     .csr_in (csr_in),
-    .csr_out (csr_out)
+    .csr_out (csr_out),
+    .timer_irpt (timer_irpt)
   );
 
   arbiter arbiter_comp

@@ -31,71 +31,35 @@ then
 	make -s -j -C obj_dir/ -f Vtop_cpu.mk Vtop_cpu
   if [ "$4" = 'dhrystone' ]
   then
-    cp $DIR/build/dhrystone/dat/dhrystone.dat memory.dat
+    cp $DIR/build/dhrystone/dat/dhrystone.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES dhrystone 2> /dev/null
   elif [ "$4" = 'coremark' ]
   then
-    cp $DIR/build/coremark/dat/coremark.dat memory.dat
+    cp $DIR/build/coremark/dat/coremark.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES coremark 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
-    cp $DIR/build/csmith/dat/csmith.dat memory.dat
+    cp $DIR/build/csmith/dat/csmith.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES csmith 2> /dev/null
   elif [ "$4" = 'torture' ]
   then
-    cp $DIR/build/torture/dat/torture.dat memory.dat
+    cp $DIR/build/torture/dat/torture.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES torture 2> /dev/null
   elif [ "$4" = 'uart' ]
   then
-    cp $DIR/build/uart/dat/uart.dat memory.dat
+    cp $DIR/build/uart/dat/uart.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES uart 2> /dev/null
   elif [ "$4" = 'compliance' ]
   then
     for filename in $DIR/build/compliance/dat/*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
-    done
-  elif [ "$4" = 'uc' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32uc*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
-    done
-  elif [ "$4" = 'ui' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32ui*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
-    done
-  elif [ "$4" = 'um' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32um*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
-    done
-  elif [ "$4" = 'mi' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32mi*.dat; do
-      cp $filename memory.dat
+      cp $filename bram.dat
       filename=${filename##*/}
       filename=${filename%.dat}
       echo "${filename}"
     	obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
     done
   else
-    cp $DIR/$4 memory.dat
+    cp $DIR/$4 bram.dat
     filename=${3##*/}
     filename=${filename%.dat}
     obj_dir/Vtop_cpu $CYCLES ${filename} 2> /dev/null
@@ -105,71 +69,35 @@ else
 	make -s -j -C obj_dir/ -f Vtop_cpu.mk Vtop_cpu
   if [ "$4" = 'dhrystone' ]
   then
-    cp $DIR/build/dhrystone/dat/dhrystone.dat memory.dat
+    cp $DIR/build/dhrystone/dat/dhrystone.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'coremark' ]
   then
-    cp $DIR/build/coremark/dat/coremark.dat memory.dat
+    cp $DIR/build/coremark/dat/coremark.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
-    cp $DIR/build/csmith/dat/csmith.dat memory.dat
+    cp $DIR/build/csmith/dat/csmith.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'torture' ]
   then
-    cp $DIR/build/torture/dat/torture.dat memory.dat
+    cp $DIR/build/torture/dat/torture.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'uart' ]
   then
-    cp $DIR/build/uart/dat/uart.dat memory.dat
+    cp $DIR/build/uart/dat/uart.dat bram.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'compliance' ]
   then
     for filename in $DIR/build/compliance/dat/*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-    done
-  elif [ "$4" = 'uc' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32uc*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-    done
-  elif [ "$4" = 'ui' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32ui*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-    done
-  elif [ "$4" = 'um' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32um*.dat; do
-      cp $filename memory.dat
-      filename=${filename##*/}
-      filename=${filename%.dat}
-      echo "${filename}"
-    	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-    done
-  elif [ "$4" = 'mi' ]
-  then
-    for filename in $DIR/build/isa/dat/rv32mi*.dat; do
-      cp $filename memory.dat
+      cp $filename bram.dat
       filename=${filename##*/}
       filename=${filename%.dat}
       echo "${filename}"
     	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
     done
   else
-    cp $DIR/$4 memory.dat
+    cp $DIR/$4 bram.dat
     obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   fi
 fi

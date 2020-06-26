@@ -6,7 +6,8 @@ module csr
   input logic rst,
   input logic clk,
   input csr_in_type csr_in,
-  output csr_out_type csr_out
+  output csr_out_type csr_out,
+  input logic [0:0] timer_irpt
 );
   timeunit 1ns;
   timeprecision 1ps;
@@ -135,6 +136,15 @@ module csr
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {28'b0,csr_in.ecause};
         exception <= 1;
+      end else if (timer_irpt == 1 &&
+                   csr_machine_reg.mstatus[3] == 1 &&
+                   csr_machine_reg.mie[7] == 1 &&
+                   csr_machine_reg.mip[7] == 1) begin
+        csr_machine_reg.mstatus[7] <= csr_machine_reg.mstatus[3];
+        csr_machine_reg.mstatus[3] <= 0;
+        csr_machine_reg.mepc <= csr_in.epc;
+        csr_machine_reg.mtval <= csr_in.etval;
+        csr_machine_reg.mcause <= {1'b1,27'b0,interrupt_mach_timer};
       end else begin
         exception <= 0;
       end

@@ -18,6 +18,7 @@
 ../../verilog/decode_stage.sv
 ../../verilog/execute_stage.sv
 ../../verilog/arbiter.sv
+../../verilog/timer.sv
 ../../verilog/cpu.sv
-../../verilog/tb/memory.sv
+../../verilog/tb/bram.sv
 ../../verilog/tb/top_cpu.sv

@@ -4,6 +4,7 @@ module top_cpu
 (
   input logic rst,
   input logic clk,
+  input logic rtc,
   input logic rx,
   output logic tx
 );
@@ -34,9 +35,21 @@ module top_cpu
   logic [31 : 0] uart_rdata;
   logic [0  : 0] uart_ready;
 
+  logic [0  : 0] timer_valid;
+  logic [0  : 0] timer_instr;
+  logic [31 : 0] timer_addr;
+  logic [31 : 0] timer_wdata;
+  logic [3  : 0] timer_wstrb;
+  logic [31 : 0] timer_rdata;
+  logic [0  : 0] timer_ready;
+  logic [0  : 0] timer_irpt;
+
   always_comb begin
 
     if (memory_addr == uart_base_addr) begin
+      bram_valid = 0;
+      uart_valid = memory_valid;
+    end else if (memory_addr == timer_base_addr) begin
       bram_valid = 0;
       uart_valid = memory_valid;
     end else begin
@@ -77,7 +90,8 @@ module top_cpu
     .memory_wdata (memory_wdata),
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
-    .memory_ready (memory_ready)
+    .memory_ready (memory_ready),
+    .timer_irpt (timer_irpt)
   );
 
   bram bram_comp
@@ -106,6 +120,21 @@ module top_cpu
     .uart_ready (uart_ready),
     .uart_rx (rx),
     .uart_tx (tx)
+  );
+
+  timer timer_comp
+  (
+    .rst (rst),
+    .clk (clk),
+    .rtc (rtc),
+    .timer_valid (timer_valid),
+    .timer_instr (timer_instr),
+    .timer_addr (timer_addr),
+    .timer_wdata (timer_wdata),
+    .timer_wstrb (timer_wstrb),
+    .timer_rdata (timer_rdata),
+    .timer_ready (timer_ready),
+    .timer_irpt (timer_irpt)
   );
 
 endmodule
