@@ -34,16 +34,8 @@ module top_cpu
 
   always_comb begin
 
-    if (memory_addr == mtimecmp) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtimecmp4) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtime) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtime4) begin
+    if (memory_addr >= timer_base_address && 
+      memory_addr < timer_top_address) begin
       bram_valid = 0;
       timer_valid = memory_valid;
     end else begin
@@ -85,7 +77,9 @@ module top_cpu
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
     .memory_ready (memory_ready),
-    .timer_irpt (timer_irpt)
+    .extern_irpt (0),
+    .timer_irpt (timer_irpt),
+    .soft_irpt (0)
   );
 
   bram bram_comp

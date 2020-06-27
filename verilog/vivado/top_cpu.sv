@@ -4,12 +4,14 @@ module top_cpu
 (
   input logic rst,
   input logic clk,
-  input logic rtc,
   input logic rx,
   output logic tx
 );
   timeunit 1ns;
   timeprecision 1ps;
+
+  logic rtc;
+  logic [15 : 0] count;
 
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;
@@ -44,21 +46,29 @@ module top_cpu
   logic [0  : 0] timer_ready;
   logic [0  : 0] timer_irpt;
 
+  always_ff @(posedge clk) begin
+
+    if (rst == 0) begin
+      rtc <= 0;
+      count <= 0;
+    end else begin
+      if (count == clk_divider_rtc - 1) begin
+        rtc <= ~rtc;
+        count <= 0;
+      end else begin
+        count <= count + 1;
+      end
+    end
+  end
+
   always_comb begin
 
-    if (memory_addr == uart_base_addr) begin
+    if (memory_addr >= uart_base_addr && 
+          memory_addr < uart_top_addr) begin
       bram_valid = 0;
       uart_valid = memory_valid;
-    end else if (memory_addr == mtimecmp) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtimecmp4) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtime) begin
-      bram_valid = 0;
-      timer_valid = memory_valid;
-    end else if (memory_addr == mtime4) begin
+    end else if (memory_addr >= timer_base_address && 
+          memory_addr < timer_top_address) begin
       bram_valid = 0;
       timer_valid = memory_valid;
     end else begin
@@ -82,6 +92,9 @@ module top_cpu
     end else if  (uart_ready == 1) begin
       memory_rdata = uart_rdata;
       memory_ready = uart_ready;
+    end else if  (timer_ready == 1) begin
+      memory_rdata = timer_rdata;
+      memory_ready = timer_ready;
     end else begin
       memory_rdata = 0;
       memory_ready = 0;
@@ -100,7 +113,9 @@ module top_cpu
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
     .memory_ready (memory_ready),
-    .timer_irpt (timer_irpt)
+    .extern_irpt (0),
+    .timer_irpt (timer_irpt),
+    .soft_irpt (0)
   );
 
   bram bram_comp

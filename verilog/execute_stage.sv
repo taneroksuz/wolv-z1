@@ -14,6 +14,7 @@ module execute_stage
   output muldiv_in_type muldiv_in,
   output register_in_type register_in,
   output forwarding_in_type forwarding_in,
+  input csr_out_type csr_out,
   output csr_in_type csr_in,
   input mem_out_type dmem_out,
   input execute_in_type d,
@@ -135,7 +136,7 @@ module execute_stage
       end
     end
 
-    if ((v.stall | v.clear) == 1) begin
+    if ((v.stall | v.clear | csr_out.exception) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;

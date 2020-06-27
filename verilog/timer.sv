@@ -94,14 +94,22 @@ module timer
   assign timer_rdata = rdata;
   assign timer_ready = ready;
 
+  always_ff @(posedge clk) begin
+    if (rst == 0) begin
+      timer_irpt <= 0;
+    end else begin
+      if (timer >= timer_cmp) begin
+        timer_irpt <= 1;
+      end else begin
+        timer_irpt <= 0;
+      end
+    end
+  end
+
   always_ff @(posedge rtc) begin
     if (rst == 0) begin
       timer <= 0;
     end else begin
-      timer_irpt <= 0;
-      if (timer >= timer_cmp) begin
-        timer_irpt <= 1;
-      end
       timer <= timer + 1;
     end
   end

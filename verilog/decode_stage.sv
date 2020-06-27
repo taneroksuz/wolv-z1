@@ -179,7 +179,7 @@ module decode_stage
       v.stall = 1;
     end
 
-    if ((v.stall | v.clear) == 1) begin
+    if ((v.stall | v.clear | csr_out.exception) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;
@@ -214,8 +214,12 @@ module decode_stage
     csr_in.mret = v.mret;
     csr_in.exception = v.exception;
     csr_in.ecause = v.ecause;
-    csr_in.epc = v.pc;
     csr_in.etval = v.etval;
+    if (r.jump == 1) begin
+      csr_in.epc = r.pc;
+    end else begin
+      csr_in.epc = v.pc;
+    end
 
     csr_in.crden = v.crden;
     csr_in.craddr = v.caddr;
