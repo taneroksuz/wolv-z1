@@ -11,7 +11,7 @@ module top_cpu
   timeprecision 1ps;
 
   logic rtc;
-  logic [15 : 0] count;
+  logic [31 : 0] count;
 
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;
@@ -52,7 +52,7 @@ module top_cpu
       rtc <= 0;
       count <= 0;
     end else begin
-      if (count == clk_divider_rtc - 1) begin
+      if (count == clk_divider_rtc) begin
         rtc <= ~rtc;
         count <= 0;
       end else begin
@@ -116,9 +116,9 @@ module top_cpu
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
     .memory_ready (memory_ready),
-    .extern_irpt (0),
+    .extern_irpt (1'b0),
     .timer_irpt (timer_irpt),
-    .soft_irpt (0)
+    .soft_irpt (1'b0)
   );
 
   bram bram_comp

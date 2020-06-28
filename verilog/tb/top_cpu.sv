@@ -77,9 +77,9 @@ module top_cpu
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
     .memory_ready (memory_ready),
-    .extern_irpt (0),
+    .extern_irpt (1'b0),
     .timer_irpt (timer_irpt),
-    .soft_irpt (0)
+    .soft_irpt (1'b0)
   );
 
   bram bram_comp

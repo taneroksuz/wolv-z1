@@ -19,8 +19,8 @@ package configure;
 
 	parameter baudrate = 115200;
 
-	parameter clks_per_bit = clk_freq/baudrate;
+	parameter clks_per_bit = 2*clk_freq/baudrate;
 
-	parameter clk_divider_rtc = clk_freq/rtc_freq;
+	parameter clk_divider_rtc = clk_freq/rtc_freq/2;
 
 endpackage
