@@ -82,13 +82,13 @@ void init_timer_interrupt()
 
   unsigned int val;
   
-  val = read_csr(mstatus);
+  val = 0;
 
   val |= MSTATUS_MIE;
 
   write_csr(mstatus,val);
 
-  val = read_csr(mie);
+  val = 0;
 
   val |= MIP_MTIP;
 

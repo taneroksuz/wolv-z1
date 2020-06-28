@@ -21,7 +21,7 @@ module bram
   logic [0  : 0] ready;
 
   initial begin
-    $readmemh("uart.dat", bram_block);
+    $readmemh("bram.dat", bram_block);
   end
 
   always_ff @(posedge clk) begin

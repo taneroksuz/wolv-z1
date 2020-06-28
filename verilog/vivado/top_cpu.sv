@@ -66,13 +66,16 @@ module top_cpu
     if (memory_addr >= uart_base_addr && 
           memory_addr < uart_top_addr) begin
       bram_valid = 0;
+      timer_valid = 0;
       uart_valid = memory_valid;
     end else if (memory_addr >= timer_base_address && 
           memory_addr < timer_top_address) begin
       bram_valid = 0;
       timer_valid = memory_valid;
+      uart_valid = 0;
     end else begin
       bram_valid = memory_valid;
+      timer_valid = 0;
       uart_valid = 0;
     end
 

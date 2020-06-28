@@ -25,13 +25,13 @@ module register
     end
   end
 
+  initial begin
+    reg_file = '{default:'0};
+  end
+
   always_ff @(posedge clk) begin
-    if (rst == 0) begin
-      reg_file <= '{default:'0};
-    end else begin
-      if (register_in.wren == 1) begin
-        reg_file[register_in.waddr] <= register_in.wdata;
-      end
+    if (register_in.wren == 1 && register_in.waddr != 0) begin
+      reg_file[register_in.waddr] <= register_in.wdata;
     end
   end
 
