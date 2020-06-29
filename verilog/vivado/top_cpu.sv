@@ -89,6 +89,11 @@ module top_cpu
     bram_wdata = memory_wdata;
     bram_wstrb = memory_wstrb;
 
+    timer_instr = memory_instr;
+    timer_addr = memory_addr;
+    timer_wdata = memory_wdata;
+    timer_wstrb = memory_wstrb;
+
     if (bram_ready == 1) begin
       memory_rdata = bram_rdata;
       memory_ready = bram_ready;
