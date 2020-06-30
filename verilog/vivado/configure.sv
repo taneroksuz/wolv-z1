@@ -21,6 +21,6 @@ package configure;
 
 	parameter clks_per_bit = 2*clk_freq/baudrate;
 
-	parameter clk_divider_rtc = clk_freq/rtc_freq/2;
+	parameter clk_divider_rtc = 2*clk_freq/rtc_freq;
 
 endpackage

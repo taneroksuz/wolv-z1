@@ -49,7 +49,7 @@ module top_cpu
     bram_wstrb = memory_wstrb;
 
     timer_instr = memory_instr;
-    timer_addr = memory_addr;
+    timer_addr = memory_addr ^ timer_base_address;
     timer_wdata = memory_wdata;
     timer_wstrb = memory_wstrb;
 

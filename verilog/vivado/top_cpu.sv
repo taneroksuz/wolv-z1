@@ -79,20 +79,20 @@ module top_cpu
       uart_valid = 0;
     end
 
-    uart_instr = memory_instr;
-    uart_addr = memory_addr;
-    uart_wdata = memory_wdata;
-    uart_wstrb = memory_wstrb;
-
     bram_instr = memory_instr;
     bram_addr = memory_addr;
     bram_wdata = memory_wdata;
     bram_wstrb = memory_wstrb;
 
     timer_instr = memory_instr;
-    timer_addr = memory_addr;
+    timer_addr = memory_addr ^ timer_base_address;
     timer_wdata = memory_wdata;
     timer_wstrb = memory_wstrb;
+
+    uart_instr = memory_instr;
+    uart_addr = memory_addr ^ uart_base_addr;
+    uart_wdata = memory_wdata;
+    uart_wstrb = memory_wstrb;
 
     if (bram_ready == 1) begin
       memory_rdata = bram_rdata;
