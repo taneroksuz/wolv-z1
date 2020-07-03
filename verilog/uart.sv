@@ -81,7 +81,7 @@ module uart
       end
       default : begin
         if (r_tx.counter_tx > clks_per_bit) begin
-          v_tx.data_tx = {1'b1,v_tx.data_tx[8:1]};
+          v_tx.data_tx = {1'b1,v_tx.data_tx[9:1]};
           v_tx.state_tx = v_tx.state_tx + 1;
           v_tx.counter_tx = 0;
         end
@@ -123,7 +123,7 @@ module uart
       end
       default : begin
         if (r_rx.counter_rx > clks_per_bit) begin
-          v_rx.data_rx = {uart_rx,v_rx.data_rx[7:1]};
+          v_rx.data_rx = {uart_rx,v_rx.data_rx[8:1]};
           v_rx.state_rx = v_rx.state_rx + 1;
           v_rx.counter_rx = 0;
         end
