@@ -75,7 +75,7 @@ module execute_stage
       v = r;
     end
 
-		v.clear = d.e.clear;
+    v.clear = d.e.clear;
 
     v.stall = 0;
 
