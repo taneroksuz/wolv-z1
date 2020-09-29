@@ -749,7 +749,10 @@ package wires;
     logic [0  : 0] mret;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
-    logic [31 : 0] epc;
+    logic [31 : 0] d_epc;
+    logic [31 : 0] e_epc;
+    logic [0 : 0]  d_valid;
+    logic [0 : 0]  e_valid;
     logic [31 : 0] etval;
   } csr_in_type;
 

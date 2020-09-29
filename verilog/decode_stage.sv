@@ -211,12 +211,10 @@ module decode_stage
     dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
     dmem_in.mem_wstrb = (v.load == 1) ? 0 : v.byteenable;
 
-    csr_in.epc = v.pc;
-    if (v.valid == 0) begin
-      if (r.valid == 1) begin
-        csr_in.epc = r.pc;
-      end
-    end
+    csr_in.d_epc = v.pc;
+    csr_in.e_epc = r.pc;
+    csr_in.d_valid = v.valid;
+    csr_in.e_valid = r.valid;
     csr_in.mret = v.mret;
     csr_in.exception = v.exception;
     csr_in.ecause = v.ecause;

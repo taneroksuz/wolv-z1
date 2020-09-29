@@ -237,7 +237,7 @@ module csr
       if (csr_in.exception == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
         csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_in.epc;
+        csr_machine_reg.mepc <= csr_in.d_epc;
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {28'b0,csr_in.ecause};
         exception <= 1;
@@ -246,7 +246,11 @@ module csr
                    csr_machine_reg.mip.meip == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
         csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_in.epc;
+        if (csr_in.d_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.d_epc;
+        end else if (csr_in.e_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.e_epc;
+        end
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {1'b1,27'b0,interrupt_mach_extern};
         exception <= 1;
@@ -255,7 +259,11 @@ module csr
                    csr_machine_reg.mip.mtip == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
         csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_in.epc;
+        if (csr_in.d_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.d_epc;
+        end else if (csr_in.e_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.e_epc;
+        end
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {1'b1,27'b0,interrupt_mach_timer};
         exception <= 1;
@@ -264,7 +272,11 @@ module csr
                    csr_machine_reg.mip.msip == 1) begin
         csr_machine_reg.mstatus.mpie <= csr_machine_reg.mstatus.mie;
         csr_machine_reg.mstatus.mie <= 0;
-        csr_machine_reg.mepc <= csr_in.epc;
+        if (csr_in.d_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.d_epc;
+        end else if (csr_in.e_valid == 1) begin
+          csr_machine_reg.mepc <= csr_in.e_epc;
+        end
         csr_machine_reg.mtval <= csr_in.etval;
         csr_machine_reg.mcause <= {1'b1,27'b0,interrupt_mach_soft};
         exception <= 1;
