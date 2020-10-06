@@ -13,6 +13,9 @@ module top_cpu
   logic rtc;
   logic [31 : 0] count;
 
+  logic clk_pll;
+  logic [31 : 0] count_pll;
+
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;
   logic [31 : 0] memory_addr;
@@ -51,12 +54,20 @@ module top_cpu
     if (rst == 0) begin
       rtc <= 0;
       count <= 0;
+      clk_pll <= 0;
+      count_pll <= 0;
     end else begin
       if (count == clk_divider_rtc) begin
         rtc <= ~rtc;
         count <= 0;
       end else begin
         count <= count + 1;
+      end
+      if (count_pll == clk_divider_pll) begin
+        clk_pll <= ~clk_pll;
+        count_pll <= 0;
+      end else begin
+        count_pll <= count_pll + 1;
       end
     end
   end
@@ -113,7 +124,7 @@ module top_cpu
   cpu cpu_comp
   (
     .rst (rst),
-    .clk (clk),
+    .clk (clk_pll),
     .memory_valid (memory_valid),
     .memory_instr (memory_instr),
     .memory_addr (memory_addr),
@@ -129,7 +140,7 @@ module top_cpu
   bram bram_comp
   (
     .rst (rst),
-    .clk (clk),
+    .clk (clk_pll),
     .bram_valid (bram_valid),
     .bram_instr (bram_instr),
     .bram_addr (bram_addr),
@@ -142,7 +153,7 @@ module top_cpu
   uart uart_comp
   (
     .rst (rst),
-    .clk (clk),
+    .clk (clk_pll),
     .uart_valid (uart_valid),
     .uart_instr (uart_instr),
     .uart_addr (uart_addr),
@@ -157,7 +168,7 @@ module top_cpu
   timer timer_comp
   (
     .rst (rst),
-    .clk (clk),
+    .clk (clk_pll),
     .rtc (rtc),
     .timer_valid (timer_valid),
     .timer_instr (timer_instr),

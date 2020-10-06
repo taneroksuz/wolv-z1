@@ -11,16 +11,15 @@ package configure;
 	parameter timer_top_address = 32'h200010;
 
 	parameter prefetch_depth = 4;
-	parameter bram_depth = 14;
+	parameter bram_depth = 12;
 
-	parameter clk_freq = 50000000; // 50MHz
-
-	parameter rtc_freq = 32768; // 32.768MHz
-
+	parameter clk_freq = 100000000; // 100MHz
+	parameter clk_pll = 50000000; // 50MHz
+	parameter rtc_freq = 32768; // 32768Hz
 	parameter baudrate = 115200;
 
-	parameter clks_per_bit = 2*clk_freq/baudrate;
-
-	parameter clk_divider_rtc = 2*clk_freq/rtc_freq;
+	parameter clks_per_bit = clk_pll/baudrate-1;
+	parameter clk_divider_rtc = clk_freq/rtc_freq-1;
+	parameter clk_divider_pll = clk_freq/clk_pll-1;
 
 endpackage
