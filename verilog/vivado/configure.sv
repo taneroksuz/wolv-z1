@@ -18,8 +18,8 @@ package configure;
 	parameter rtc_freq = 32768; // 32768Hz
 	parameter baudrate = 115200;
 
+	parameter clk_divider_pll = (clk_freq/clk_pll)/2-1;
+	parameter clk_divider_rtc = (clk_freq/rtc_freq)/2-1;
 	parameter clks_per_bit = clk_pll/baudrate-1;
-	parameter clk_divider_rtc = clk_freq/rtc_freq-1;
-	parameter clk_divider_pll = clk_freq/clk_pll-1;
 
 endpackage
