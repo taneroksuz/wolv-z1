@@ -5,7 +5,7 @@ RISCV-Zwerg CPU supports currently only riscv32-imc instruction set architecture
 ## Dhrystone Benchmark ##
 | Cycles | Dhrystone/s/MHz | DMIPS/s/MHz |
 | ------ | --------------- | ----------- |
-|    493 |            2028 |        1.15 |
+|    472 |            2118 |        1.21 |
 
 ## Coremark Benchmark ##
 | Cycles | Iteration/s/MHz | Iterations |
