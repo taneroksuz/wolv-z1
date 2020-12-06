@@ -1,6 +1,6 @@
-# RISCV ZWERG CPU #
+# RISCV Z1 CPU #
 
-RISCV-Zwerg CPU supports currently only riscv32-imc instruction set architecture and is implemented with 3-stage pipeline.
+RISCV Z1 CPU supports currently only riscv32-imc instruction set architecture and is implemented with 3-stage pipeline.
 
 ## Dhrystone Benchmark ##
 | Cycles | Dhrystone/s/MHz | DMIPS/s/MHz |
