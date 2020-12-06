@@ -11,6 +11,6 @@ package configure;
 	parameter timer_top_address = 32'h200010;
 
 	parameter prefetch_depth = 4;
-	parameter bram_depth = 14;
+	parameter bram_depth = 15;
 
 endpackage
