@@ -11,18 +11,15 @@ module testbench;
   logic tx;
 
   initial begin
-    rst = 1;
-    clk = 1;
-    rx = 1;
-  end
-
-  always begin
-    #100;
-    clk = !clk;
-  end
-
-  always begin
+    rst = 0;
+    clk = 0;
+    rx = 0;
     #20;
+    rst = 1;
+  end
+
+  always begin
+    #5;
     clk = !clk;
   end
 
