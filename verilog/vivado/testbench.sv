@@ -14,7 +14,6 @@ module testbench;
     rst = 1;
     clk = 1;
     rx = 1;
-    tx = 1;
   end
 
   always begin
