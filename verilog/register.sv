@@ -1,6 +1,7 @@
 import wires::*;
 
 module register
+  #(parameter REGISTER_TYPE = 0)
 (
   input logic rst,
   input logic clk,
@@ -25,24 +26,36 @@ module register
     end
   end
 
-  initial begin
-    reg_file = '{default:'0};
-  end
+  generate
 
-  always_ff @(posedge clk) begin
-    if (register_in.wren == 1 && register_in.waddr != 0) begin
-      reg_file[register_in.waddr] <= register_in.wdata;
+  if (REGISTER_TYPE == 0) begin
+
+    initial begin
+      reg_file = '{default:'0};
     end
+
+    always_ff @(posedge clk) begin
+      if (register_in.wren == 1 && register_in.waddr != 0) begin
+        reg_file[register_in.waddr] <= register_in.wdata;
+      end
+    end
+
   end
 
-  // always_ff @(posedge clk) begin
-  //   if (rst == 0) begin
-  //     reg_file <= '{default:'0};
-  //   end else begin
-  //     if (register_in.wren == 1) begin
-  //       reg_file[register_in.waddr] <= register_in.wdata;
-  //     end
-  //   end
-  // end
+  if (REGISTER_TYPE == 1) begin
+
+    always_ff @(posedge clk) begin
+      if (rst == 0) begin
+        reg_file <= '{default:'0};
+      end else begin
+        if (register_in.wren == 1) begin
+          reg_file[register_in.waddr] <= register_in.wdata;
+        end
+      end
+    end
+
+  end
+
+  endgenerate
 
 endmodule
