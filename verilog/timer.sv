@@ -18,8 +18,8 @@ module timer
   timeunit 1ns;
   timeprecision 1ps;
 
-  logic [63:0] timer;
-  logic [63:0] timer_cmp;
+  logic [63:0] timer = 0;
+  logic [63:0] timer_cmp = 0;
 
   logic [31:0] rdata;
   logic [0:0] ready;
@@ -107,11 +107,7 @@ module timer
   end
 
   always_ff @(posedge rtc) begin
-    if (rst == 0) begin
-      timer <= 0;
-    end else begin
-      timer <= timer + 1;
-    end
+    timer <= timer + 1;
   end
 
 endmodule
