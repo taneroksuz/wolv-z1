@@ -11,16 +11,19 @@ module testbench;
   logic tx;
 
   initial begin
-    rst = 0;
-    clk = 0;
     rx = 0;
-    #20;
-    rst = 1;
+    clk = 1;
   end
 
   always begin
     #5;
     clk = !clk;
+  end
+
+  initial begin
+    rst = 0;
+    #100;
+    rst = 1;
   end
 
   top_cpu top_cpu_comp

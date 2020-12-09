@@ -10,11 +10,11 @@ module top_cpu
   timeunit 1ns;
   timeprecision 1ps;
 
-  logic rtc;
-  logic [31 : 0] count;
+  logic rtc = 0;
+  logic [31 : 0] count = 0;
 
-  logic clk_pll;
-  logic [31 : 0] count_pll;
+  logic clk_pll = 0;
+  logic [31 : 0] count_pll = 0;
 
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;
@@ -50,36 +50,28 @@ module top_cpu
   logic [0  : 0] timer_irpt;
 
   always_ff @(posedge clk) begin
-
-    if (rst == 0) begin
-      rtc <= 0;
+    if (count == clk_divider_rtc) begin
+      rtc <= ~rtc;
       count <= 0;
-      clk_pll <= 0;
+    end else begin
+      count <= count + 1;
+    end
+    if (count_pll == clk_divider_pll) begin
+      clk_pll <= ~clk_pll;
       count_pll <= 0;
     end else begin
-      if (count == clk_divider_rtc) begin
-        rtc <= ~rtc;
-        count <= 0;
-      end else begin
-        count <= count + 1;
-      end
-      if (count_pll == clk_divider_pll) begin
-        clk_pll <= ~clk_pll;
-        count_pll <= 0;
-      end else begin
-        count_pll <= count_pll + 1;
-      end
+      count_pll <= count_pll + 1;
     end
   end
 
   always_comb begin
 
-    if (memory_addr >= uart_base_addr && 
+    if (memory_addr >= uart_base_addr &&
           memory_addr < uart_top_addr) begin
       bram_valid = 0;
       timer_valid = 0;
       uart_valid = memory_valid;
-    end else if (memory_addr >= timer_base_address && 
+    end else if (memory_addr >= timer_base_address &&
           memory_addr < timer_top_address) begin
       bram_valid = 0;
       timer_valid = memory_valid;

@@ -16,8 +16,8 @@ module csr
 
   csr_machine_reg_type csr_machine_reg;
 
-  logic [0:0] exception;
-  logic [0:0] mret;
+  logic [0:0] exception = 0;
+  logic [0:0] mret = 0;
 
   always_comb begin
     if (csr_in.crden == 1) begin
