@@ -23,12 +23,15 @@ module fetch_stage
 
     v = r;
 
-    v.instr = nop;
-
+    // v.stall = (!imem_out.mem_ready) | d.d.stall | d.e.stall | d.e.clear;
     v.stall = prefetch_out.stall | d.d.stall | d.e.stall | d.e.clear;
     v.clear = csr_out.exception | csr_out.mret | d.e.clear;
     v.spec = csr_out.exception | csr_out.mret | d.d.jump | d.e.clear;
 
+    // v.instr = nop;
+    // if (imem_out.mem_ready == 1) begin
+    //   v.instr = imem_out.mem_rdata;
+    // end
     v.instr = prefetch_out.instr;
 
     if (csr_out.exception == 1) begin
@@ -50,6 +53,7 @@ module fetch_stage
 
     imem_in.mem_valid = 1;
     imem_in.mem_instr = 1;
+    // imem_in.mem_addr = v.pc;
     imem_in.mem_addr = prefetch_out.fpc;
     imem_in.mem_wdata = 0;
     imem_in.mem_wstrb = 0;
