@@ -2,7 +2,10 @@ default: all
 
 src_dir = $(BASEDIR)/soft/src
 bld_dir = $(BASEDIR)/build/coremark/elf
-obj = $(wildcard $(src_dir)/common/*.S) $(wildcard $(src_dir)/common/*.c) $(wildcard $(src_dir)/coremark/*.c) $(wildcard $(src_dir)/coremark_portme/*.c)
+srcs = $(wildcard $(src_dir)/common/*.S) $(wildcard $(src_dir)/common/*.c) $(wildcard $(src_dir)/coremark/*.c) $(wildcard $(src_dir)/coremark_portme/*.c)
+objs0 = $(srcs:.c=.o)
+objs = $(objs0:.S=.o)
+
 RISCV_GCC ?= $(RISCV)/riscv64-unknown-elf-gcc
 RISCV_GCC_OPTS ?= -g -march=$(MARCH) -mabi=$(MABI) -DPREALLOCATE=1 -mcmodel=medany -static -std=gnu99 -O3 -funroll-all-loops -finline-functions -ffast-math -fno-common
 RISCV_LINK_OPTS ?= -static -nostdlib -nostartfiles -lm -lc -lgcc -T $(src_dir)/common/test.ld
@@ -12,16 +15,15 @@ RISCV_INCL ?= -I$(src_dir)/env -I$(src_dir)/coremark -I$(src_dir)/coremark_portm
 
 FLAGS_STR = "$(RISCV_GCC_OPTS) $(RISCV_LINK_OPTS)"
 
-coremark.elf: $(obj)
-	echo $(obj)
-	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) -DITERATIONS=$(ITER) -DFLAGS_STR=\"$(FLAGS_STR)\" -o $(bld_dir)/$@ $(obj) $(RISCV_LINK_OPTS)
+coremark.elf: $(objs)
+	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) $^ -o $(bld_dir)/$@ $(RISCV_LINK_OPTS)
+	mv $^ $(bld_dir)
 
 %.o: %.c
-	echo $<
-	$(RISCV_GCC) -c $< -o $@
+	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) -DITERATIONS=$(ITER) -DFLAGS_STR=\"$(FLAGS_STR)\" -c $< -o $@
 
 %.o: %.S
-	$(RISCV_GCC) -c $< -o $@
+	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) -c $< -o $@
 
 coremark.dump: $(bld_dir)/coremark.elf
 	$(RISCV_OBJDUMP) $< > $(bld_dir)/$@
