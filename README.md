@@ -5,11 +5,11 @@ RISCV Z1 CPU supports currently only riscv32-imc instruction set architecture an
 ## Dhrystone Benchmark ##
 | Cycles | Dhrystone/s/MHz | DMIPS/s/MHz |
 | ------ | --------------- | ----------- |
-|    464 |            2152 |        1.22 |
+|    460 |            2171 |        1.24 |
 
 ## Coremark Benchmark ##
 | Cycles | Iteration/s/MHz |
 | ------ | --------------- |
-| 428168 |            2.34 |
+| 364803 |            2.74 |
 
 Documentation will be expanded in the future.
