@@ -12,6 +12,7 @@ RISCV_LINK_OPTS ?= -static -nostartfiles -lm -lgcc -T $(src_dir)/timer/link.ld
 RISCV_OBJDUMP ?= $(RISCV)/riscv64-unknown-elf-objdump -S -Mnumeric,no-aliases --disassemble-all --disassemble-zeroes
 RISCV_OBJCOPY ?= $(RISCV)/riscv64-unknown-elf-objcopy -O binary
 RISCV_INCL ?= -I$(src_dir)/env -I$(src_dir)/timer -I$(src_dir)/common
+RISCV_NM ?= $(RISCV)/riscv64-unknown-elf-nm -A
 
 timer.elf: $(objs)
 	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) $^ -o $(bld_dir)/$@ $(RISCV_LINK_OPTS)
@@ -23,6 +24,9 @@ timer.elf: $(objs)
 %.o: %.S
 	$(RISCV_GCC) $(RISCV_INCL) $(RISCV_GCC_OPTS) -c $< -o $@
 
+timer.host: $(bld_dir)/timer.elf
+	$(RISCV_NM) $< | grep -sw 'tohost' | sed -e 's/.*:\(.*\) D.*/\1/' > $(bld_dir)/$@
+
 timer.dump: $(bld_dir)/timer.elf
 	$(RISCV_OBJDUMP) $< > $(bld_dir)/$@
 
@@ -31,4 +35,4 @@ timer.bin: $(bld_dir)/timer.elf
 
 # Default
 
-all: timer.elf timer.dump timer.bin
+all: timer.elf timer.host timer.dump timer.bin
