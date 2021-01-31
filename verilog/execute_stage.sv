@@ -51,6 +51,7 @@ module execute_stage
     v.branch = d.d.branch;
     v.load = d.d.load;
     v.store = d.d.store;
+    v.nop = d.d.nop;
     v.csr = d.d.csr;
     v.div = d.d.div;
     v.mul = d.d.mul;
@@ -160,6 +161,7 @@ module execute_stage
       v.jal = 0;
       v.jalr = 0;
       v.branch = 0;
+      v.nop = 0;
       v.csr = 0;
       v.fence = 0;
       v.ecall = 0;
@@ -172,6 +174,10 @@ module execute_stage
 
     if (v.clear == 1) begin
       v.stall = 0;
+    end
+
+    if (v.nop == 1) begin
+      v.valid = 0;
     end
 
     register_in.wren = v.wren;

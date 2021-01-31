@@ -40,6 +40,7 @@ module decoder
   logic [0  : 0] branch;
   logic [0  : 0] load;
   logic [0  : 0] store;
+  logic [0  : 0] nop;
   logic [0  : 0] csr;
   logic [0  : 0] div;
   logic [0  : 0] mul;
@@ -102,6 +103,7 @@ module decoder
     branch = 0;
     load = 0;
     store = 0;
+    nop = 0;
     csr = 0;
     div = 0;
     mul = 0;
@@ -334,8 +336,9 @@ module decoder
       default : valid = 0;
     endcase;
 
-    if (instr == nop) begin
+    if (instr == nop_instr) begin
       alu_op.alu_add = 0;
+      nop = 1;
     end
 
     decoder_out.imm = imm;
@@ -351,6 +354,7 @@ module decoder
     decoder_out.branch = branch;
     decoder_out.load = load;
     decoder_out.store = store;
+    decoder_out.nop = nop;
     decoder_out.csr = csr;
     decoder_out.div = div;
     decoder_out.mul = mul;

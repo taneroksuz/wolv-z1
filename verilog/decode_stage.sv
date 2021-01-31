@@ -68,6 +68,7 @@ module decode_stage
     v.branch = decoder_out.branch;
     v.load = decoder_out.load;
     v.store = decoder_out.store;
+    v.nop = decoder_out.nop;
     v.csr = decoder_out.csr;
     v.div = decoder_out.div;
     v.mul = decoder_out.mul;
@@ -193,6 +194,7 @@ module decode_stage
       v.branch = 0;
       v.load = 0;
       v.store = 0;
+      v.nop = 0;
       v.csr = 0;
       v.div = 0;
       v.mul = 0;
@@ -251,6 +253,7 @@ module decode_stage
     q.branch = r.branch;
     q.load = r.load;
     q.store = r.store;
+    q.nop = r.nop;
     q.csr = r.csr;
     q.div = r.div;
     q.mul = r.mul;
