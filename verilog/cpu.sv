@@ -36,11 +36,14 @@ module cpu
   decoder_out_type decoder_out;
   compress_in_type compress_in;
   compress_out_type compress_out;
-  forwarding_in_type forwarding_in;
+  forwarding_register_in_type forwarding_rin;
+  forwarding_execute_in_type forwarding_ein;
   forwarding_out_type forwarding_out;
-  csr_in_type csr_in;
+  csr_decode_in_type csr_din;
+  csr_execute_in_type csr_ein;
   csr_out_type csr_out;
-  register_in_type register_in;
+  register_read_in_type register_rin;
+  register_write_in_type register_win;
   register_out_type register_out;
   fetch_in_type fetch_in;
   decode_in_type decode_in;
@@ -113,7 +116,8 @@ module cpu
 
   forwarding forwarding_comp
   (
-    .forwarding_in (forwarding_in),
+    .forwarding_rin (forwarding_rin),
+    .forwarding_ein (forwarding_ein),
     .forwarding_out (forwarding_out)
   );
 
@@ -133,7 +137,8 @@ module cpu
   (
     .rst (rst),
     .clk (clk),
-    .register_in (register_in),
+    .register_rin (register_rin),
+    .register_win (register_win),
     .register_out (register_out)
   );
 
@@ -141,7 +146,8 @@ module cpu
   (
     .rst (rst),
     .clk (clk),
-    .csr_in (csr_in),
+    .csr_din (csr_din),
+    .csr_ein (csr_ein),
     .csr_out (csr_out),
     .extern_irpt (extern_irpt),
     .timer_irpt (timer_irpt),
@@ -199,11 +205,11 @@ module cpu
     .bcu_out (bcu_out),
     .bcu_in (bcu_in),
     .register_out (register_out),
-    .register_in (register_in),
+    .register_rin (register_rin),
     .forwarding_out (forwarding_out),
-    .forwarding_in (forwarding_in),
+    .forwarding_rin (forwarding_rin),
     .csr_out (csr_out),
-    .csr_in (csr_in),
+    .csr_din (csr_din),
     .dmem_in (dmem_in),
     .d (decode_in),
     .q (decode_out)
@@ -223,10 +229,10 @@ module cpu
     .div_in (div_in),
     .mul_out (mul_out),
     .mul_in (mul_in),
-    .register_in (register_in),
-    .forwarding_in (forwarding_in),
+    .register_win (register_win),
+    .forwarding_ein (forwarding_ein),
     .csr_out (csr_out),
-    .csr_in (csr_in),
+    .csr_ein (csr_ein),
     .dmem_out (dmem_out),
     .d (execute_in),
     .q (execute_out)

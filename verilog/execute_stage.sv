@@ -14,10 +14,10 @@ module execute_stage
   output div_in_type div_in,
   input mul_out_type mul_out,
   output mul_in_type mul_in,
-  output register_in_type register_in,
-  output forwarding_in_type forwarding_in,
+  output register_write_in_type register_win,
+  output forwarding_execute_in_type forwarding_ein,
   input csr_out_type csr_out,
-  output csr_in_type csr_in,
+  output csr_execute_in_type csr_ein,
   input mem_out_type dmem_out,
   input execute_in_type d,
   output execute_out_type q
@@ -180,18 +180,18 @@ module execute_stage
       v.valid = 0;
     end
 
-    register_in.wren = v.wren;
-    register_in.waddr = v.waddr;
-    register_in.wdata = v.wdata;
+    register_win.wren = v.wren;
+    register_win.waddr = v.waddr;
+    register_win.wdata = v.wdata;
 
-    forwarding_in.execute_wren = v.wren;
-    forwarding_in.execute_waddr = v.waddr;
-    forwarding_in.execute_wdata = v.wdata;
+    forwarding_ein.wren = v.wren;
+    forwarding_ein.waddr = v.waddr;
+    forwarding_ein.wdata = v.wdata;
 
-    csr_in.valid = v.valid;
-    csr_in.cwren = v.cwren;
-    csr_in.cwaddr = v.caddr;
-    csr_in.cdata = v.cdata;
+    csr_ein.valid = v.valid;
+    csr_ein.cwren = v.cwren;
+    csr_ein.cwaddr = v.caddr;
+    csr_ein.cdata = v.cdata;
 
     rin = v;
 
