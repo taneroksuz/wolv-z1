@@ -69,9 +69,9 @@ module decode_stage
     v.load = decoder_out.load;
     v.store = decoder_out.store;
     v.nop = decoder_out.nop;
-    v.csr = decoder_out.csr;
-    v.div = decoder_out.div;
-    v.mul = decoder_out.mul;
+    v.csregister = decoder_out.csregister;
+    v.division = decoder_out.division;
+    v.multiplication = decoder_out.multiplication;
     v.alu_op = decoder_out.alu_op;
     v.bcu_op = decoder_out.bcu_op;
     v.lsu_op = decoder_out.lsu_op;
@@ -178,9 +178,9 @@ module decode_stage
 
     if (d.d.cwren == 1) begin
       v.stall = 1;
-    end else if (d.d.div == 1) begin
+    end else if (d.d.division == 1) begin
       v.stall = 1;
-    end else if (d.d.mul == 1) begin
+    end else if (d.d.multiplication == 1) begin
       v.stall = 1;
     end
 
@@ -195,9 +195,9 @@ module decode_stage
       v.load = 0;
       v.store = 0;
       v.nop = 0;
-      v.csr = 0;
-      v.div = 0;
-      v.mul = 0;
+      v.csregister = 0;
+      v.division = 0;
+      v.multiplication = 0;
       v.fence = 0;
       v.ecall = 0;
       v.ebreak = 0;
@@ -216,7 +216,7 @@ module decode_stage
     dmem_in.mem_instr = 0;
     dmem_in.mem_addr = v.address;
     dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
-    dmem_in.mem_wstrb = (v.load == 1) ? 0 : v.byteenable;
+    dmem_in.mem_wstrb = (v.load == 1) ? 4'h0 : v.byteenable;
 
     csr_in.d_epc = v.pc;
     csr_in.e_epc = r.pc;
@@ -254,9 +254,9 @@ module decode_stage
     q.load = r.load;
     q.store = r.store;
     q.nop = r.nop;
-    q.csr = r.csr;
-    q.div = r.div;
-    q.mul = r.mul;
+    q.csregister = r.csregister;
+    q.division = r.division;
+    q.multiplication = r.multiplication;
     q.fence = r.fence;
     q.ecall = r.ecall;
     q.ebreak = r.ebreak;

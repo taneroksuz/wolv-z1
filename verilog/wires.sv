@@ -15,7 +15,7 @@ package wires;
     logic [0 : 0] alu_xor;
   } alu_op_type;
 
-  alu_op_type init_alu_op = '{
+  parameter alu_op_type init_alu_op = '{
     alu_add : 0,
     alu_sub : 0,
     alu_sll : 0,
@@ -29,28 +29,28 @@ package wires;
   };
 
   typedef struct packed{
-    logic [0 : 0] div;
+    logic [0 : 0] divs;
     logic [0 : 0] divu;
     logic [0 : 0] rem;
     logic [0 : 0] remu;
   } div_op_type;
 
-  div_op_type init_div_op = '{
-    div : 0,
+  parameter div_op_type init_div_op = '{
+    divs : 0,
     divu : 0,
     rem : 0,
     remu : 0
   };
 
   typedef struct packed{
-    logic [0 : 0] mul;
+    logic [0 : 0] muls;
     logic [0 : 0] mulh;
     logic [0 : 0] mulhsu;
     logic [0 : 0] mulhu;
   } mul_op_type;
 
-  mul_op_type init_mul_op = '{
-    mul : 0,
+  parameter mul_op_type init_mul_op = '{
+    muls : 0,
     mulh : 0,
     mulhsu : 0,
     mulhu : 0
@@ -67,7 +67,7 @@ package wires;
     logic [0 : 0] lsu_sw;
   } lsu_op_type;
 
-  lsu_op_type init_lsu_op = '{
+  parameter lsu_op_type init_lsu_op = '{
     lsu_lb : 0,
     lsu_lbu : 0,
     lsu_lh : 0,
@@ -87,7 +87,7 @@ package wires;
     logic [0 : 0] bcu_bgeu;
   } bcu_op_type;
 
-  bcu_op_type init_bcu_op = '{
+  parameter bcu_op_type init_bcu_op = '{
     bcu_beq : 0,
     bcu_bne : 0,
     bcu_blt : 0,
@@ -105,7 +105,7 @@ package wires;
     logic [0 : 0] csrrci;
   } csr_op_type;
 
-  csr_op_type init_csr_op = '{
+  parameter csr_op_type init_csr_op = '{
     csrrw : 0,
     csrrs : 0,
     csrrc : 0,
@@ -146,7 +146,7 @@ package wires;
     logic [0  : 0] op1_neg;
     logic [5  : 0] counter;
     logic [64 : 0] result;
-    logic [0  : 0] div;
+    logic [0  : 0] division;
     logic [0  : 0] negativ;
     logic [0  : 0] divisionbyzero;
     logic [0  : 0] overflow;
@@ -154,7 +154,7 @@ package wires;
     div_op_type op;
   } div_reg_type;
 
-  div_reg_type init_div_reg = '{
+  parameter div_reg_type init_div_reg = '{
     op1 : 0,
     op2 : 0,
     op1_signed : 0,
@@ -162,7 +162,7 @@ package wires;
     op1_neg : 0,
     counter : 0,
     result : 0,
-    div : 0,
+    division : 0,
     negativ : 0,
     divisionbyzero : 0,
     overflow : 0,
@@ -190,13 +190,13 @@ package wires;
     logic [0  : 0] op1_neg;
     logic [5  : 0] counter;
     logic [64 : 0] result;
-    logic [0  : 0] mul;
+    logic [0  : 0] multiplication;
     logic [0  : 0] negativ;
     logic [0  : 0] ready;
     mul_op_type op;
   } mul_reg_type;
 
-  mul_reg_type init_mul_reg = '{
+  parameter mul_reg_type init_mul_reg = '{
     op1 : 0,
     op2 : 0,
     op1_signed : 0,
@@ -204,7 +204,7 @@ package wires;
     op1_neg : 0,
     counter : 0,
     result : 0,
-    mul : 0,
+    multiplication : 0,
     negativ : 0,
     ready : 0,
     op : init_mul_op
@@ -282,9 +282,9 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csr;
-    logic [0  : 0] div;
-    logic [0  : 0] mul;
+    logic [0  : 0] csregister;
+    logic [0  : 0] division;
+    logic [0  : 0] multiplication;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
@@ -311,7 +311,6 @@ package wires;
     logic [0  : 0] wren;
     logic [0  : 0] rden1;
     logic [0  : 0] rden2;
-    logic [0  : 0] auipc;
     logic [0  : 0] lui;
     logic [0  : 0] jal;
     logic [0  : 0] jalr;
@@ -360,7 +359,7 @@ package wires;
     logic [0  : 0] stall;
   } fetch_reg_type;
 
-  fetch_reg_type init_fetch_reg = '{
+  parameter fetch_reg_type init_fetch_reg = '{
     pc : 0,
     instr : 0,
     spec : 0,
@@ -393,9 +392,9 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csr;
-    logic [0  : 0] div;
-    logic [0  : 0] mul;
+    logic [0  : 0] csregister;
+    logic [0  : 0] division;
+    logic [0  : 0] multiplication;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -442,9 +441,9 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csr;
-    logic [0  : 0] div;
-    logic [0  : 0] mul;
+    logic [0  : 0] csregister;
+    logic [0  : 0] division;
+    logic [0  : 0] multiplication;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -470,7 +469,7 @@ package wires;
     logic [0  : 0] clear;
   } decode_reg_type;
 
-  decode_reg_type init_decode_reg = '{
+  parameter decode_reg_type init_decode_reg = '{
     pc : 0,
     instr : 0,
     npc : 0,
@@ -492,9 +491,9 @@ package wires;
     load : 0,
     store : 0,
     nop : 0,
-    csr : 0,
-    div : 0,
-    mul : 0,
+    csregister : 0,
+    division : 0,
+    multiplication : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -546,9 +545,9 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csr;
-    logic [0  : 0] div;
-    logic [0  : 0] mul;
+    logic [0  : 0] csregister;
+    logic [0  : 0] division;
+    logic [0  : 0] multiplication;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -575,7 +574,7 @@ package wires;
     logic [0  : 0] clear;
   } execute_reg_type;
 
-  execute_reg_type init_execute_reg = '{
+  parameter execute_reg_type init_execute_reg = '{
     pc : 0,
     npc : 0,
     imm : 0,
@@ -596,9 +595,9 @@ package wires;
     load : 0,
     store : 0,
     nop : 0,
-    csr : 0,
-    div : 0,
-    mul : 0,
+    csregister : 0,
+    division : 0,
+    multiplication : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -637,7 +636,7 @@ package wires;
     logic [0:0] usip;
   } csr_mip_reg_type;
 
-  csr_mip_reg_type init_csr_mip_reg = '{
+  parameter csr_mip_reg_type init_csr_mip_reg = '{
     meip : 0,
     seip : 0,
     ueip : 0,
@@ -661,7 +660,7 @@ package wires;
     logic [0:0] usie;
   } csr_mie_reg_type;
 
-  csr_mie_reg_type init_csr_mie_reg = '{
+  parameter csr_mie_reg_type init_csr_mie_reg = '{
     meie : 0,
     seie : 0,
     ueie : 0,
@@ -693,7 +692,7 @@ package wires;
     logic [0:0] uie;
   } csr_mstatus_reg_type;
 
-  csr_mstatus_reg_type init_csr_mstatus_reg = '{
+  parameter csr_mstatus_reg_type init_csr_mstatus_reg = '{
     sd : 0,
     tsr : 0,
     tw : 0,
@@ -743,7 +742,7 @@ package wires;
     logic [0:0] a;
   } csr_misa_reg_type;
 
-  csr_misa_reg_type init_csr_misa_reg = '{
+  parameter csr_misa_reg_type init_csr_misa_reg = '{
     mxl : 1,
     z : 0,
     y : 0,
@@ -787,7 +786,7 @@ package wires;
     csr_mie_reg_type mie;
   } csr_machine_reg_type;
 
-  csr_machine_reg_type init_csr_machine_reg = '{
+  parameter csr_machine_reg_type init_csr_machine_reg = '{
     mstatus : init_csr_mstatus_reg,
     misa : init_csr_misa_reg,
     mtvec : 0,
