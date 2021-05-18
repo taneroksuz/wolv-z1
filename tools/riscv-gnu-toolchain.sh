@@ -30,7 +30,7 @@ make -j$(nproc)
 
 git clone --recursive https://github.com/riscv/riscv-isa-sim.git
 
-cd riscv-spike
+cd riscv-isa-sim
 
 mkdir build
 cd build
