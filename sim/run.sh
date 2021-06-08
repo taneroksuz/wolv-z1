@@ -39,11 +39,11 @@ then
     cp $DIR/build/coremark/dat/coremark.dat bram.dat
     cp $DIR/build/coremark/elf/coremark.host host.dat
   	obj_dir/Vtop_cpu $CYCLES coremark 2> /dev/null
-  elif [ "$4" = 'aapg' ]
+  elif [ "$4" = 'timer' ]
   then
-    cp $DIR/build/aapg/dat/aapg.dat bram.dat
-    cp $DIR/build/aapg/elf/aapg.host host.dat
-  	obj_dir/Vtop_cpu $CYCLES aapg 2> /dev/null
+    cp $DIR/build/timer/dat/timer.dat bram.dat
+    cp $DIR/build/timer/elf/timer.host host.dat
+  	obj_dir/Vtop_cpu $CYCLES timer 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
     cp $DIR/build/csmith/dat/csmith.dat bram.dat
@@ -91,10 +91,10 @@ else
     cp $DIR/build/coremark/dat/coremark.dat bram.dat
     cp $DIR/build/coremark/elf/coremark.host host.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-  elif [ "$4" = 'aapg' ]
+  elif [ "$4" = 'timer' ]
   then
-    cp $DIR/build/aapg/dat/aapg.dat bram.dat
-    cp $DIR/build/aapg/elf/aapg.host host.dat
+    cp $DIR/build/timer/dat/timer.dat bram.dat
+    cp $DIR/build/timer/elf/timer.host host.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
