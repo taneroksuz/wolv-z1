@@ -885,8 +885,9 @@ package wires;
   typedef struct packed{
     logic [31:0] pc;
     logic [31:0] npc;
-    logic [0:0] jump;
+    logic [0:0] spec;
     logic [0:0] fence;
+    logic [0:0] valid;
     logic [31:0] rdata;
     logic [0:0] ready;
   } prefetch_in_type;

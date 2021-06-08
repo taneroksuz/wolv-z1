@@ -2,6 +2,8 @@ package configure;
 	timeunit 1ns;
 	timeprecision 1ps;
 
+  parameter bram_latency = 0;
+
 	parameter start_base_addr = 32'h0;
 
 	parameter uart_base_addr = 32'h100000;
