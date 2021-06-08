@@ -39,11 +39,6 @@ then
     cp $DIR/build/coremark/dat/coremark.dat bram.dat
     cp $DIR/build/coremark/elf/coremark.host host.dat
   	obj_dir/Vtop_cpu $CYCLES coremark 2> /dev/null
-  elif [ "$4" = 'timer' ]
-  then
-    cp $DIR/build/timer/dat/timer.dat bram.dat
-    cp $DIR/build/timer/elf/timer.host host.dat
-  	obj_dir/Vtop_cpu $CYCLES timer 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
     cp $DIR/build/csmith/dat/csmith.dat bram.dat
@@ -59,6 +54,11 @@ then
     cp $DIR/build/uart/dat/uart.dat bram.dat
     cp $DIR/build/uart/elf/uart.host host.dat
   	obj_dir/Vtop_cpu $CYCLES uart 2> /dev/null
+  elif [ "$4" = 'timer' ]
+  then
+    cp $DIR/build/timer/dat/timer.dat bram.dat
+    cp $DIR/build/timer/elf/timer.host host.dat
+  	obj_dir/Vtop_cpu $CYCLES timer 2> /dev/null
   elif [ "$4" = 'compliance' ]
   then
     for filename in $DIR/build/compliance/dat/*.dat; do
@@ -91,11 +91,6 @@ else
     cp $DIR/build/coremark/dat/coremark.dat bram.dat
     cp $DIR/build/coremark/elf/coremark.host host.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
-  elif [ "$4" = 'timer' ]
-  then
-    cp $DIR/build/timer/dat/timer.dat bram.dat
-    cp $DIR/build/timer/elf/timer.host host.dat
-  	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'csmith' ]
   then
     cp $DIR/build/csmith/dat/csmith.dat bram.dat
@@ -110,6 +105,11 @@ else
   then
     cp $DIR/build/uart/dat/uart.dat bram.dat
     cp $DIR/build/uart/elf/uart.host host.dat
+  	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
+  elif [ "$4" = 'timer' ]
+  then
+    cp $DIR/build/timer/dat/timer.dat bram.dat
+    cp $DIR/build/timer/elf/timer.host host.dat
   	obj_dir/Vtop_cpu $CYCLES 2> /dev/null
   elif [ "$4" = 'compliance' ]
   then
