@@ -11,7 +11,9 @@ module fetch_stage
   output prefetch_in_type prefetch_in,
   input mem_out_type imem_out,
   output mem_in_type imem_in,
+  input fetch_in_type a,
   input fetch_in_type d,
+  output fetch_out_type y,
   output fetch_out_type q
 );
   timeunit 1ns;
@@ -24,8 +26,8 @@ module fetch_stage
 
     v = r;
 
-    v.valid = ~(d.d.stall | d.e.stall | d.e.clear);
-    v.stall = prefetch_out.stall | d.d.stall | d.e.stall | d.e.clear;
+    v.valid = ~(a.d.stall | a.e.stall | d.e.clear);
+    v.stall = prefetch_out.stall | a.d.stall | a.e.stall | d.e.clear;
     v.clear = csr_out.exception | csr_out.mret | d.e.clear;
     v.spec = csr_out.exception | csr_out.mret | d.d.jump | d.e.clear;
 
@@ -56,6 +58,12 @@ module fetch_stage
     imem_in.mem_wstrb = 0;
 
     rin = v;
+
+    y.pc = v.pc;
+    y.instr = v.instr;
+    y.exception = v.exception;
+    y.ecause = v.ecause;
+    y.etval = v.etval;
 
     q.pc = r.pc;
     q.instr = v.instr;

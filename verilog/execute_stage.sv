@@ -20,7 +20,9 @@ module execute_stage
   input csr_out_type csr_out,
   output csr_execute_in_type csr_ein,
   input mem_out_type dmem_out,
+  input execute_in_type a,
   input execute_in_type d,
+  output execute_out_type y,
   output execute_out_type q
 );
   timeunit 1ns;
@@ -154,7 +156,7 @@ module execute_stage
       end
     end
 
-    if ((v.stall | v.clear | csr_out.exception) == 1) begin
+    if ((v.stall | v.clear | csr_out.exception | csr_out.mret) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;
@@ -195,6 +197,9 @@ module execute_stage
     csr_ein.cdata = v.cdata;
 
     rin = v;
+
+    y.stall = v.stall;
+    y.clear = v.clear;
 
     q.stall = r.stall;
     q.clear = r.clear;

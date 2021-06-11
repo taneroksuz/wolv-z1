@@ -45,12 +45,18 @@ module cpu
   register_read_in_type register_rin;
   register_write_in_type register_win;
   register_out_type register_out;
-  fetch_in_type fetch_in;
-  decode_in_type decode_in;
-  execute_in_type execute_in;
-  fetch_out_type fetch_out;
-  decode_out_type decode_out;
-  execute_out_type execute_out;
+  fetch_in_type fetch_in_a;
+  decode_in_type decode_in_a;
+  execute_in_type execute_in_a;
+  fetch_out_type fetch_out_y;
+  decode_out_type decode_out_y;
+  execute_out_type execute_out_y;
+  fetch_in_type fetch_in_d;
+  decode_in_type decode_in_d;
+  execute_in_type execute_in_d;
+  fetch_out_type fetch_out_q;
+  decode_out_type decode_out_q;
+  execute_out_type execute_out_q;
   prefetch_in_type prefetch_in;
   prefetch_out_type prefetch_out;
   mem_in_type imem_in;
@@ -58,15 +64,25 @@ module cpu
   mem_in_type dmem_in;
   mem_out_type dmem_out;
 
-  assign fetch_in.f = fetch_out;
-  assign fetch_in.d = decode_out;
-  assign fetch_in.e = execute_out;
-  assign decode_in.f = fetch_out;
-  assign decode_in.d = decode_out;
-  assign decode_in.e = execute_out;
-  assign execute_in.f = fetch_out;
-  assign execute_in.d = decode_out;
-  assign execute_in.e = execute_out;
+  assign fetch_in_a.f = fetch_out_y;
+  assign fetch_in_a.d = decode_out_y;
+  assign fetch_in_a.e = execute_out_y;
+  assign decode_in_a.f = fetch_out_y;
+  assign decode_in_a.d = decode_out_y;
+  assign decode_in_a.e = execute_out_y;
+  assign execute_in_a.f = fetch_out_y;
+  assign execute_in_a.d = decode_out_y;
+  assign execute_in_a.e = execute_out_y;
+
+  assign fetch_in_d.f = fetch_out_q;
+  assign fetch_in_d.d = decode_out_q;
+  assign fetch_in_d.e = execute_out_q;
+  assign decode_in_d.f = fetch_out_q;
+  assign decode_in_d.d = decode_out_q;
+  assign decode_in_d.e = execute_out_q;
+  assign execute_in_d.f = fetch_out_q;
+  assign execute_in_d.d = decode_out_q;
+  assign execute_in_d.e = execute_out_q;
 
   agu agu_comp
   (
@@ -188,8 +204,10 @@ module cpu
     .prefetch_in (prefetch_in),
     .imem_out (imem_out),
     .imem_in (imem_in),
-    .d (fetch_in),
-    .q (fetch_out)
+    .a (fetch_in_a),
+    .d (fetch_in_d),
+    .y (fetch_out_y),
+    .q (fetch_out_q)
   );
 
   decode_stage decode_stage_comp
@@ -211,8 +229,10 @@ module cpu
     .csr_out (csr_out),
     .csr_din (csr_din),
     .dmem_in (dmem_in),
-    .d (decode_in),
-    .q (decode_out)
+    .a (decode_in_a),
+    .d (decode_in_d),
+    .y (decode_out_y),
+    .q (decode_out_q)
   );
 
   execute_stage execute_stage_comp
@@ -234,8 +254,10 @@ module cpu
     .csr_out (csr_out),
     .csr_ein (csr_ein),
     .dmem_out (dmem_out),
-    .d (execute_in),
-    .q (execute_out)
+    .a (execute_in_a),
+    .d (execute_in_d),
+    .y (execute_out_y),
+    .q (execute_out_q)
   );
 
 endmodule

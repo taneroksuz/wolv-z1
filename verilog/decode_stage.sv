@@ -21,7 +21,9 @@ module decode_stage
   input forwarding_out_type forwarding_out,
   output forwarding_register_in_type forwarding_rin,
   output mem_in_type dmem_in,
+  input decode_in_type a,
   input decode_in_type d,
+  output decode_out_type y,
   output decode_out_type q
 );
   timeunit 1ns;
@@ -184,7 +186,7 @@ module decode_stage
       v.stall = 1;
     end
 
-    if ((v.stall | v.clear | csr_out.exception) == 1) begin
+    if ((v.stall | v.clear | csr_out.exception | csr_out.mret) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;
@@ -233,6 +235,52 @@ module decode_stage
     v.cdata = csr_out.cdata;
 
     rin = v;
+
+    y.pc = v.pc;
+    y.npc = v.npc;
+    y.imm = v.imm;
+    y.wren = v.wren;
+    y.rden1 = v.rden1;
+    y.rden2 = v.rden2;
+    y.cwren = v.cwren;
+    y.crden = v.crden;
+    y.waddr = v.waddr;
+    y.raddr1 = v.raddr1;
+    y.raddr2 = v.raddr2;
+    y.caddr = v.caddr;
+    y.auipc = v.auipc;
+    y.lui = v.lui;
+    y.jal = v.jal;
+    y.jalr = v.jalr;
+    y.branch = v.branch;
+    y.load = v.load;
+    y.store = v.store;
+    y.nop = v.nop;
+    y.csregister = v.csregister;
+    y.division = v.division;
+    y.multiplication = v.multiplication;
+    y.fence = v.fence;
+    y.ecall = v.ecall;
+    y.ebreak = v.ebreak;
+    y.mret = v.mret;
+    y.wfi = v.wfi;
+    y.valid = v.valid;
+    y.jump = v.jump;
+    y.rdata1 = v.rdata1;
+    y.rdata2 = v.rdata2;
+    y.cdata = v.cdata;
+    y.address = v.address;
+    y.byteenable = v.byteenable;
+    y.alu_op = v.alu_op;
+    y.bcu_op = v.bcu_op;
+    y.lsu_op = v.lsu_op;
+    y.csr_op = v.csr_op;
+    y.div_op = v.div_op;
+    y.mul_op = v.mul_op;
+    y.exception = v.exception;
+    y.ecause = v.ecause;
+    y.etval = v.etval;
+    y.stall = v.stall;
 
     q.pc = r.pc;
     q.npc = r.npc;
