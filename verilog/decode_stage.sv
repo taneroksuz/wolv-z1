@@ -42,9 +42,9 @@ module decode_stage
     v.ecause = d.f.ecause;
     v.etval = d.f.etval;
 
-    if ((d.d.stall | d.e.stall) == 1) begin
-      v = r;
-    end
+    // if ((d.d.stall | d.e.stall) == 1) begin
+    //   v = r;
+    // end
 
     v.clear = d.d.jump | d.d.exception | d.d.mret | d.e.clear;
 
@@ -186,7 +186,7 @@ module decode_stage
       v.stall = 1;
     end
 
-    if ((v.stall | v.clear | csr_out.exception | csr_out.mret) == 1) begin
+    if ((v.stall | a.e.stall | v.clear | csr_out.exception | csr_out.mret) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;
