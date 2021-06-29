@@ -3,19 +3,15 @@ package wires;
   timeprecision 1ps;
 
   typedef struct packed{
-    logic [0:0] bit_add;
     logic [0:0] bit_sh1add;
     logic [0:0] bit_sh2add;
     logic [0:0] bit_sh3add;
-    logic [0:0] bit_slli;
   } zba_op_type;
 
   parameter zba_op_type init_zba_op = '{
-    bit_add    : 0,
     bit_sh1add : 0,
     bit_sh2add : 0,
-    bit_sh3add : 0,
-    bit_slli   : 0
+    bit_sh3add : 0
   };
 
   typedef struct packed{
@@ -86,7 +82,6 @@ package wires;
 
   typedef struct packed{
     logic [0:0] bmcycle;
-    logic [0:0] bit_word;
     logic [0:0] bit_imm;
     logic [0:0] bit_alu;
     logic [0:0] bit_clmul;
@@ -98,7 +93,6 @@ package wires;
 
   parameter bit_op_type init_bit_op = '{
     bmcycle   : 0,
-    bit_word  : 0,
     bit_imm   : 0,
     bit_alu   : 0,
     bit_clmul : 0,
@@ -106,6 +100,55 @@ package wires;
     bit_zbb   : init_zbb_op,
     bit_zbc   : init_zbc_op,
     bit_zbs   : init_zbs_op
+  };
+
+  typedef struct packed{
+    logic [31:0] rs1;
+    logic [31:0] rs2;
+    logic [31:0] imm;
+    logic [0:0] sel;
+    bit_op_type bit_op;
+  } bit_alu_in_type;
+
+  typedef struct packed{
+    logic [31:0] res;
+  } bit_alu_out_type;
+
+  typedef struct packed{
+    logic [31:0] data1;
+    logic [31:0] data2;
+    logic [0:0] enable;
+    logic [0:0] clear;
+    zbc_op_type op;
+  } bit_clmul_in_type;
+
+  typedef struct packed{
+    logic [31:0] result;
+    logic [0:0] ready;
+  } bit_clmul_out_type;
+
+  typedef struct packed{
+    logic [1:0] state;
+    logic [4:0] counter;
+    logic [5:0] index;
+    logic [31:0] data1;
+    logic [31:0] data2;
+    logic [31:0] swap;
+    logic [31:0] result;
+    logic [0:0] ready;
+    zbc_op_type op;
+  } bit_clmul_reg_type;
+
+  parameter bit_clmul_reg_type init_bit_clmul_reg = '{
+    state   : 0,
+    counter : 0,
+    index   : 0,
+    data1   : 0,
+    data2   : 0,
+    swap    : 0,
+    result  : 0,
+    ready   : 0,
+    op      : init_zbc_op
   };
 
   typedef struct packed{
