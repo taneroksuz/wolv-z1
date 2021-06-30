@@ -29,9 +29,9 @@ module bit_alu
     index = 0;
     op = 0;
 
-		bit_zba = bit_alu_i.bit_op.bit_zba;
-		bit_zbb = bit_alu_i.bit_op.bit_zbb;
-		bit_zbs = bit_alu_i.bit_op.bit_zbs;
+		bit_zba = bit_alu_in.bit_op.bit_zba;
+		bit_zbb = bit_alu_in.bit_op.bit_zbb;
+		bit_zbs = bit_alu_in.bit_op.bit_zbs;
 
 		if (bit_zba.bit_sh1add == 1) begin
 			index = 1;

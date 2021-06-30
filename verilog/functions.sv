@@ -148,8 +148,8 @@ package functions;
   endfunction
 
   function [31:0] bit_rol;
-    logic [31:0] rs1;
-    logic [31:0] rs2;
+    input [31:0] rs1;
+    input [31:0] rs2;
     logic [31:0] res;
     begin
       res = rs1 >> rs2[4:0];
@@ -159,8 +159,8 @@ package functions;
   endfunction
 
   function [31:0] bit_ror;
-    logic [31:0] rs1;
-    logic [31:0] rs2;
+    input [31:0] rs1;
+    input [31:0] rs2;
     logic [31:0] res;
     begin
       res = rs1 << rs2[4:0];

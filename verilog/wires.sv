@@ -118,7 +118,6 @@ package wires;
     logic [31:0] data1;
     logic [31:0] data2;
     logic [0:0] enable;
-    logic [0:0] clear;
     zbc_op_type op;
   } bit_clmul_in_type;
 
