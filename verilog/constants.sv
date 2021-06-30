@@ -35,6 +35,29 @@ package constants;
 	parameter [2  : 0] funct_or                   = 3'b110;
 	parameter [2  : 0] funct_and                  = 3'b111;
 
+	parameter [2  : 0] funct_bclr                 = 3'b001;
+	parameter [2  : 0] funct_bext                 = 3'b101;
+	parameter [2  : 0] funct_binv                 = 3'b001;
+	parameter [2  : 0] funct_bset                 = 3'b001;
+
+	parameter [2  : 0] funct_clmul                = 3'b001;
+	parameter [2  : 0] funct_clmulr               = 3'b010;
+	parameter [2  : 0] funct_clmulh               = 3'b011;
+
+	parameter [2  : 0] funct_min                  = 3'b100;
+	parameter [2  : 0] funct_minu                 = 3'b101;
+	parameter [2  : 0] funct_max                  = 3'b110;
+	parameter [2  : 0] funct_maxu                 = 3'b111;
+
+	parameter [2  : 0] funct_rol                  = 3'b001;
+	parameter [2  : 0] funct_ror                  = 3'b101;
+
+	parameter [2  : 0] funct_sh1add               = 3'b010;
+	parameter [2  : 0] funct_sh2add               = 3'b100;
+	parameter [2  : 0] funct_sh3add               = 3'b110;
+
+	parameter [2  : 0] funct_zexth                = 3'b100;
+
 	parameter [2  : 0] funct_mul                  = 3'b000;
 	parameter [2  : 0] funct_mulh                 = 3'b001;
 	parameter [2  : 0] funct_mulhsu               = 3'b010;

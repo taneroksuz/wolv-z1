@@ -19,8 +19,11 @@ module decoder
   logic [31 : 0] imm_j;
   logic [31 : 0] imm;
 
+  logic [4  : 0] shamt;
+
   logic [6  : 0] opcode;
   logic [2  : 0] funct3;
+  logic [4  : 0] funct5;
   logic [6  : 0] funct7;
 
   logic [4  : 0] waddr;
@@ -85,8 +88,11 @@ module decoder
 
     imm = 0;
 
+    shamt = instr[24:20];
+
     opcode = instr[6:0];
     funct3 = instr[14:12];
+    funct5 = instr[24:20];
     funct7 = instr[31:25];
 
     waddr = instr[11:7];
@@ -215,6 +221,34 @@ module decoder
           funct_sll : begin
             if (funct7 == 7'b0000000) begin
               alu_op.alu_sll = 1;
+            end else if (funct7 == 7'b0100100) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bclr = 1;
+            end else if (funct7 == 7'b0010100) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bset = 1;
+            end else if (funct7 == 7'b0110100) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_binv = 1;
+            end else if (funct7 == 7'b0110000) begin
+              if (funct5 == 5'b00000) begin
+                bitmanipulation = 1;
+                bit_op.bit_zbb.bit_clz = 1;
+              end else if (funct5 == 5'b00001) begin
+                bitmanipulation = 1;
+                bit_op.bit_zbb.bit_ctz = 1;
+              end else if (funct5 == 5'b00010) begin
+                bitmanipulation = 1;
+                bit_op.bit_zbb.bit_cpop = 1;
+              end else if (funct5 == 5'b00100) begin
+                bitmanipulation = 1;
+                bit_op.bit_zbb.bit_sextb = 1;
+              end else if (funct5 == 5'b00101) begin
+                bitmanipulation = 1;
+                bit_op.bit_zbb.bit_sexth = 1;
+              end else begin
+                valid = 0;
+              end
             end else begin
               valid = 0;
             end
@@ -224,6 +258,18 @@ module decoder
               alu_op.alu_srl = 1;
             end else if (funct7 == 7'b0100000) begin
               alu_op.alu_sra = 1;
+            end else if (funct7 == 7'b0100100) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bext = 1;
+            end else if (funct7 == 7'b0110000) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_ror = 1;
+            end else if (funct7 == 7'b0010100 && funct5 == 5'b00111) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_orcb = 1;
+            end else if (funct7 == 7'b0110100 && funct5 == 5'b11000) begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_rev8 = 1;
             end else begin
               valid = 0;
             end
@@ -251,6 +297,114 @@ module decoder
           case (funct3)
             funct_add : alu_op.alu_sub = 1;
             funct_srl : alu_op.alu_sra = 1;
+            funct_and : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_andn = 1;
+            end
+            funct_or : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_orn = 1;
+            end
+            funct_xor : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_xnor = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0010000) begin
+          case (funct3)
+            funct_sh1add : begin
+              bitmanipulation = 1;
+              bit_op.bit_zba.bit_sh1add = 1;
+            end
+            funct_sh2add : begin
+              bitmanipulation = 1;
+              bit_op.bit_zba.bit_sh2add = 1;
+            end
+            funct_sh3add : begin
+              bitmanipulation = 1;
+              bit_op.bit_zba.bit_sh3add = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0000101) begin
+          case (funct3)
+            funct_clmul : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbc.bit_clmul = 1;
+            end
+            funct_clmulr : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbc.bit_clmulr = 1;
+            end
+            funct_clmulh : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbc.bit_clmulh = 1;
+            end
+            funct_min : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_min = 1;
+            end
+            funct_minu : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_minu = 1;
+            end
+            funct_max : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_max = 1;
+            end
+            funct_maxu : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_maxu = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0100100) begin
+          case (funct3)
+            funct_bclr : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bclr = 1;
+            end
+            funct_bext : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bext = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0010100) begin
+          case (funct3)
+            funct_bset : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_bset = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0110100) begin
+          case (funct3)
+            funct_binv : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbs.bit_binv = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0110000) begin
+          case (funct3)
+            funct_rol : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_rol = 1;
+            end
+            funct_ror : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_ror = 1;
+            end
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0000100 && funct5 == 5'b00000) begin
+          case (funct3)
+            funct_zexth : begin
+              bitmanipulation = 1;
+              bit_op.bit_zbb.bit_zexth = 1;
+            end
             default : valid = 0;
           endcase;
         end else if (funct7 == 7'b0000001) begin
@@ -352,6 +506,10 @@ module decoder
     if (instr == nop_instr) begin
       alu_op.alu_add = 0;
       nop = 1;
+    end
+
+    if (bitmanipulation == 1) begin
+      imm = {27'h0,shamt};
     end
 
     decoder_out.imm = imm;
