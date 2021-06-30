@@ -74,6 +74,16 @@ then
       echo "${filename}"
     	obj_dir/Vsoc $CYCLES ${filename} 2> /dev/null
     done
+  elif [ "$4" = 'ovp' ]
+  then
+    for filename in $DIR/build/ovp/dat/*.dat; do
+      cp $filename bram.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      cp $DIR/build/ovp/elf/${filename}.host host.dat
+      echo "${filename}"
+    	obj_dir/Vsoc $CYCLES ${filename} 2> /dev/null
+    done
   else
     cp $DIR/$4 bram.dat
     dirname="$4"
@@ -128,6 +138,16 @@ else
       filename=${filename##*/}
       filename=${filename%.dat}
       cp $DIR/build/compliance/elf/${filename}.host host.dat
+      echo "${filename}"
+    	obj_dir/Vsoc $CYCLES 2> /dev/null
+    done
+  elif [ "$4" = 'ovp' ]
+  then
+    for filename in $DIR/build/ovp/dat/*.dat; do
+      cp $filename bram.dat
+      filename=${filename##*/}
+      filename=${filename%.dat}
+      cp $DIR/build/ovp/elf/${filename}.host host.dat
       echo "${filename}"
     	obj_dir/Vsoc $CYCLES 2> /dev/null
     done
