@@ -103,20 +103,20 @@ package wires;
   };
 
   typedef struct packed{
-    logic [31:0] rs1;
-    logic [31:0] rs2;
+    logic [31:0] rdata1;
+    logic [31:0] rdata2;
     logic [31:0] imm;
     logic [0:0] sel;
     bit_op_type bit_op;
   } bit_alu_in_type;
 
   typedef struct packed{
-    logic [31:0] res;
+    logic [31:0] result;
   } bit_alu_out_type;
 
   typedef struct packed{
-    logic [31:0] data1;
-    logic [31:0] data2;
+    logic [31:0] rdata1;
+    logic [31:0] rdata2;
     logic [0:0] enable;
     zbc_op_type op;
   } bit_clmul_in_type;
@@ -130,8 +130,8 @@ package wires;
     logic [1:0] state;
     logic [4:0] counter;
     logic [5:0] index;
-    logic [31:0] data1;
-    logic [31:0] data2;
+    logic [31:0] rdata1;
+    logic [31:0] rdata2;
     logic [31:0] swap;
     logic [31:0] result;
     logic [0:0] ready;
@@ -142,8 +142,8 @@ package wires;
     state   : 0,
     counter : 0,
     index   : 0,
-    data1   : 0,
-    data2   : 0,
+    rdata1  : 0,
+    rdata2  : 0,
     swap    : 0,
     result  : 0,
     ready   : 0,
@@ -271,7 +271,7 @@ package wires;
   } alu_in_type;
 
   typedef struct packed{
-    logic [31 : 0] res;
+    logic [31 : 0] result;
   } alu_out_type;
 
   typedef struct packed{
@@ -396,7 +396,7 @@ package wires;
   } lsu_in_type;
 
   typedef struct packed{
-    logic [31 : 0] res;
+    logic [31 : 0] result;
   } lsu_out_type;
 
   typedef struct packed{
@@ -548,6 +548,7 @@ package wires;
     logic [0  : 0] csregister;
     logic [0  : 0] division;
     logic [0  : 0] multiplication;
+    logic [0  : 0] bitmanipulation;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -566,6 +567,7 @@ package wires;
     csr_op_type csr_op;
     div_op_type div_op;
     mul_op_type mul_op;
+    bit_op_type bit_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -597,6 +599,7 @@ package wires;
     logic [0  : 0] csregister;
     logic [0  : 0] division;
     logic [0  : 0] multiplication;
+    logic [0  : 0] bitmanipulation;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -615,6 +618,7 @@ package wires;
     csr_op_type csr_op;
     div_op_type div_op;
     mul_op_type mul_op;
+    bit_op_type bit_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -647,6 +651,7 @@ package wires;
     csregister : 0,
     division : 0,
     multiplication : 0,
+    bitmanipulation : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -665,6 +670,7 @@ package wires;
     csr_op : init_csr_op,
     div_op : init_div_op,
     mul_op : init_mul_op,
+    bit_op : init_bit_op,
     exception : 0,
     ecause : 0,
     etval : 0,
@@ -701,6 +707,7 @@ package wires;
     logic [0  : 0] csregister;
     logic [0  : 0] division;
     logic [0  : 0] multiplication;
+    logic [0  : 0] bitmanipulation;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -710,6 +717,7 @@ package wires;
     logic [31 : 0] rdata1;
     logic [31 : 0] rdata2;
     logic [31 : 0] cdata;
+    logic [31 : 0] bdata;
     logic [31 : 0] wdata;
     logic [31 : 0] ldata;
     logic [31 : 0] address;
@@ -720,6 +728,7 @@ package wires;
     csr_op_type csr_op;
     mul_op_type mul_op;
     div_op_type div_op;
+    bit_op_type bit_op;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -751,6 +760,7 @@ package wires;
     csregister : 0,
     division : 0,
     multiplication : 0,
+    bitmanipulation : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -760,6 +770,7 @@ package wires;
     rdata1 : 0,
     rdata2 : 0,
     cdata : 0,
+    bdata : 0,
     wdata : 0,
     ldata : 0,
     address : 0,
@@ -770,6 +781,7 @@ package wires;
     csr_op : init_csr_op,
     div_op : init_div_op,
     mul_op : init_mul_op,
+    bit_op : init_bit_op,
     exception : 0,
     ecause : 0,
     etval : 0,

@@ -57,7 +57,7 @@ module lsu
       ldata = {16'b0,data_h};
     end
 
-    lsu_out.res = ldata;
+    lsu_out.result = ldata;
 
   end
 

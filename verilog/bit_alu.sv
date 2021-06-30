@@ -9,9 +9,9 @@ module bit_alu
   timeunit 1ns;
   timeprecision 1ps;
 
-  logic [31 : 0] rs1;
-  logic [31 : 0] rs2;
-  logic [31 : 0] res;
+  logic [31 : 0] rdata1;
+  logic [31 : 0] rdata2;
+  logic [31 : 0] result;
 
   logic [1 : 0] index;
   logic [1 : 0] op;
@@ -22,9 +22,9 @@ module bit_alu
 
   always_comb begin
 
-    rs1 = bit_alu_in.rs1;
-    rs2 = multiplexer(bit_alu_in.imm,bit_alu_in.rs2,bit_alu_in.sel);
-    res = 0;
+    rdata1 = bit_alu_in.rdata1;
+    rdata2 = multiplexer(bit_alu_in.imm,bit_alu_in.rdata2,bit_alu_in.sel);
+    result = 0;
 
     index = 0;
     op = 0;
@@ -52,46 +52,46 @@ module bit_alu
 		end
 
 		if ((bit_zba.bit_sh1add | bit_zba.bit_sh2add | bit_zba.bit_sh3add) == 1) begin
-			res = bit_shadd(rs1,rs2,index);
+			result = bit_shadd(rdata1,rdata2,index);
 		end else if (bit_zbb.bit_andn == 1) begin
-			res = bit_andn(rs1,rs2);
+			result = bit_andn(rdata1,rdata2);
 		end else if (bit_zbb.bit_orn == 1) begin
-			res = bit_orn(rs1,rs2);
+			result = bit_orn(rdata1,rdata2);
 		end else if (bit_zbb.bit_xnor == 1) begin
-			res = bit_xnor(rs1,rs2);
+			result = bit_xnor(rdata1,rdata2);
 		end else if (bit_zbb.bit_clz == 1) begin
-			res = bit_clz(rs1);
+			result = bit_clz(rdata1);
 		end else if (bit_zbb.bit_cpop == 1) begin
-			res = bit_cpop(rs1);
+			result = bit_cpop(rdata1);
 		end else if (bit_zbb.bit_ctz == 1) begin
-			res = bit_ctz(rs1);
+			result = bit_ctz(rdata1);
 		end else if ((bit_zbb.bit_max | bit_zbb.bit_maxu | bit_zbb.bit_min | bit_zbb.bit_minu) == 1) begin
-			res = bit_minmax(rs1,rs2,op);
+			result = bit_minmax(rdata1,rdata2,op);
 		end else if (bit_zbb.bit_orcb == 1) begin
-			res = bit_orcb(rs1);
+			result = bit_orcb(rdata1);
 		end else if (bit_zbb.bit_rev8 == 1) begin
-			res = bit_rev8(rs1);
+			result = bit_rev8(rdata1);
 		end else if (bit_zbb.bit_rol == 1) begin
-			res = bit_rol(rs1,rs2);
+			result = bit_rol(rdata1,rdata2);
 		end else if (bit_zbb.bit_ror == 1) begin
-			res = bit_ror(rs1,rs2);
+			result = bit_ror(rdata1,rdata2);
 		end else if (bit_zbb.bit_sextb == 1) begin
-			res = bit_sextb(rs1);
+			result = bit_sextb(rdata1);
 		end else if (bit_zbb.bit_sexth == 1) begin
-			res = bit_sexth(rs1);
+			result = bit_sexth(rdata1);
 		end else if (bit_zbb.bit_zexth == 1) begin
-			res = bit_zexth(rs1);
+			result = bit_zexth(rdata1);
 		end else if (bit_zbs.bit_bclr == 1) begin
-			res = bit_bclr(rs1,rs2);
+			result = bit_bclr(rdata1,rdata2);
 		end else if (bit_zbs.bit_bext == 1) begin
-			res = bit_bext(rs1,rs2);
+			result = bit_bext(rdata1,rdata2);
 		end else if (bit_zbs.bit_binv == 1) begin
-			res = bit_binv(rs1,rs2);
+			result = bit_binv(rdata1,rdata2);
 		end else if (bit_zbs.bit_bset == 1) begin
-			res = bit_bset(rs1,rs2);
+			result = bit_bset(rdata1,rdata2);
 		end
 
-    bit_alu_out.res = res;
+    bit_alu_out.result = result;
 
   end
 

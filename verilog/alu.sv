@@ -39,7 +39,7 @@ module alu
       result = alu_in.rdata1 ^ rdata2;
     end
 
-    alu_out.res = result;
+    alu_out.result = result;
 
   end
 

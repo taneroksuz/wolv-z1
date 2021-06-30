@@ -331,14 +331,17 @@ module decoder
           case (funct3)
             funct_clmul : begin
               bitmanipulation = 1;
+              bit_op.bmcycle = 1;
               bit_op.bit_zbc.bit_clmul = 1;
             end
             funct_clmulr : begin
               bitmanipulation = 1;
+              bit_op.bmcycle = 1;
               bit_op.bit_zbc.bit_clmulr = 1;
             end
             funct_clmulh : begin
               bitmanipulation = 1;
+              bit_op.bmcycle = 1;
               bit_op.bit_zbc.bit_clmulh = 1;
             end
             funct_min : begin

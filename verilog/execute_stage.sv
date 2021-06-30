@@ -62,6 +62,7 @@ module execute_stage
     v.csregister = d.d.csregister;
     v.division = d.d.division;
     v.multiplication = d.d.multiplication;
+    v.bitmanipulation = d.d.bitmanipulation;
     v.fence = d.d.fence;
     v.ecall = d.d.ecall;
     v.ebreak = d.d.ebreak;
@@ -79,6 +80,7 @@ module execute_stage
     v.csr_op = d.d.csr_op;
     v.div_op = d.d.div_op;
     v.mul_op = d.d.mul_op;
+    v.bit_op = d.d.bit_op;
     v.exception = d.d.exception;
     v.ecause = d.d.ecause;
     v.etval = d.d.etval;
@@ -97,7 +99,15 @@ module execute_stage
     alu_in.sel = v.rden2;
     alu_in.alu_op = v.alu_op;
 
-    v.wdata = alu_out.res;
+    v.wdata = alu_out.result;
+
+    bit_alu_in.rdata1 = v.rdata1;
+    bit_alu_in.rdata2 = v.rdata2;
+    bit_alu_in.imm = v.imm;
+    bit_alu_in.sel = v.rden2;
+    bit_alu_in.bit_op = v.bit_op;
+
+    v.bdata = bit_alu_out.result;
 
     if (v.auipc == 1) begin
       v.wdata = v.address;
@@ -109,6 +119,8 @@ module execute_stage
       v.wdata = v.npc;
     end else if (v.crden == 1) begin
       v.wdata = v.cdata;
+    end else if (v.bitmanipulation == 1) begin
+      v.wdata = v.bdata;
     end
 
     csr_alu_in.cdata = v.cdata;
@@ -129,11 +141,16 @@ module execute_stage
     mul_in.enable = v.multiplication & ~(d.e.clear | d.e.stall);
     mul_in.op = v.mul_op;
 
+    bit_clmul_in.rdata1 = v.rdata1;
+    bit_clmul_in.rdata2 = v.rdata2;
+    bit_clmul_in.enable = v.bitmanipulation & ~(d.e.clear | d.e.stall);
+    bit_clmul_in.op = v.bit_op.bit_zbc;
+
     lsu_in.ldata = dmem_out.mem_rdata;
     lsu_in.byteenable = v.byteenable;
     lsu_in.lsu_op = v.lsu_op;
 
-    v.ldata = lsu_out.res;
+    v.ldata = lsu_out.result;
 
     if (v.division == 1) begin
       if (div_out.ready == 0) begin
@@ -148,6 +165,13 @@ module execute_stage
       end else if (mul_out.ready == 1) begin
         v.wren = |v.waddr;
         v.wdata = mul_out.result;
+      end
+    end else if (v.bitmanipulation == 1 && v.bit_op.bmcycle == 1) begin
+      if (bit_clmul_out.ready == 0) begin
+        v.stall = 1;
+      end else if (bit_clmul_out.ready == 1) begin
+        v.wren = |v.waddr;
+        v.wdata = bit_clmul_out.result;
       end
     end
 

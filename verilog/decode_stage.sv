@@ -74,12 +74,14 @@ module decode_stage
     v.csregister = decoder_out.csregister;
     v.division = decoder_out.division;
     v.multiplication = decoder_out.multiplication;
+    v.bitmanipulation = decoder_out.bitmanipulation;
     v.alu_op = decoder_out.alu_op;
     v.bcu_op = decoder_out.bcu_op;
     v.lsu_op = decoder_out.lsu_op;
     v.csr_op = decoder_out.csr_op;
     v.div_op = decoder_out.div_op;
     v.mul_op = decoder_out.mul_op;
+    v.bit_op = decoder_out.bit_op;
     v.fence = decoder_out.fence;
     v.ecall = decoder_out.ecall;
     v.ebreak = decoder_out.ebreak;
@@ -184,6 +186,8 @@ module decode_stage
       v.stall = 1;
     end else if (d.d.multiplication == 1) begin
       v.stall = 1;
+    end else if (d.d.bitmanipulation == 1 && d.d.bit_op.bmcycle == 1) begin
+      v.stall = 1;
     end
 
     if ((v.stall | a.e.stall | v.clear | csr_out.exception | csr_out.mret) == 1) begin
@@ -200,6 +204,7 @@ module decode_stage
       v.csregister = 0;
       v.division = 0;
       v.multiplication = 0;
+      v.bitmanipulation = 0;
       v.fence = 0;
       v.ecall = 0;
       v.ebreak = 0;
@@ -259,6 +264,7 @@ module decode_stage
     y.csregister = v.csregister;
     y.division = v.division;
     y.multiplication = v.multiplication;
+    y.bitmanipulation = v.bitmanipulation;
     y.fence = v.fence;
     y.ecall = v.ecall;
     y.ebreak = v.ebreak;
@@ -277,6 +283,7 @@ module decode_stage
     y.csr_op = v.csr_op;
     y.div_op = v.div_op;
     y.mul_op = v.mul_op;
+    y.bit_op = v.bit_op;
     y.exception = v.exception;
     y.ecause = v.ecause;
     y.etval = v.etval;
@@ -305,6 +312,7 @@ module decode_stage
     q.csregister = r.csregister;
     q.division = r.division;
     q.multiplication = r.multiplication;
+    q.bitmanipulation = r.bitmanipulation;
     q.fence = r.fence;
     q.ecall = r.ecall;
     q.ebreak = r.ebreak;
@@ -323,6 +331,7 @@ module decode_stage
     q.csr_op = r.csr_op;
     q.div_op = r.div_op;
     q.mul_op = r.mul_op;
+    q.bit_op = r.bit_op;
     q.exception = r.exception;
     q.ecause = r.ecause;
     q.etval = r.etval;
