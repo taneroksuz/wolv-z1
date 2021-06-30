@@ -21,6 +21,7 @@ module decoder
 
   logic [6  : 0] opcode;
   logic [2  : 0] funct3;
+  logic [6  : 0] funct7;
 
   logic [4  : 0] waddr;
   logic [4  : 0] raddr1;
@@ -44,6 +45,7 @@ module decoder
   logic [0  : 0] csregister;
   logic [0  : 0] division;
   logic [0  : 0] multiplication;
+  logic [0  : 0] bitmanipulation;
   logic [0  : 0] fence;
   logic [0  : 0] ecall;
   logic [0  : 0] ebreak;
@@ -58,6 +60,7 @@ module decoder
 
   div_op_type div_op;
   mul_op_type mul_op;
+  bit_op_type bit_op;
 
   logic [0  : 0] nonzero_waddr;
   logic [0  : 0] nonzero_raddr1;
@@ -84,6 +87,7 @@ module decoder
 
     opcode = instr[6:0];
     funct3 = instr[14:12];
+    funct7 = instr[31:25];
 
     waddr = instr[11:7];
     raddr1 = instr[19:15];
@@ -107,6 +111,7 @@ module decoder
     csregister = 0;
     division = 0;
     multiplication = 0;
+    bitmanipulation = 0;
     fence = 0;
     ecall = 0;
     ebreak = 0;
@@ -121,6 +126,7 @@ module decoder
 
     div_op = init_div_op;
     mul_op = init_mul_op;
+    bit_op = init_bit_op;
 
     nonzero_waddr = |waddr;
     nonzero_raddr1 = |raddr1;
@@ -201,20 +207,27 @@ module decoder
         imm = imm_i;
         case (funct3)
           funct_add : alu_op.alu_add = 1;
-          funct_sll : begin
-            alu_op.alu_sll = 1;
-            valid = ~instr[25];
-          end
-          funct_srl : begin
-            alu_op.alu_srl = ~instr[30];
-            alu_op.alu_sra = instr[30];
-            valid = ~instr[25];
-          end
           funct_slt : alu_op.alu_slt = 1;
           funct_sltu : alu_op.alu_sltu = 1;
           funct_and : alu_op.alu_and = 1;
           funct_or : alu_op.alu_or = 1;
           funct_xor : alu_op.alu_xor = 1;
+          funct_sll : begin
+            if (funct7 == 7'b0000000) begin
+              alu_op.alu_sll = 1;
+            end else begin
+              valid = 0;
+            end
+          end
+          funct_srl : begin
+            if (funct7 == 7'b0000000) begin
+              alu_op.alu_srl = 1;
+            end else if (funct7 == 7'b0100000) begin
+              alu_op.alu_sra = 1;
+            end else begin
+              valid = 0;
+            end
+          end
           default : valid = 0;
         endcase;
       end
@@ -222,17 +235,11 @@ module decoder
         wren = nonzero_waddr;
         rden1 = 1;
         rden2 = 1;
-        if (instr[25] == 0) begin
+        if (funct7 == 7'b0000000) begin
           case (funct3)
-            funct_add : begin
-              alu_op.alu_add = ~instr[30];
-              alu_op.alu_sub = instr[30];
-            end
+            funct_add : alu_op.alu_add = 1;
             funct_sll : alu_op.alu_sll = 1;
-            funct_srl : begin
-              alu_op.alu_srl = ~instr[30];
-              alu_op.alu_sra = instr[30];
-            end
+            funct_srl : alu_op.alu_srl = 1;
             funct_slt : alu_op.alu_slt = 1;
             funct_sltu : alu_op.alu_sltu = 1;
             funct_and : alu_op.alu_and = 1;
@@ -240,7 +247,13 @@ module decoder
             funct_xor : alu_op.alu_xor = 1;
             default : valid = 0;
           endcase;
-        end else if (instr[25] == 1) begin
+        end else if (funct7 == 7'b0100000) begin
+          case (funct3)
+            funct_add : alu_op.alu_sub = 1;
+            funct_srl : alu_op.alu_sra = 1;
+            default : valid = 0;
+          endcase;
+        end else if (funct7 == 7'b0000001) begin
           case (funct3)
             funct_mul : begin
               multiplication = 1;
@@ -358,12 +371,14 @@ module decoder
     decoder_out.csregister = csregister;
     decoder_out.division = division;
     decoder_out.multiplication = multiplication;
+    decoder_out.bitmanipulation = bitmanipulation;
     decoder_out.alu_op = alu_op;
     decoder_out.bcu_op = bcu_op;
     decoder_out.lsu_op = lsu_op;
     decoder_out.csr_op = csr_op;
     decoder_out.div_op = div_op;
     decoder_out.mul_op = mul_op;
+    decoder_out.bit_op = bit_op;
     decoder_out.fence = fence;
     decoder_out.ecall = ecall;
     decoder_out.ebreak = ebreak;
