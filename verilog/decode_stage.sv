@@ -184,7 +184,7 @@ module decode_stage
       v.stall = 1;
     end else if (d.d.division == 1) begin
       v.stall = 1;
-    end else if (d.d.multiplication == 1) begin
+    end else if (d.d.multiplication == 1 && d.d.mul_op.mmcycle == 1) begin
       v.stall = 1;
     end else if (d.d.bitmanipulation == 1 && d.d.bit_op.bmcycle == 1) begin
       v.stall = 1;

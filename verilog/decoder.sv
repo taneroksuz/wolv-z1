@@ -415,18 +415,22 @@ module decoder
             funct_mul : begin
               multiplication = 1;
               mul_op.muls = 1;
+              mul_op.mmcycle = 0;
             end
             funct_mulh :  begin
               multiplication = 1;
               mul_op.mulh = 1;
+              mul_op.mmcycle = 0;
             end
             funct_mulhsu :  begin
               multiplication = 1;
               mul_op.mulhsu = 1;
+              mul_op.mmcycle = 0;
             end
             funct_mulhu :  begin
               multiplication = 1;
               mul_op.mulhu = 1;
+              mul_op.mmcycle = 0;
             end
             funct_div :  begin
               division = 1;

@@ -109,6 +109,13 @@ module execute_stage
 
     v.bdata = bit_alu_out.result;
 
+    mul_in.rdata1 = v.rdata1;
+    mul_in.rdata2 = v.rdata2;
+    mul_in.enable = v.multiplication & ~(d.e.clear | d.e.stall);
+    mul_in.op = v.mul_op;
+
+    v.mdata = mul_out.result;
+
     if (v.auipc == 1) begin
       v.wdata = v.address;
     end else if (v.lui == 1) begin
@@ -119,6 +126,8 @@ module execute_stage
       v.wdata = v.npc;
     end else if (v.crden == 1) begin
       v.wdata = v.cdata;
+    end else if (v.multiplication == 1) begin
+      v.wdata = v.mdata;
     end else if (v.bitmanipulation == 1) begin
       v.wdata = v.bdata;
     end
@@ -135,11 +144,6 @@ module execute_stage
     div_in.rdata2 = v.rdata2;
     div_in.enable = v.division & ~(d.e.clear | d.e.stall);
     div_in.op = v.div_op;
-
-    mul_in.rdata1 = v.rdata1;
-    mul_in.rdata2 = v.rdata2;
-    mul_in.enable = v.multiplication & ~(d.e.clear | d.e.stall);
-    mul_in.op = v.mul_op;
 
     bit_clmul_in.rdata1 = v.rdata1;
     bit_clmul_in.rdata2 = v.rdata2;
@@ -159,7 +163,7 @@ module execute_stage
         v.wren = |v.waddr;
         v.wdata = div_out.result;
       end
-    end else if (v.multiplication == 1) begin
+    end else if (v.multiplication == 1 && v.mul_op.mmcycle == 1) begin
       if (mul_out.ready == 0) begin
         v.stall = 1;
       end else if (mul_out.ready == 1) begin

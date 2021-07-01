@@ -195,13 +195,15 @@ package wires;
     logic [0 : 0] mulh;
     logic [0 : 0] mulhsu;
     logic [0 : 0] mulhu;
+    logic [0 : 0] mmcycle;
   } mul_op_type;
 
   parameter mul_op_type init_mul_op = '{
     muls : 0,
     mulh : 0,
     mulhsu : 0,
-    mulhu : 0
+    mulhu : 0,
+    mmcycle : 0
   };
 
   typedef struct packed{
@@ -718,6 +720,7 @@ package wires;
     logic [31 : 0] rdata2;
     logic [31 : 0] cdata;
     logic [31 : 0] bdata;
+    logic [31 : 0] mdata;
     logic [31 : 0] wdata;
     logic [31 : 0] ldata;
     logic [31 : 0] address;
@@ -771,6 +774,7 @@ package wires;
     rdata2 : 0,
     cdata : 0,
     bdata : 0,
+    mdata : 0,
     wdata : 0,
     ldata : 0,
     address : 0,
