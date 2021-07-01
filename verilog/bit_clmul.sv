@@ -77,7 +77,7 @@ module bit_clmul
 
   always_ff @ (posedge clk) begin
     if (rst == 0) begin
-      r <= init_mul_reg;
+      r <= init_bit_clmul_reg;
     end else begin
       r <= rin;
     end
