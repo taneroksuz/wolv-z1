@@ -3,7 +3,7 @@ default: none
 VERILATOR ?= /opt/verilator/bin/verilator
 SYSTEMC ?= /opt/systemc
 RISCV ?= /opt/riscv/bin
-MARCH ?= rv32imc
+MARCH ?= rv32imc_zba_zbb_zbc
 MABI ?= ilp32
 ITER ?= 10
 CSMITH ?= /opt/csmith
