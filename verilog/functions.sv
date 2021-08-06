@@ -49,7 +49,7 @@ package functions;
         if (rs1[i] == 1) begin
           break;
         end
-        res = res + 1;
+        res = res + 6'b1;
       end
       bit_clz = {26'h0,res};
     end
@@ -63,7 +63,7 @@ package functions;
       res = 0;
       for (i = 0; i < 32; i=i+1) begin
         if (rs1[i] == 1) begin
-          res = res + 1;
+          res = res + 6'b1;
         end
       end
       bit_cpop = {26'h0,res};
@@ -80,7 +80,7 @@ package functions;
         if (rs1[i] == 1) begin
           break;
         end
-        res = res + 1;
+        res = res + 6'b1;
       end
       bit_ctz = {26'h0,res};
     end

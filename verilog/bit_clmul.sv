@@ -20,7 +20,7 @@ module bit_clmul
 
     case (r.state)
       0 : begin
-        if ((bit_clmul_in.enable & (bit_clmul_in.op.bit_clmul |
+        if ((bit_clmul_in.enable & (bit_clmul_in.op.bit_clmul_ |
             bit_clmul_in.op.bit_clmulh | bit_clmul_in.op.bit_clmulr)) == 1) begin
           v.state = 1;
         end
@@ -30,7 +30,7 @@ module bit_clmul
         if (r.counter == 31) begin
           v.state = 2;
         end else begin
-          v.counter = v.counter + 1;
+          v.counter = v.counter + 5'b1;
         end
         v.ready = 0;
       end
@@ -56,7 +56,7 @@ module bit_clmul
     end
     1 : begin
       if (v.rdata2[r.counter] == 1) begin
-        if (v.op.bit_clmul == 1) begin
+        if (v.op.bit_clmul_ == 1) begin
           v.swap = v.rdata1 << r.counter;
         end else if (v.op.bit_clmulh == 1 || v.op.bit_clmulr == 1) begin
           v.swap = v.rdata1 >> (r.index-r.counter);

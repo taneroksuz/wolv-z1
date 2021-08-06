@@ -55,13 +55,13 @@ package wires;
   };
 
   typedef struct packed{
-    logic [0:0] bit_clmul;
+    logic [0:0] bit_clmul_;
     logic [0:0] bit_clmulh;
     logic [0:0] bit_clmulr;
   } zbc_op_type;
 
   parameter zbc_op_type init_zbc_op = '{
-    bit_clmul  : 0,
+    bit_clmul_ : 0,
     bit_clmulh : 0,
     bit_clmulr : 0
   };
@@ -83,8 +83,8 @@ package wires;
   typedef struct packed{
     logic [0:0] bmcycle;
     logic [0:0] bit_imm;
-    logic [0:0] bit_alu;
-    logic [0:0] bit_clmul;
+    logic [0:0] bit_alu_;
+    logic [0:0] bit_clmul_;
     zba_op_type bit_zba;
     zbb_op_type bit_zbb;
     zbc_op_type bit_zbc;
@@ -92,14 +92,14 @@ package wires;
   } bit_op_type;
 
   parameter bit_op_type init_bit_op = '{
-    bmcycle   : 0,
-    bit_imm   : 0,
-    bit_alu   : 0,
-    bit_clmul : 0,
-    bit_zba   : init_zba_op,
-    bit_zbb   : init_zbb_op,
-    bit_zbc   : init_zbc_op,
-    bit_zbs   : init_zbs_op
+    bmcycle    : 0,
+    bit_imm    : 0,
+    bit_alu_   : 0,
+    bit_clmul_ : 0,
+    bit_zba    : init_zba_op,
+    bit_zbb    : init_zbb_op,
+    bit_zbc    : init_zbc_op,
+    bit_zbs    : init_zbs_op
   };
 
   typedef struct packed{

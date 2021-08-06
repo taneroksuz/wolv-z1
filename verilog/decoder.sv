@@ -333,7 +333,7 @@ module decoder
             funct_clmul : begin
               bitmanipulation = 1;
               bit_op.bmcycle = 1;
-              bit_op.bit_zbc.bit_clmul = 1;
+              bit_op.bit_zbc.bit_clmul_ = 1;
             end
             funct_clmulr : begin
               bitmanipulation = 1;
