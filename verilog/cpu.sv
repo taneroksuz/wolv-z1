@@ -12,9 +12,10 @@ module cpu
   output logic [3  : 0] memory_wstrb,
   input logic [31  : 0] memory_rdata,
   input logic [0   : 0] memory_ready,
-  input logic [0   :0] extern_irpt,
-  input logic [0   :0] timer_irpt,
-  input logic [0   :0] soft_irpt
+  input logic [0   : 0] meip,
+  input logic [0   : 0] msip,
+  input logic [0   : 0] mtip,
+  input logic [63  : 0] mtime
 );
   timeunit 1ns;
   timeprecision 1ps;
@@ -184,9 +185,10 @@ module cpu
     .csr_din (csr_din),
     .csr_ein (csr_ein),
     .csr_out (csr_out),
-    .extern_irpt (extern_irpt),
-    .timer_irpt (timer_irpt),
-    .soft_irpt (soft_irpt)
+    .meip (meip),
+    .msip (msip),
+    .mtip (mtip),
+    .mtime (mtime)
   );
 
   arbiter arbiter_comp

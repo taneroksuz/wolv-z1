@@ -21,7 +21,7 @@
 ../../verilog/decode_stage.sv
 ../../verilog/execute_stage.sv
 ../../verilog/arbiter.sv
-../../verilog/timer.sv
+../../verilog/clint.sv
 ../../verilog/cpu.sv
 ../../verilog/tb/bram.sv
 ../../verilog/tb/soc.sv

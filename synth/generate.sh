@@ -40,7 +40,7 @@ ${SV2V} ${DIR}/verilog/${FPGA}/configure.sv \
 				${DIR}/verilog/decode_stage.sv \
 				${DIR}/verilog/execute_stage.sv \
 				${DIR}/verilog/arbiter.sv \
-				${DIR}/verilog/timer.sv \
+				${DIR}/verilog/clint.sv \
 				${DIR}/verilog/uart.sv \
 				${DIR}/verilog/cpu.sv \
 				> cpu.v
