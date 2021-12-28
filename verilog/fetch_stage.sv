@@ -28,7 +28,7 @@ module fetch_stage
 
     v.valid = ~(a.d.stall | a.e.stall | d.e.clear);
     v.stall = prefetch_out.stall | a.d.stall | a.e.stall | d.e.clear;
-    v.clear = csr_out.exception | csr_out.mret | d.e.clear;
+    v.clear = d.e.clear;
     v.spec = csr_out.exception | csr_out.mret | d.d.jump | d.e.clear;
 
     v.instr = prefetch_out.instr;
