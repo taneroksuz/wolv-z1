@@ -25,6 +25,6 @@ rv32c_test = \
   csw-01 \
   cswsp-01 \
   cxor-01 \
-  cebreak-01
+  cebreak-01 \
 
 rv32c_tests = $(addprefix rv32c-, $(rv32c_test))

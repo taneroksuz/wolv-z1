@@ -36,6 +36,6 @@ rv32i_test = \
   sw-align-01 \
   xor-01 \
   xori-01 \
-  fence-01
+  fence-01 \
 
 rv32i_tests = $(addprefix rv32i-, $(rv32i_test))

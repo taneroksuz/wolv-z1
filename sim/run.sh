@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 DIR=${1}
 
@@ -86,10 +87,11 @@ then
     done
   else
     cp $DIR/$4 bram.dat
+    filename="$4"
     dirname="$4"
-    subpath=${dirname%/dat*}
-    filename=${4##*/}
+    filename=${filename##*/}
     filename=${filename%.dat}
+    subpath=${dirname%/dat*}
     cp $DIR/${subpath}/elf/${filename}.host host.dat
     obj_dir/Vsoc $CYCLES ${filename} 2> /dev/null
   fi
@@ -153,10 +155,11 @@ else
     done
   else
     cp $DIR/$4 bram.dat
+    filename="$4"
     dirname="$4"
-    subpath=${dirname%/dat*}
-    filename=${4##*/}
+    filename=${filename##*/}
     filename=${filename%.dat}
+    subpath=${dirname%/dat*}
     cp $DIR/${subpath}/elf/${filename}.host host.dat
     obj_dir/Vsoc $CYCLES 2> /dev/null
   fi

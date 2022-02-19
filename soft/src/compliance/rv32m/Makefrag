@@ -6,6 +6,6 @@ rv32m_test = \
   mulhsu-01 \
   mulhu-01 \
   rem-01 \
-  remu-01
+  remu-01 \
 
 rv32m_tests = $(addprefix rv32m-, $(rv32m_test))

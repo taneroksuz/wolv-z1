@@ -14,6 +14,6 @@ rv32p_test = \
   misalign-sh-01 \
   misalign-sw-01 \
   misalign1-jalr-01 \
-  misalign2-jalr-01
+  misalign2-jalr-01 \
 
 rv32p_tests = $(addprefix rv32p-, $(rv32p_test))
