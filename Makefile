@@ -13,13 +13,13 @@ GCC ?= /usr/bin/gcc
 PYTHON ?= /usr/bin/python2
 BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 OVP ?= riscv-ovpsim-plus-bitmanip-tests.zip
-OFFSET ?= 0x40000 # Number of dwords in blockram (address range is OFFSET * 8)
+OFFSET ?= 0x80000 # Number of dwords in blockram (address range is OFFSET * 8)
 TEST ?= dhrystone
 AAPG ?= aapg
 CONFIG ?= integer
 CYCLES ?= 10000000000
 FPGA ?= quartus # tb vivado quartus
-WAVE ?= "" # "wave" for saving dump file
+WAVE ?= "" # "on" for saving dump file
 
 generate:
 	@if [ ${TEST} = "compliance" ]; \
@@ -57,4 +57,4 @@ simulate:
 synthesis:
 	synth/generate.sh ${BASEDIR} ${SV2V} ${FPGA} ${TEST}
 
-all: generate_dhrystone generate_coremark generate_csmith generate_torture simulate
+all: generate simulate synthesis

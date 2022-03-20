@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 export RISCV=$1
 export MARCH=$2
@@ -26,6 +27,7 @@ mkdir ${BASEDIR}/build/ovp/coe
 mkdir ${BASEDIR}/build/ovp/dat
 mkdir ${BASEDIR}/build/ovp/mif
 mkdir ${BASEDIR}/build/ovp/hex
+mkdir ${BASEDIR}/build/ovp/ref
 
 if [ -d "${BASEDIR}/soft/src/riscv-ovp" ]; then
   rm -rf ${BASEDIR}/soft/src/riscv-ovp
@@ -38,13 +40,30 @@ fi
 
 unzip ${OVP} -d ${BASEDIR}/soft/src/riscv-ovp
 
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-env/*.h ${BASEDIR}/soft/src/ovp/env/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-env/p ${BASEDIR}/soft/src/ovp/env/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-target/sail-riscv-c/*.h ${BASEDIR}/soft/src/ovp/target/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32ic/src/* ${BASEDIR}/soft/src/ovp/rv32ic/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i/src/* ${BASEDIR}/soft/src/ovp/rv32i/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32b/src/* ${BASEDIR}/soft/src/ovp/rv32b/
-cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32m/src/* ${BASEDIR}/soft/src/ovp/rv32m/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/env/*.h ${BASEDIR}/soft/src/ovp/env/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/C/src/* ${BASEDIR}/soft/src/ovp/asm/rv32c/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/I/src/* ${BASEDIR}/soft/src/ovp/asm/rv32i/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/M/src/* ${BASEDIR}/soft/src/ovp/asm/rv32m/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zba/src/* ${BASEDIR}/soft/src/ovp/asm/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbb/src/* ${BASEDIR}/soft/src/ovp/asm/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbc/src/* ${BASEDIR}/soft/src/ovp/asm/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbs/src/* ${BASEDIR}/soft/src/ovp/asm/rv32b/
+
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/C/references/* ${BASEDIR}/soft/src/ovp/ref/rv32c/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/I/references/* ${BASEDIR}/soft/src/ovp/ref/rv32i/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/M/references/* ${BASEDIR}/soft/src/ovp/ref/rv32m/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zba/references/* ${BASEDIR}/soft/src/ovp/ref/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbb/references/* ${BASEDIR}/soft/src/ovp/ref/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbc/references/* ${BASEDIR}/soft/src/ovp/ref/rv32b/
+cp -r ${BASEDIR}/soft/src/riscv-ovp/imperas-riscv-tests/riscv-test-suite/rv32i_m/Zbs/references/* ${BASEDIR}/soft/src/ovp/ref/rv32b/
+
+for path in ${BASEDIR}/soft/src/ovp/ref/*; do
+  dirname=$(basename $path)
+  prefix="${dirname}-"
+  for file in $path/*.reference_output; do
+    cp $file ${BASEDIR}/build/ovp/ref/${prefix}$(basename $file)
+  done
+done
 
 make -f ${BASEDIR}/soft/src/ovp/Makefile || exit
 
