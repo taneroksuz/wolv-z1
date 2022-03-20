@@ -57,4 +57,4 @@ simulate:
 synthesis:
 	synth/generate.sh ${BASEDIR} ${SV2V} ${FPGA} ${TEST}
 
-all: generate_dhrystone generate_coremark generate_csmith generate_torture simulate
+all: generate simulate synthesis

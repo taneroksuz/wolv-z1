@@ -509,9 +509,8 @@ package wires;
   typedef struct packed{
     logic [31 : 0] pc;
     logic [31 : 0] instr;
-    logic [0  : 0] spec;
-    logic [0  : 0] clear;
     logic [0  : 0] valid;
+    logic [0  : 0] fence;
     logic [0  : 0] exception;
     logic [3  : 0] ecause;
     logic [31 : 0] etval;
@@ -521,9 +520,8 @@ package wires;
   parameter fetch_reg_type init_fetch_reg = '{
     pc : 0,
     instr : 0,
-    spec : 0,
-    clear : 0,
     valid : 0,
+    fence : 0,
     exception : 0,
     ecause : 0,
     etval : 0,
@@ -1041,6 +1039,7 @@ package wires;
 
   typedef struct packed{
     logic [0  : 0] mem_valid;
+    logic [0  : 0] mem_fence;
     logic [0  : 0] mem_instr;
     logic [31 : 0] mem_addr;
     logic [31 : 0] mem_wdata;
@@ -1051,21 +1050,5 @@ package wires;
     logic [0  : 0] mem_ready;
     logic [31 : 0] mem_rdata;
   } mem_out_type;
-
-  typedef struct packed{
-    logic [31:0] pc;
-    logic [31:0] npc;
-    logic [0:0] spec;
-    logic [0:0] fence;
-    logic [0:0] valid;
-    logic [31:0] rdata;
-    logic [0:0] ready;
-  } prefetch_in_type;
-
-  typedef struct packed{
-    logic [31:0] fpc;
-    logic [31:0] instr;
-    logic [0:0] stall;
-  } prefetch_out_type;
 
 endpackage
