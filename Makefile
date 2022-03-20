@@ -13,7 +13,7 @@ GCC ?= /usr/bin/gcc
 PYTHON ?= /usr/bin/python2
 BASEDIR ?= $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 OVP ?= riscv-ovpsim-plus-bitmanip-tests.zip
-OFFSET ?= 0x80000 # Number of dwords in blockram (address range is OFFSET * 8)
+OFFSET ?= 0x100000 # Number of dwords in blockram (address range is OFFSET * 8)
 TEST ?= dhrystone
 AAPG ?= aapg
 CONFIG ?= integer
@@ -22,7 +22,10 @@ FPGA ?= quartus # tb vivado quartus
 WAVE ?= "" # "on" for saving dump file
 
 generate:
-	@if [ ${TEST} = "compliance" ]; \
+	@if [ ${TEST} = "isa" ]; \
+	then \
+		soft/isa.sh ${RISCV} ${MARCH} ${MABI} ${PYTHON} ${OFFSET} ${BASEDIR}; \
+	elif [ ${TEST} = "compliance" ]; \
 	then \
 		soft/compliance.sh ${RISCV} ${MARCH} ${MABI} ${XLEN} ${PYTHON} ${OFFSET} ${BASEDIR}; \
 	elif [ ${TEST} = "ovp" ]; \
