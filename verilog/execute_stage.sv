@@ -215,7 +215,7 @@ module execute_stage
       v.valid = 0;
     end
 
-    register_win.wren = v.wren;
+    register_win.wren = v.wren & |(v.waddr);
     register_win.waddr = v.waddr;
     register_win.wdata = v.wdata;
 
