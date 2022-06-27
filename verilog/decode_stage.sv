@@ -226,15 +226,6 @@ module decode_stage
     dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
     dmem_in.mem_wstrb = (v.load == 1) ? 4'h0 : v.byteenable;
 
-    csr_din.d_epc = v.pc;
-    csr_din.e_epc = r.pc;
-    csr_din.d_valid = v.valid;
-    csr_din.e_valid = r.valid;
-    csr_din.mret = v.mret;
-    csr_din.exception = v.exception;
-    csr_din.ecause = v.ecause;
-    csr_din.etval = v.etval;
-
     csr_din.crden = v.crden;
     csr_din.craddr = v.caddr;
 
