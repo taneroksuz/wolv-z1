@@ -26,7 +26,7 @@ module bram
   int sig_end;
   int sig;
 
-  logic [31 : 0] rdata;
+  logic [31 : 0] raddr;
   logic [0  : 0] ready;
 
   task check;
@@ -45,10 +45,14 @@ module bram
           $fwrite(sig,"%H\n",bram_block[i/4]);
         end
         if (wdata == 32'h1) begin
+          $write("%c[1;32m",8'h1B);
           $display("TEST SUCCEEDED");
+          $write("%c[0m",8'h1B);
           $finish;
         end else begin
+          $write("%c[1;31m",8'h1B);
           $display("TEST STOPPED");
+          $write("%c[0m",8'h1B);
           $finish;
         end
       end
@@ -74,6 +78,8 @@ module bram
 
   always_ff @(posedge clk) begin
 
+    raddr <= bram_addr;
+
     if (bram_valid == 1) begin
 
       check(bram_addr,bram_wdata,bram_wstrb);
@@ -87,7 +93,6 @@ module bram
       if (bram_wstrb[3] == 1)
         bram_block[bram_addr[(bram_depth+1):2]][31:24] <= bram_wdata[31:24];
 
-      rdata <= bram_block[bram_addr[(bram_depth+1):2]];
       ready <= 1;
 
     end else begin
@@ -98,7 +103,7 @@ module bram
 
   end
 
-  assign bram_rdata = rdata;
+  assign bram_rdata = bram_block[raddr[(bram_depth+1):2]];
   assign bram_ready = ready;
 
 
