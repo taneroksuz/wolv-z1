@@ -71,10 +71,12 @@ module decode_stage
     v.load = decoder_out.load;
     v.store = decoder_out.store;
     v.nop = decoder_out.nop;
-    v.csregister = decoder_out.csregister;
+    v.csrreg = decoder_out.csrreg;
     v.division = decoder_out.division;
-    v.multiplication = decoder_out.multiplication;
-    v.bitmanipulation = decoder_out.bitmanipulation;
+    v.mult = decoder_out.mult;
+    v.mulc = decoder_out.mulc;
+    v.bitm = decoder_out.bitm;
+    v.bitc = decoder_out.bitc;
     v.alu_op = decoder_out.alu_op;
     v.bcu_op = decoder_out.bcu_op;
     v.lsu_op = decoder_out.lsu_op;
@@ -180,13 +182,13 @@ module decode_stage
       v.etval = v.instr;
     end
 
-    if (d.d.cwren == 1) begin
+    if (a.e.cwren == 1) begin
       v.stall = 1;
-    end else if (d.d.division == 1) begin
+    end else if (a.e.division == 1) begin
       v.stall = 1;
-    end else if (d.d.multiplication == 1 && d.d.mul_op.mmcycle == 1) begin
+    end else if (a.e.mult == 1 && a.e.mulc == 1) begin
       v.stall = 1;
-    end else if (d.d.bitmanipulation == 1 && d.d.bit_op.bmcycle == 1) begin
+    end else if (a.e.bitm == 1 && a.e.bitc == 1) begin
       v.stall = 1;
     end
 
@@ -201,10 +203,10 @@ module decode_stage
       v.load = 0;
       v.store = 0;
       v.nop = 0;
-      v.csregister = 0;
+      v.csrreg = 0;
       v.division = 0;
-      v.multiplication = 0;
-      v.bitmanipulation = 0;
+      v.mult = 0;
+      v.bitm = 0;
       v.fence = 0;
       v.ecall = 0;
       v.ebreak = 0;
@@ -253,10 +255,12 @@ module decode_stage
     y.load = v.load;
     y.store = v.store;
     y.nop = v.nop;
-    y.csregister = v.csregister;
+    y.csrreg = v.csrreg;
     y.division = v.division;
-    y.multiplication = v.multiplication;
-    y.bitmanipulation = v.bitmanipulation;
+    y.mult = v.mult;
+    y.mulc = v.mulc;
+    y.bitm = v.bitm;
+    y.bitc = v.bitc;
     y.fence = v.fence;
     y.ecall = v.ecall;
     y.ebreak = v.ebreak;
@@ -301,10 +305,12 @@ module decode_stage
     q.load = r.load;
     q.store = r.store;
     q.nop = r.nop;
-    q.csregister = r.csregister;
+    q.csrreg = r.csrreg;
     q.division = r.division;
-    q.multiplication = r.multiplication;
-    q.bitmanipulation = r.bitmanipulation;
+    q.mult = r.mult;
+    q.mulc = r.mulc;
+    q.bitm = r.bitm;
+    q.bitc = r.bitc;
     q.fence = r.fence;
     q.ecall = r.ecall;
     q.ebreak = r.ebreak;

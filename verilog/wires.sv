@@ -81,7 +81,6 @@ package wires;
   };
 
   typedef struct packed{
-    logic [0:0] bmcycle;
     logic [0:0] bit_imm;
     logic [0:0] bit_alu_;
     logic [0:0] bit_clmul_;
@@ -92,7 +91,6 @@ package wires;
   } bit_op_type;
 
   parameter bit_op_type init_bit_op = '{
-    bmcycle    : 0,
     bit_imm    : 0,
     bit_alu_   : 0,
     bit_clmul_ : 0,
@@ -344,7 +342,7 @@ package wires;
     logic [0  : 0] op1_neg;
     logic [5  : 0] counter;
     logic [64 : 0] result;
-    logic [0  : 0] multiplication;
+    logic [0  : 0] mult;
     logic [0  : 0] negativ;
     logic [0  : 0] ready;
     mul_op_type op;
@@ -358,7 +356,7 @@ package wires;
     op1_neg : 0,
     counter : 0,
     result : 0,
-    multiplication : 0,
+    mult : 0,
     negativ : 0,
     ready : 0,
     op : init_mul_op
@@ -436,10 +434,12 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csregister;
+    logic [0  : 0] csrreg;
     logic [0  : 0] division;
-    logic [0  : 0] multiplication;
-    logic [0  : 0] bitmanipulation;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
@@ -549,10 +549,12 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csregister;
+    logic [0  : 0] csrreg;
     logic [0  : 0] division;
-    logic [0  : 0] multiplication;
-    logic [0  : 0] bitmanipulation;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -600,10 +602,12 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csregister;
+    logic [0  : 0] csrreg;
     logic [0  : 0] division;
-    logic [0  : 0] multiplication;
-    logic [0  : 0] bitmanipulation;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -652,10 +656,12 @@ package wires;
     load : 0,
     store : 0,
     nop : 0,
-    csregister : 0,
+    csrreg : 0,
     division : 0,
-    multiplication : 0,
-    bitmanipulation : 0,
+    mult : 0,
+    mulc : 0,
+    bitm : 0,
+    bitc : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
@@ -683,6 +689,12 @@ package wires;
   };
 
   typedef struct packed{
+    logic [0  : 0] cwren;
+    logic [0  : 0] division;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
     logic [0  : 0] stall;
     logic [0  : 0] clear;
   } execute_out_type;
@@ -708,10 +720,12 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csregister;
+    logic [0  : 0] csrreg;
     logic [0  : 0] division;
-    logic [0  : 0] multiplication;
-    logic [0  : 0] bitmanipulation;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
     logic [0  : 0] fence;
     logic [0  : 0] ecall;
     logic [0  : 0] ebreak;
@@ -762,10 +776,12 @@ package wires;
     load : 0,
     store : 0,
     nop : 0,
-    csregister : 0,
+    csrreg : 0,
     division : 0,
-    multiplication : 0,
-    bitmanipulation : 0,
+    mult : 0,
+    mulc : 0,
+    bitm : 0,
+    bitc : 0,
     fence : 0,
     ecall : 0,
     ebreak : 0,
