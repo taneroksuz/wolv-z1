@@ -491,14 +491,14 @@ module decoder
         end else if (funct3 == 2) begin
           wren = nonzero_waddr;
           rden1 = 1;
-          cwren = nonzero_waddr;
+          cwren = nonzero_raddr1;
           crden = 1;
           csr_op.csrrs = 1;
           csrreg = 1;
         end else if (funct3 == 3) begin
           wren = nonzero_waddr;
           rden1 = 1;
-          cwren = nonzero_waddr;
+          cwren = nonzero_raddr1;
           crden = 1;
           csr_op.csrrc = 1;
           csrreg = 1;
