@@ -3,7 +3,7 @@ default: none
 VERILATOR ?= /opt/verilator/bin/verilator
 SYSTEMC ?= /opt/systemc
 RISCVDV ?= /opt/riscv-dv
-RISCV ?= /opt/riscv/bin/riscv32-unknown-elf-
+RISCV ?= /opt/rv32imcb/bin/riscv32-unknown-elf-
 MARCH ?= rv32imc_zba_zbb_zbc_zbs_zicsr_zifencei
 MABI ?= ilp32
 ITER ?= 10
