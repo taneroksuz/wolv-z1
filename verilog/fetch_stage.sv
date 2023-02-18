@@ -28,7 +28,7 @@ module fetch_stage
     v.fence = d.d.fence;
     v.stall = v.stall | a.d.stall | a.e.stall | d.e.clear;
 
-    if (csr_out.exception == 1) begin
+    if (csr_out.trap == 1) begin
       v.pc = csr_out.mtvec;
     end else if (csr_out.mret == 1) begin
       v.pc = csr_out.mepc;
