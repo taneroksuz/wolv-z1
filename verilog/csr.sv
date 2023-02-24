@@ -3,8 +3,8 @@ import wires::*;
 
 module csr
 (
-  input logic rst,
-  input logic clk,
+  input logic reset,
+  input logic clock,
   input csr_decode_in_type csr_din,
   input csr_execute_in_type csr_ein,
   output csr_out_type csr_out,
@@ -103,9 +103,9 @@ module csr
 
   end
 
-  always_ff @(posedge clk) begin
+  always_ff @(posedge clock) begin
 
-    if (rst == 0) begin
+    if (reset == 1) begin
       csr_machine_reg <= init_csr_machine_reg;
       exception <= 0;
       interrupt <= 0;

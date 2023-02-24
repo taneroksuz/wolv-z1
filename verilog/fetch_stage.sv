@@ -4,8 +4,8 @@ import wires::*;
 
 module fetch_stage
 (
-  input logic rst,
-  input logic clk,
+  input logic reset,
+  input logic clock,
   input csr_out_type csr_out,
   input mem_out_type fetchbuffer_out,
   output mem_in_type fetchbuffer_in,
@@ -69,8 +69,8 @@ module fetch_stage
 
   end
 
-  always_ff @(posedge clk) begin
-    if (rst == 0) begin
+  always_ff @(posedge clock) begin
+    if (reset == 1) begin
       r <= init_fetch_reg;
     end else begin
       r <= rin;

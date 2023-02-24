@@ -3,8 +3,8 @@ import wires::*;
 
 module cpu
 (
-  input logic rst,
-  input logic clk,
+  input logic reset,
+  input logic clock,
   output logic [0  : 0] memory_valid,
   output logic [0  : 0] memory_instr,
   output logic [31 : 0] memory_addr,
@@ -122,16 +122,16 @@ module cpu
 
   div div_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .div_in (div_in),
     .div_out (div_out)
   );
 
   mul #(mul_performance) mul_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .mul_in (mul_in),
     .mul_out (mul_out)
   );
@@ -144,8 +144,8 @@ module cpu
 
   bit_clmul bit_clmul_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .bit_clmul_in (bit_clmul_in),
     .bit_clmul_out (bit_clmul_out)
   );
@@ -171,8 +171,8 @@ module cpu
 
   register register_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .register_rin (register_rin),
     .register_win (register_win),
     .register_out (register_out)
@@ -180,8 +180,8 @@ module cpu
 
   csr csr_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .csr_din (csr_din),
     .csr_ein (csr_ein),
     .csr_out (csr_out),
@@ -193,8 +193,8 @@ module cpu
 
   arbiter arbiter_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .imem_in (imem_in),
     .imem_out (imem_out),
     .dmem_in (dmem_in),
@@ -210,8 +210,8 @@ module cpu
 
   fetchbuffer fetchbuffer_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .fetchbuffer_in (fetchbuffer_in),
     .fetchbuffer_out (fetchbuffer_out),
     .imem_out (imem_out),
@@ -220,8 +220,8 @@ module cpu
 
   fetch_stage fetch_stage_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .csr_out (csr_out),
     .fetchbuffer_out (fetchbuffer_out),
     .fetchbuffer_in (fetchbuffer_in),
@@ -233,8 +233,8 @@ module cpu
 
   decode_stage decode_stage_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .decoder_out (decoder_out),
     .decoder_in (decoder_in),
     .compress_out (compress_out),
@@ -258,8 +258,8 @@ module cpu
 
   execute_stage execute_stage_comp
   (
-    .rst (rst),
-    .clk (clk),
+    .reset (reset),
+    .clock (clock),
     .alu_out (alu_out),
     .alu_in (alu_in),
     .lsu_out (lsu_out),

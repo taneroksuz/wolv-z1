@@ -1,8 +1,8 @@
 import wires::*;
 
 module arbiter(
-  input logic rst,
-  input logic clk,
+  input logic reset,
+  input logic clock,
   input mem_in_type imem_in,
   output mem_out_type imem_out,
   input mem_in_type dmem_in,
@@ -103,8 +103,8 @@ module arbiter(
 
   end
 
-  always_ff @(posedge clk) begin
-    if (rst == 0) begin
+  always_ff @(posedge clock) begin
+    if (reset == 1) begin
       r <= init_reg;
     end else begin
       r <= rin;

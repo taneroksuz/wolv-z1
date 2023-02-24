@@ -2,8 +2,8 @@ import wires::*;
 
 module mul
 (
-  input logic rst,
-  input logic clk,
+  input logic reset,
+  input logic clock,
   input mul_in_type mul_in,
   output mul_out_type mul_out
 );
@@ -105,8 +105,8 @@ module mul
 
       end
 
-      always_ff @ (posedge clk) begin
-        if (rst == 0) begin
+      always_ff @ (posedge clock) begin
+        if (reset == 1) begin
           r <= init_mul_reg;
         end else begin
           r <= rin;
