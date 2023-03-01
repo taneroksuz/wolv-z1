@@ -1,6 +1,6 @@
-# RISCV Z1 CPU #
+# Graywolv Z1 CPU core #
 
-RISCV Z1 CPU supports currently only riscv32-imcb instruction set architecture and is implemented with 3-stage pipeline and Neumann bus architecture.
+Graywolv Z1 CPU core supports currently only riscv32-imcb instruction set architecture and is implemented with 3-stage pipeline and Neumann bus architecture.
 
 ## Dhrystone Benchmark ##
 | Cycles | Dhrystone/s/MHz | DMIPS/s/MHz | Iteration |
