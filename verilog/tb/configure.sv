@@ -4,9 +4,9 @@ package configure;
 
   parameter mul_performance = 1;
 
-  parameter fetchbuffer_depth = 4;
+  parameter fetchbuffer_depth = 16;
 
-  parameter bram_depth = 18;
+  parameter bram_depth = 262144;
 
   parameter bram_base_addr = 32'h000000;
   parameter bram_top_addr  = 32'h100000;

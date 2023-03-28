@@ -24,22 +24,27 @@ module fetch_stage
 
     v = r;
 
-    v.valid = ~(a.d.stall | a.e.stall | d.e.clear) | d.d.fence;
-    v.fence = d.d.fence;
-    v.stall = v.stall | a.d.stall | a.e.stall | d.e.clear;
+    v.valid = ~(a.d.stall | a.e.stall | d.e.clear) | a.d.fence;
+    v.stall = d.f.stall | d.d.stall | d.e.stall | d.e.clear;
+
+    v.spec = 0;
 
     if (csr_out.trap == 1) begin
+      v.spec = 1;
       v.pc = csr_out.mtvec;
     end else if (csr_out.mret == 1) begin
+      v.spec = 1;
       v.pc = csr_out.mepc;
     end else if (d.d.jump == 1) begin
+      v.spec = 1;
       v.pc = d.d.address;
     end else if (v.stall == 0) begin
       v.pc = v.pc + ((v.instr[1:0] == 2'b11) ? 4 : 2);
     end
 
     fetchbuffer_in.mem_valid = v.valid;
-    fetchbuffer_in.mem_fence = v.fence;
+    fetchbuffer_in.mem_fence = a.d.fence;
+    fetchbuffer_in.mem_spec = v.spec;
     fetchbuffer_in.mem_instr = 1;
     fetchbuffer_in.mem_addr = v.pc;
     fetchbuffer_in.mem_wdata = 0;
@@ -60,12 +65,14 @@ module fetch_stage
     y.exception = v.exception;
     y.ecause = v.ecause;
     y.etval = v.etval;
+    y.stall = v.stall;
 
     q.pc = r.pc;
     q.instr = r.instr;
     q.exception = r.exception;
     q.ecause = r.ecause;
     q.etval = r.etval;
+    q.stall = r.stall;
 
   end
 

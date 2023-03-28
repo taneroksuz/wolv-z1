@@ -42,9 +42,9 @@ module decode_stage
     v.ecause = d.f.ecause;
     v.etval = d.f.etval;
 
-    // if ((d.d.stall | d.e.stall) == 1) begin
-    //   v = r;
-    // end
+    if ((d.d.stall | d.e.stall) == 1) begin
+      v = r;
+    end
 
     v.clear = d.d.jump | d.d.exception | d.d.mret | d.e.clear;
 

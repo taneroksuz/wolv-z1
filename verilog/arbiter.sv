@@ -29,6 +29,16 @@ module arbiter(
     logic [31:0] mem_addr;
     logic [31:0] mem_wdata;
     logic [3:0] mem_wstrb;
+    logic [0:0] dmem_valid;
+    logic [0:0] dmem_instr;
+    logic [31:0] dmem_addr;
+    logic [31:0] dmem_wdata;
+    logic [3:0] dmem_wstrb;
+    logic [0:0] imem_valid;
+    logic [0:0] imem_instr;
+    logic [31:0] imem_addr;
+    logic [31:0] imem_wdata;
+    logic [3:0] imem_wstrb;
   } reg_type;
 
   parameter reg_type init_reg = '{
@@ -37,7 +47,17 @@ module arbiter(
     mem_instr : 1,
     mem_addr : 0,
     mem_wdata : 0,
-    mem_wstrb : 0
+    mem_wstrb : 0,
+    dmem_valid : 0,
+    dmem_instr : 0,
+    dmem_addr : 0,
+    dmem_wdata : 0,
+    dmem_wstrb : 0,
+    imem_valid : 0,
+    imem_instr : 0,
+    imem_addr : 0,
+    imem_wdata : 0,
+    imem_wstrb : 0
   };
 
   reg_type r,rin;
@@ -50,22 +70,48 @@ module arbiter(
     if (memory_ready == 1) begin
       v.access_type = no_access;
     end
+    
+    if (dmem_in.mem_valid == 1) begin
+      v.dmem_valid = dmem_in.mem_valid;
+      v.dmem_instr = dmem_in.mem_instr;
+      v.dmem_addr = dmem_in.mem_addr;
+      v.dmem_wdata = dmem_in.mem_wdata;
+      v.dmem_wstrb = dmem_in.mem_wstrb;
+    end
+    
+    if (imem_in.mem_valid == 1) begin
+      v.imem_valid = imem_in.mem_valid;
+      v.imem_instr = imem_in.mem_instr;
+      v.imem_addr = imem_in.mem_addr;
+      v.imem_wdata = imem_in.mem_wdata;
+      v.imem_wstrb = imem_in.mem_wstrb;
+    end
 
     if (v.access_type == no_access) begin
-      if (dmem_in.mem_valid == 1) begin
+      if (v.dmem_valid == 1) begin
         v.access_type = data_access;
-        v.mem_valid = dmem_in.mem_valid;
-        v.mem_instr = dmem_in.mem_instr;
-        v.mem_addr = dmem_in.mem_addr;
-        v.mem_wdata = dmem_in.mem_wdata;
-        v.mem_wstrb = dmem_in.mem_wstrb;
-      end else if (imem_in.mem_valid == 1) begin
+        v.mem_valid = v.dmem_valid;
+        v.mem_instr = v.dmem_instr;
+        v.mem_addr = v.dmem_addr;
+        v.mem_wdata = v.dmem_wdata;
+        v.mem_wstrb = v.dmem_wstrb;
+        v.dmem_valid = 0;
+        v.dmem_instr = 0;
+        v.dmem_addr = 0;
+        v.dmem_wdata = 0;
+        v.dmem_wstrb = 0;
+      end else if (v.imem_valid == 1) begin
         v.access_type = instr_access;
         v.mem_valid = imem_in.mem_valid;
         v.mem_instr = imem_in.mem_instr;
         v.mem_addr = imem_in.mem_addr;
         v.mem_wdata = imem_in.mem_wdata;
         v.mem_wstrb = imem_in.mem_wstrb;
+        v.imem_valid = 0;
+        v.imem_instr = 0;
+        v.imem_addr = 0;
+        v.imem_wdata = 0;
+        v.imem_wstrb = 0;
       end
     end
 
