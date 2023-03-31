@@ -223,6 +223,7 @@ module decode_stage
 
     dmem_in.mem_valid = v.load | v.store;
     dmem_in.mem_fence = 0;
+    dmem_in.mem_spec = 0;
     dmem_in.mem_instr = 0;
     dmem_in.mem_addr = v.address;
     dmem_in.mem_wdata = store_data(v.rdata2,v.lsu_op.lsu_sb,v.lsu_op.lsu_sh,v.lsu_op.lsu_sw);
