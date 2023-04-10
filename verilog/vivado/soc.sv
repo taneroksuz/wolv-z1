@@ -4,8 +4,8 @@ module soc
 (
   input logic reset,
   input logic clock,
-  input logic rx,
-  output logic tx,
+  input logic uart_rx,
+  output logic uart_tx,
   output logic [31 : 0] m_axi_awaddr,
   output logic [7  : 0] m_axi_awlen,
   output logic [2  : 0] m_axi_awsize,
@@ -216,8 +216,8 @@ module soc
     .uart_wstrb (uart_wstrb),
     .uart_rdata (uart_rdata),
     .uart_ready (uart_ready),
-    .uart_rx (rx),
-    .uart_tx (tx)
+    .uart_rx (uart_rx),
+    .uart_tx (uart_tx)
   );
 
   clint clint_comp
