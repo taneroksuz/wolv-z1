@@ -22,6 +22,22 @@ module soc
   timeunit 1ns;
   timeprecision 1ps;
 
+  logic [0  : 0] imemory_valid;
+  logic [0  : 0] imemory_instr;
+  logic [31 : 0] imemory_addr;
+  logic [31 : 0] imemory_wdata;
+  logic [3  : 0] imemory_wstrb;
+  logic [31 : 0] imemory_rdata;
+  logic [0  : 0] imemory_ready;
+
+  logic [0  : 0] dmemory_valid;
+  logic [0  : 0] dmemory_instr;
+  logic [31 : 0] dmemory_addr;
+  logic [31 : 0] dmemory_wdata;
+  logic [3  : 0] dmemory_wstrb;
+  logic [31 : 0] dmemory_rdata;
+  logic [0  : 0] dmemory_ready;
+
   logic [0  : 0] memory_valid;
   logic [0  : 0] memory_instr;
   logic [31 : 0] memory_addr;
@@ -160,17 +176,51 @@ module soc
   (
     .reset (reset),
     .clock (clock),
+    .imemory_valid (imemory_valid),
+    .imemory_instr (imemory_instr),
+    .imemory_addr (imemory_addr),
+    .imemory_wdata (imemory_wdata),
+    .imemory_wstrb (imemory_wstrb),
+    .imemory_rdata (imemory_rdata),
+    .imemory_ready (imemory_ready),
+    .dmemory_valid (dmemory_valid),
+    .dmemory_instr (dmemory_instr),
+    .dmemory_addr (dmemory_addr),
+    .dmemory_wdata (dmemory_wdata),
+    .dmemory_wstrb (dmemory_wstrb),
+    .dmemory_rdata (dmemory_rdata),
+    .dmemory_ready (dmemory_ready),
+    .meip (meip),
+    .msip (msip),
+    .mtip (mtip),
+    .mtime (mtime)
+  );
+
+  arbiter arbiter_comp
+  (
+    .reset (reset),
+    .clock (clock),
+    .imemory_valid (imemory_valid),
+    .imemory_instr (imemory_instr),
+    .imemory_addr (imemory_addr),
+    .imemory_wdata (imemory_wdata),
+    .imemory_wstrb (imemory_wstrb),
+    .imemory_rdata (imemory_rdata),
+    .imemory_ready (imemory_ready),
+    .dmemory_valid (dmemory_valid),
+    .dmemory_instr (dmemory_instr),
+    .dmemory_addr (dmemory_addr),
+    .dmemory_wdata (dmemory_wdata),
+    .dmemory_wstrb (dmemory_wstrb),
+    .dmemory_rdata (dmemory_rdata),
+    .dmemory_ready (dmemory_ready),
     .memory_valid (memory_valid),
     .memory_instr (memory_instr),
     .memory_addr (memory_addr),
     .memory_wdata (memory_wdata),
     .memory_wstrb (memory_wstrb),
     .memory_rdata (memory_rdata),
-    .memory_ready (memory_ready),
-    .meip (meip),
-    .msip (msip),
-    .mtip (mtip),
-    .mtime (mtime)
+    .memory_ready (memory_ready)
   );
 
   rom rom_comp

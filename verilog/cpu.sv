@@ -5,13 +5,20 @@ module cpu
 (
   input logic reset,
   input logic clock,
-  output logic [0  : 0] memory_valid,
-  output logic [0  : 0] memory_instr,
-  output logic [31 : 0] memory_addr,
-  output logic [31 : 0] memory_wdata,
-  output logic [3  : 0] memory_wstrb,
-  input logic [31  : 0] memory_rdata,
-  input logic [0   : 0] memory_ready,
+  output logic [0  : 0] imemory_valid,
+  output logic [0  : 0] imemory_instr,
+  output logic [31 : 0] imemory_addr,
+  output logic [31 : 0] imemory_wdata,
+  output logic [3  : 0] imemory_wstrb,
+  input logic [31  : 0] imemory_rdata,
+  input logic [0   : 0] imemory_ready,
+  output logic [0  : 0] dmemory_valid,
+  output logic [0  : 0] dmemory_instr,
+  output logic [31 : 0] dmemory_addr,
+  output logic [31 : 0] dmemory_wdata,
+  output logic [3  : 0] dmemory_wstrb,
+  input logic [31  : 0] dmemory_rdata,
+  input logic [0   : 0] dmemory_ready,
   input logic [0   : 0] meip,
   input logic [0   : 0] msip,
   input logic [0   : 0] mtip,
@@ -191,23 +198,6 @@ module cpu
     .mtime (mtime)
   );
 
-  arbiter arbiter_comp
-  (
-    .reset (reset),
-    .clock (clock),
-    .imem_in (imem_in),
-    .imem_out (imem_out),
-    .dmem_in (dmem_in),
-    .dmem_out (dmem_out),
-    .memory_valid (memory_valid),
-    .memory_instr (memory_instr),
-    .memory_addr (memory_addr),
-    .memory_wdata (memory_wdata),
-    .memory_wstrb (memory_wstrb),
-    .memory_rdata (memory_rdata),
-    .memory_ready (memory_ready)
-  );
-
   fetchbuffer fetchbuffer_comp
   (
     .reset (reset),
@@ -284,5 +274,21 @@ module cpu
     .y (execute_out_y),
     .q (execute_out_q)
   );
+
+  assign imemory_valid = imem_in.mem_valid;
+  assign imemory_instr = imem_in.mem_instr;
+  assign imemory_addr = imem_in.mem_addr;
+  assign imemory_wdata = imem_in.mem_wdata;
+  assign imemory_wstrb = imem_in.mem_wstrb;
+  assign imem_out.mem_rdata = imemory_rdata;
+  assign imem_out.mem_ready = imemory_ready;
+
+  assign dmemory_valid = dmem_in.mem_valid;
+  assign dmemory_instr = dmem_in.mem_instr;
+  assign dmemory_addr = dmem_in.mem_addr;
+  assign dmemory_wdata = dmem_in.mem_wdata;
+  assign dmemory_wstrb = dmem_in.mem_wstrb;
+  assign dmem_out.mem_rdata = dmemory_rdata;
+  assign dmem_out.mem_ready = dmemory_ready;
 
 endmodule

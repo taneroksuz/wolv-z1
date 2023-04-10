@@ -4,13 +4,23 @@ import constants::*;
 module arbiter(
   input logic reset,
   input logic clock,
-  input mem_in_type imem_in,
-  output mem_out_type imem_out,
-  input mem_in_type dmem_in,
-  output mem_out_type dmem_out,
+  input logic [0  : 0] imemory_valid,
+  input logic [0  : 0] imemory_instr,
+  input logic [31 : 0] imemory_addr ,
+  input logic [31 : 0] imemory_wdata,
+  input logic [3  : 0] imemory_wstrb,
+  output logic [31  : 0] imemory_rdata,
+  output logic [0   : 0] imemory_ready,
+  input logic [0  : 0] dmemory_valid,
+  input logic [0  : 0] dmemory_instr,
+  input logic [31 : 0] dmemory_addr ,
+  input logic [31 : 0] dmemory_wdata,
+  input logic [3  : 0] dmemory_wstrb,
+  output logic [31  : 0] dmemory_rdata,
+  output logic [0   : 0] dmemory_ready,
   output logic [0  : 0] memory_valid,
   output logic [0  : 0] memory_instr,
-  output logic [31 : 0] memory_addr ,
+  output logic [31 : 0] memory_addr,
   output logic [31 : 0] memory_wdata,
   output logic [3  : 0] memory_wstrb,
   input logic [31  : 0] memory_rdata,
@@ -64,12 +74,12 @@ module arbiter(
       v.access_type = no_access;
     end
     
-    if (dmem_in.mem_valid == 1) begin
-      v.dmem_valid = dmem_in.mem_valid;
-      v.dmem_instr = dmem_in.mem_instr;
-      v.dmem_addr = dmem_in.mem_addr;
-      v.dmem_wdata = dmem_in.mem_wdata;
-      v.dmem_wstrb = dmem_in.mem_wstrb;
+    if (dmemory_valid == 1) begin
+      v.dmem_valid = dmemory_valid;
+      v.dmem_instr = dmemory_instr;
+      v.dmem_addr = dmemory_addr;
+      v.dmem_wdata = dmemory_wdata;
+      v.dmem_wstrb = dmemory_wstrb;
     end
 
     if (v.access_type == no_access) begin
@@ -85,13 +95,13 @@ module arbiter(
         v.dmem_addr = 0;
         v.dmem_wdata = 0;
         v.dmem_wstrb = 0;
-      end else if (imem_in.mem_valid == 1) begin
+      end else if (imemory_valid == 1) begin
         v.access_type = instr_access;
-        v.mem_valid = imem_in.mem_valid;
-        v.mem_instr = imem_in.mem_instr;
-        v.mem_addr = imem_in.mem_addr;
-        v.mem_wdata = imem_in.mem_wdata;
-        v.mem_wstrb = imem_in.mem_wstrb;
+        v.mem_valid = imemory_valid;
+        v.mem_instr = imemory_instr;
+        v.mem_addr = imemory_addr;
+        v.mem_wdata = imemory_wdata;
+        v.mem_wstrb = imemory_wstrb;
       end
     end
 
@@ -112,19 +122,19 @@ module arbiter(
     rin = v;
 
     if (r.access_type == instr_access) begin
-      imem_out.mem_ready = memory_ready;
-      imem_out.mem_rdata = memory_rdata;
+      imemory_ready = memory_ready;
+      imemory_rdata = memory_rdata;
     end else begin
-      imem_out.mem_ready = 0;
-      imem_out.mem_rdata = 0;
+      imemory_ready = 0;
+      imemory_rdata = 0;
     end
 
     if (r.access_type == data_access) begin
-      dmem_out.mem_ready = memory_ready;
-      dmem_out.mem_rdata = memory_rdata;
+      dmemory_ready = memory_ready;
+      dmemory_rdata = memory_rdata;
     end else begin
-      dmem_out.mem_ready = 0;
-      dmem_out.mem_rdata = 0;
+      dmemory_ready = 0;
+      dmemory_rdata = 0;
     end
 
   end
