@@ -123,7 +123,7 @@ module soc
           uart_valid = 0;
           clint_valid = 0;
           axi_valid = memory_valid;
-          base_addr = rom_base_addr;
+          base_addr = axi_base_addr;
       end else if (memory_addr >= clint_base_addr &&
         memory_addr < clint_top_addr) begin
           rom_valid = 0;
