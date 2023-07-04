@@ -5,7 +5,7 @@ Wolv Z1 CPU core supports currently only riscv32-imcb instruction set architectu
 ## Dhrystone Benchmark ##
 | Cycles | Dhrystone/s/MHz | DMIPS/s/MHz | Iteration |
 | ------ | --------------- | ----------- | --------- |
-|    477 |            2096 |        1.19 |      1000 |
+|    369 |            2709 |        1.54 |      1000 |
 
 ## Coremark Benchmark ##
 | Cycles | Iteration/s/MHz | Iteration |
