@@ -133,6 +133,22 @@ module soc();
     end
   end
 
+  always_ff @(posedge clock) begin
+    if (memory_addr[31:2] == host[0][31:2] && |memory_wstrb == 1) begin
+      if (memory_wdata == 32'h1) begin
+        $write("%c[1;32m",8'h1B);
+        $display("TEST SUCCEEDED");
+        $write("%c[0m",8'h1B);
+        $finish;
+      end else begin
+        $write("%c[1;31m",8'h1B);
+        $display("TEST FAILED");
+        $write("%c[0m",8'h1B);
+        $finish;
+      end
+    end
+  end
+
   always_comb begin
 
     rom_valid = 0;
@@ -143,13 +159,7 @@ module soc();
     base_addr = 0;
 
     if (memory_valid == 1) begin
-      if (memory_addr == host[0]) begin
-          rom_valid = 0;
-          print_valid = 0;
-          clint_valid = 0;
-          bram_valid = memory_valid;
-          base_addr = 0;
-      end else if (memory_addr >= bram_base_addr &&
+      if (memory_addr >= bram_base_addr &&
         memory_addr < bram_top_addr) begin
           rom_valid = 0;
           print_valid = 0;
