@@ -36,17 +36,12 @@ module decode_stage
 
     v = r;
 
-    v.pc = d.f.pc;
-    v.instr = d.f.instr;
-    v.exception = d.f.exception;
-    v.ecause = d.f.ecause;
-    v.etval = d.f.etval;
+    v.pc = a.f.done ? a.f.pc : 0;
+    v.instr = a.f.done ? a.f.instr : nop_instr;
 
-    if ((d.d.stall | d.e.stall) == 1) begin
-      v = r;
-    end
+    v.npc = v.pc + ((&v.instr[1:0]) ? 4 : 2);
 
-    v.clear = d.d.jump | d.d.exception | d.d.mret | d.e.clear;
+    v.clear = csr_out.trap | csr_out.mret | d.d.fence | d.d.jump | d.e.clear;
 
     v.stall = 0;
 
@@ -113,8 +108,6 @@ module decode_stage
       v.ebreak = compress_out.ebreak;
       v.valid = compress_out.valid;
     end
-
-    v.npc = v.pc + ((v.instr[1:0] == 2'b11) ? 4 : 2);
 
     register_rin.rden1 = v.rden1;
     register_rin.rden2 = v.rden2;
@@ -192,7 +185,7 @@ module decode_stage
       v.stall = 1;
     end
 
-    if ((v.stall | a.e.stall | v.clear | csr_out.trap | csr_out.mret) == 1) begin
+    if ((v.stall | a.e.stall | v.clear) == 1) begin
       v.wren = 0;
       v.cwren = 0;
       v.auipc = 0;

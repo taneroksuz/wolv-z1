@@ -70,8 +70,8 @@ module cpu
   fetch_out_type fetch_out_q;
   decode_out_type decode_out_q;
   execute_out_type execute_out_q;
-  mem_in_type fetchbuffer_in;
-  mem_out_type fetchbuffer_out;
+  buffer_in_type buffer_in;
+  buffer_out_type buffer_out;
   mem_in_type imem_in;
   mem_out_type imem_out;
   mem_in_type dmem_in;
@@ -198,23 +198,23 @@ module cpu
     .mtime (mtime)
   );
 
-  fetchbuffer fetchbuffer_comp
+  buffer buffer_comp
   (
     .reset (reset),
     .clock (clock),
-    .fetchbuffer_in (fetchbuffer_in),
-    .fetchbuffer_out (fetchbuffer_out),
-    .imem_out (imem_out),
-    .imem_in (imem_in)
+    .buffer_in (buffer_in),
+    .buffer_out (buffer_out)
   );
 
   fetch_stage fetch_stage_comp
   (
     .reset (reset),
     .clock (clock),
+    .buffer_out (buffer_out),
+    .buffer_in (buffer_in),
     .csr_out (csr_out),
-    .fetchbuffer_out (fetchbuffer_out),
-    .fetchbuffer_in (fetchbuffer_in),
+    .imem_out (imem_out),
+    .imem_in (imem_in),
     .a (fetch_in_a),
     .d (fetch_in_d),
     .y (fetch_out_y),

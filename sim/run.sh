@@ -37,7 +37,7 @@ $XVLOG -sv $BASEDIR/verilog/tb/configure.sv \
             $BASEDIR/verilog/register.sv \
             $BASEDIR/verilog/csr.sv \
             $BASEDIR/verilog/compress.sv \
-            $BASEDIR/verilog/fetchbuffer.sv \
+            $BASEDIR/verilog/buffer.sv \
             $BASEDIR/verilog/forwarding.sv \
             $BASEDIR/verilog/fetch_stage.sv \
             $BASEDIR/verilog/decode_stage.sv \
