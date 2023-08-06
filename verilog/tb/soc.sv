@@ -110,16 +110,19 @@ module soc();
   always #0.5 clock = ~clock;
 
   initial begin
-    reg_file = $fopen("register.txt","w");
-    for (int i=0; i<stoptime; i=i+1) begin
-      @(posedge clock);
-      if (soc.cpu_comp.register_comp.register_win.wren == 1) begin
-        $fwrite(reg_file,"PERIOD = %t\t",$time);
-        $fwrite(reg_file,"WADDR = %d\t",soc.cpu_comp.register_comp.register_win.waddr);
-        $fwrite(reg_file,"WDATA = %x\n",soc.cpu_comp.register_comp.register_win.wdata);
+    string filename;
+    if ($value$plusargs("REGFILE=%s",filename)) begin
+      reg_file = $fopen(filename,"w");
+      for (int i=0; i<stoptime; i=i+1) begin
+        @(posedge clock);
+        if (soc.cpu_comp.register_comp.register_win.wren == 1) begin
+          $fwrite(reg_file,"PERIOD = %t\t",$time);
+          $fwrite(reg_file,"WADDR = %d\t",soc.cpu_comp.register_comp.register_win.waddr);
+          $fwrite(reg_file,"WDATA = %x\n",soc.cpu_comp.register_comp.register_win.wdata);
+        end
       end
+      $fclose(reg_file);
     end
-    $fclose(reg_file); 
   end
 
   always_ff @(posedge clock) begin
@@ -134,17 +137,21 @@ module soc();
   end
 
   always_ff @(posedge clock) begin
-    if (memory_addr[31:2] == host[0][31:2] && |memory_wstrb == 1) begin
-      if (memory_wdata == 32'h1) begin
-        $write("%c[1;32m",8'h1B);
-        $display("TEST SUCCEEDED");
-        $write("%c[0m",8'h1B);
-        $finish;
-      end else begin
-        $write("%c[1;31m",8'h1B);
-        $display("TEST FAILED");
-        $write("%c[0m",8'h1B);
-        $finish;
+    if (soc.cpu_comp.decode_stage_comp.dmem_in.mem_valid == 1) begin
+      if (soc.cpu_comp.decode_stage_comp.dmem_in.mem_addr[31:2] == host[0][31:2]) begin
+        if (|soc.cpu_comp.decode_stage_comp.dmem_in.mem_wstrb == 1) begin
+          if (soc.cpu_comp.decode_stage_comp.dmem_in.mem_wdata == 32'h1) begin
+            $write("%c[1;32m",8'h1B);
+            $display("TEST SUCCEEDED");
+            $write("%c[0m",8'h1B);
+            $finish;
+          end else begin
+            $write("%c[1;31m",8'h1B);
+            $display("TEST FAILED");
+            $write("%c[0m",8'h1B);
+            $finish;
+          end
+        end
       end
     end
   end
