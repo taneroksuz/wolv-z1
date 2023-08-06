@@ -416,6 +416,158 @@ package wires;
   } csr_alu_out_type;
 
   typedef struct packed{
+    logic [0  : 0] wren;
+    logic [0  : 0] rden1;
+    logic [0  : 0] rden2;
+    logic [0  : 0] cwren;
+    logic [0  : 0] crden;
+    logic [0  : 0] fwren;
+    logic [0  : 0] frden1;
+    logic [0  : 0] frden2;
+    logic [0  : 0] frden3;
+    logic [0  : 0] alunit;
+    logic [0  : 0] auipc;
+    logic [0  : 0] lui;
+    logic [0  : 0] jal;
+    logic [0  : 0] jalr;
+    logic [0  : 0] branch;
+    logic [0  : 0] load;
+    logic [0  : 0] store;
+    logic [0  : 0] fload;
+    logic [0  : 0] fstore;
+    logic [0  : 0] nop;
+    logic [0  : 0] csreg;
+    logic [0  : 0] division;
+    logic [0  : 0] mult;
+    logic [0  : 0] mulc;
+    logic [0  : 0] bitm;
+    logic [0  : 0] bitc;
+    logic [0  : 0] fence;
+    logic [0  : 0] ecall;
+    logic [0  : 0] ebreak;
+    logic [0  : 0] mret;
+    logic [0  : 0] wfi;
+    logic [0  : 0] jump;
+    logic [0  : 0] exception;
+    logic [0  : 0] valid;
+  } operation_type;
+
+  parameter operation_type init_operation = '{
+    wren : 0,
+    rden1 : 0,
+    rden2 : 0,
+    cwren : 0,
+    crden : 0,
+    fwren : 0,
+    frden1 : 0,
+    frden2 : 0,
+    frden3 : 0,
+    alunit : 0,
+    auipc : 0,
+    lui : 0,
+    jal : 0,
+    jalr : 0,
+    branch : 0,
+    load : 0,
+    store : 0,
+    fload : 0,
+    fstore : 0,
+    nop : 0,
+    csreg : 0,
+    division : 0,
+    mult : 0,
+    mulc : 0,
+    bitm : 0,
+    bitc : 0,
+    fence : 0,
+    ecall : 0,
+    ebreak : 0,
+    mret : 0,
+    wfi : 0,
+    jump : 0,
+    exception : 0,
+    valid : 0
+  };
+
+  typedef struct packed{
+    logic [31 : 0] pc;
+    logic [31 : 0] npc;
+    logic [31 : 0] instr;
+    logic [31 : 0] imm;
+    logic [4  : 0] waddr;
+    logic [4  : 0] raddr1;
+    logic [4  : 0] raddr2;
+    logic [4  : 0] raddr3;
+    logic [11 : 0] caddr;
+    logic [31 : 0] rdata1;
+    logic [31 : 0] rdata2;
+    logic [31 : 0] crdata;
+    logic [31 : 0] cwdata;
+    logic [31 : 0] wdata;
+    logic [31 : 0] ldata;
+    logic [31 : 0] sdata;
+    logic [31 : 0] bdata;
+    logic [31 : 0] mdata;
+    logic [31 : 0] bcdata;
+    logic [31 : 0] ddata;
+    logic [0  : 0] mready;
+    logic [0  : 0] bcready;
+    logic [0  : 0] dready;
+    logic [31 : 0] address;
+    logic [3  : 0] byteenable;
+    logic [3  : 0] ecause;
+    logic [31 : 0] etval;
+    operation_type op;
+    operation_type op_b;
+    alu_op_type alu_op;
+    bcu_op_type bcu_op;
+    lsu_op_type lsu_op;
+    csr_op_type csr_op;
+    div_op_type div_op;
+    mul_op_type mul_op;
+    bit_op_type bit_op;
+  } instruction_type;
+
+  parameter instruction_type init_instruction = '{
+    pc : 32'h0,
+    npc : 32'h0,
+    instr : 0,
+    imm : 0,
+    waddr : 0,
+    raddr1 : 0,
+    raddr2 : 0,
+    raddr3 : 0,
+    caddr : 0,
+    rdata1 : 0,
+    rdata2 : 0,
+    crdata : 0,
+    cwdata : 0,
+    wdata : 0,
+    sdata : 0,
+    ldata : 0,
+    bdata : 0,
+    mdata : 0,
+    bcdata : 0,
+    ddata : 0,
+    mready : 0,
+    bcready : 0,
+    dready : 0,
+    address : 0,
+    byteenable : 0,
+    ecause : 0,
+    etval : 0,
+    op : init_operation,
+    op_b : init_operation,
+    alu_op : init_alu_op,
+    bcu_op : init_bcu_op,
+    lsu_op : init_lsu_op,
+    csr_op : init_csr_op,
+    div_op : init_div_op,
+    mul_op : init_mul_op,
+    bit_op : init_bit_op
+  };
+
+  typedef struct packed{
     logic [31 : 0] instr;
   } decoder_in_type;
 
@@ -434,12 +586,18 @@ package wires;
     logic [0  : 0] load;
     logic [0  : 0] store;
     logic [0  : 0] nop;
-    logic [0  : 0] csrreg;
+    logic [0  : 0] csreg;
     logic [0  : 0] division;
     logic [0  : 0] mult;
     logic [0  : 0] mulc;
     logic [0  : 0] bitm;
     logic [0  : 0] bitc;
+    logic [0  : 0] fence;
+    logic [0  : 0] ecall;
+    logic [0  : 0] ebreak;
+    logic [0  : 0] mret;
+    logic [0  : 0] wfi;
+    logic [0  : 0] valid;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
@@ -447,12 +605,6 @@ package wires;
     div_op_type div_op;
     mul_op_type mul_op;
     bit_op_type bit_op;
-    logic [0  : 0] fence;
-    logic [0  : 0] ecall;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] mret;
-    logic [0  : 0] wfi;
-    logic [0  : 0] valid;
   } decoder_out_type;
 
   typedef struct packed{
@@ -473,11 +625,11 @@ package wires;
     logic [0  : 0] branch;
     logic [0  : 0] load;
     logic [0  : 0] store;
+    logic [0  : 0] ebreak;
+    logic [0  : 0] valid;
     alu_op_type alu_op;
     bcu_op_type bcu_op;
     lsu_op_type lsu_op;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] valid;
   } compress_out_type;
 
   typedef struct packed{
@@ -549,284 +701,38 @@ package wires;
   };
 
   typedef struct packed{
-    logic [31 : 0] pc;
-    logic [31 : 0] npc;
-    logic [31 : 0] imm;
-    logic [0  : 0] wren;
-    logic [0  : 0] rden1;
-    logic [0  : 0] rden2;
-    logic [0  : 0] cwren;
-    logic [0  : 0] crden;
-    logic [4  : 0] waddr;
-    logic [4  : 0] raddr1;
-    logic [4  : 0] raddr2;
-    logic [11 : 0] caddr;
-    logic [0  : 0] auipc;
-    logic [0  : 0] lui;
-    logic [0  : 0] jal;
-    logic [0  : 0] jalr;
-    logic [0  : 0] branch;
-    logic [0  : 0] load;
-    logic [0  : 0] store;
-    logic [0  : 0] nop;
-    logic [0  : 0] csrreg;
-    logic [0  : 0] division;
-    logic [0  : 0] mult;
-    logic [0  : 0] mulc;
-    logic [0  : 0] bitm;
-    logic [0  : 0] bitc;
-    logic [0  : 0] fence;
-    logic [0  : 0] ecall;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] mret;
-    logic [0  : 0] wfi;
-    logic [0  : 0] valid;
-    logic [0  : 0] jump;
-    logic [31 : 0] rdata1;
-    logic [31 : 0] rdata2;
-    logic [31 : 0] cdata;
-    logic [31 : 0] address;
-    logic [3  : 0] byteenable;
-    alu_op_type alu_op;
-    bcu_op_type bcu_op;
-    lsu_op_type lsu_op;
-    csr_op_type csr_op;
-    div_op_type div_op;
-    mul_op_type mul_op;
-    bit_op_type bit_op;
-    logic [0  : 0] exception;
-    logic [3  : 0] ecause;
-    logic [31 : 0] etval;
+    instruction_type instr;
     logic [0  : 0] stall;
   } decode_out_type;
 
   typedef struct packed{
-    logic [31 : 0] pc;
-    logic [31 : 0] instr;
-    logic [31 : 0] npc;
-    logic [31 : 0] imm;
-    logic [0  : 0] wren;
-    logic [0  : 0] rden1;
-    logic [0  : 0] rden2;
-    logic [0  : 0] cwren;
-    logic [0  : 0] crden;
-    logic [4  : 0] waddr;
-    logic [4  : 0] raddr1;
-    logic [4  : 0] raddr2;
-    logic [11 : 0] caddr;
-    logic [0  : 0] auipc;
-    logic [0  : 0] lui;
-    logic [0  : 0] jal;
-    logic [0  : 0] jalr;
-    logic [0  : 0] branch;
-    logic [0  : 0] load;
-    logic [0  : 0] store;
-    logic [0  : 0] nop;
-    logic [0  : 0] csrreg;
-    logic [0  : 0] division;
-    logic [0  : 0] mult;
-    logic [0  : 0] mulc;
-    logic [0  : 0] bitm;
-    logic [0  : 0] bitc;
-    logic [0  : 0] fence;
-    logic [0  : 0] ecall;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] mret;
-    logic [0  : 0] wfi;
-    logic [0  : 0] valid;
-    logic [0  : 0] jump;
-    logic [31 : 0] rdata1;
-    logic [31 : 0] rdata2;
-    logic [31 : 0] cdata;
-    logic [31 : 0] address;
-    logic [3  : 0] byteenable;
-    alu_op_type alu_op;
-    bcu_op_type bcu_op;
-    lsu_op_type lsu_op;
-    csr_op_type csr_op;
-    div_op_type div_op;
-    mul_op_type mul_op;
-    bit_op_type bit_op;
-    logic [0  : 0] exception;
-    logic [3  : 0] ecause;
-    logic [31 : 0] etval;
+    instruction_type instr;
     logic [0  : 0] stall;
     logic [0  : 0] clear;
   } decode_reg_type;
 
   parameter decode_reg_type init_decode_reg = '{
-    pc : 0,
-    instr : 0,
-    npc : 0,
-    imm : 0,
-    wren : 0,
-    rden1 : 0,
-    rden2 : 0,
-    cwren : 0,
-    crden : 0,
-    waddr : 0,
-    raddr1 : 0,
-    raddr2 : 0,
-    caddr : 0,
-    auipc : 0,
-    lui : 0,
-    jal : 0,
-    jalr : 0,
-    branch : 0,
-    load : 0,
-    store : 0,
-    nop : 0,
-    csrreg : 0,
-    division : 0,
-    mult : 0,
-    mulc : 0,
-    bitm : 0,
-    bitc : 0,
-    fence : 0,
-    ecall : 0,
-    ebreak : 0,
-    mret : 0,
-    wfi : 0,
-    valid : 0,
-    jump : 0,
-    rdata1 : 0,
-    rdata2 : 0,
-    cdata : 0,
-    address : 0,
-    byteenable : 0,
-    alu_op : init_alu_op,
-    bcu_op : init_bcu_op,
-    lsu_op : init_lsu_op,
-    csr_op : init_csr_op,
-    div_op : init_div_op,
-    mul_op : init_mul_op,
-    bit_op : init_bit_op,
-    exception : 0,
-    ecause : 0,
-    etval : 0,
+    instr : init_instruction,
     stall : 0,
     clear : 0
   };
 
   typedef struct packed{
-    logic [0  : 0] cwren;
-    logic [0  : 0] division;
-    logic [0  : 0] mult;
-    logic [0  : 0] mulc;
-    logic [0  : 0] bitm;
-    logic [0  : 0] bitc;
+    instruction_type instr;
     logic [0  : 0] stall;
     logic [0  : 0] clear;
   } execute_out_type;
 
   typedef struct packed{
-    logic [31 : 0] pc;
-    logic [31 : 0] npc;
-    logic [31 : 0] imm;
-    logic [0  : 0] wren;
-    logic [0  : 0] rden1;
-    logic [0  : 0] rden2;
-    logic [0  : 0] cwren;
-    logic [0  : 0] crden;
-    logic [4  : 0] waddr;
-    logic [4  : 0] raddr1;
-    logic [4  : 0] raddr2;
-    logic [11 : 0] caddr;
-    logic [0  : 0] auipc;
-    logic [0  : 0] lui;
-    logic [0  : 0] jal;
-    logic [0  : 0] jalr;
-    logic [0  : 0] branch;
-    logic [0  : 0] load;
-    logic [0  : 0] store;
-    logic [0  : 0] nop;
-    logic [0  : 0] csrreg;
-    logic [0  : 0] division;
-    logic [0  : 0] mult;
-    logic [0  : 0] mulc;
-    logic [0  : 0] bitm;
-    logic [0  : 0] bitc;
-    logic [0  : 0] fence;
-    logic [0  : 0] ecall;
-    logic [0  : 0] ebreak;
-    logic [0  : 0] mret;
-    logic [0  : 0] wfi;
-    logic [0  : 0] valid;
-    logic [31 : 0] rdata1;
-    logic [31 : 0] rdata2;
-    logic [31 : 0] cdata;
-    logic [31 : 0] bdata;
-    logic [31 : 0] mdata;
-    logic [31 : 0] wdata;
-    logic [31 : 0] ldata;
-    logic [31 : 0] address;
-    logic [3  : 0] byteenable;
-    alu_op_type alu_op;
-    bcu_op_type bcu_op;
-    lsu_op_type lsu_op;
-    csr_op_type csr_op;
-    mul_op_type mul_op;
-    div_op_type div_op;
-    bit_op_type bit_op;
-    logic [0  : 0] exception;
-    logic [3  : 0] ecause;
-    logic [31 : 0] etval;
+    instruction_type instr;
+    logic [0  : 0] enable;
     logic [0  : 0] stall;
     logic [0  : 0] clear;
   } execute_reg_type;
 
   parameter execute_reg_type init_execute_reg = '{
-    pc : 0,
-    npc : 0,
-    imm : 0,
-    wren : 0,
-    rden1 : 0,
-    rden2 : 0,
-    cwren : 0,
-    crden : 0,
-    waddr : 0,
-    raddr1 : 0,
-    raddr2 : 0,
-    caddr : 0,
-    auipc : 0,
-    lui : 0,
-    jal : 0,
-    jalr : 0,
-    branch : 0,
-    load : 0,
-    store : 0,
-    nop : 0,
-    csrreg : 0,
-    division : 0,
-    mult : 0,
-    mulc : 0,
-    bitm : 0,
-    bitc : 0,
-    fence : 0,
-    ecall : 0,
-    ebreak : 0,
-    mret : 0,
-    wfi : 0,
-    valid : 0,
-    rdata1 : 0,
-    rdata2 : 0,
-    cdata : 0,
-    bdata : 0,
-    mdata : 0,
-    wdata : 0,
-    ldata : 0,
-    address : 0,
-    byteenable : 0,
-    alu_op : init_alu_op,
-    bcu_op : init_bcu_op,
-    lsu_op : init_lsu_op,
-    csr_op : init_csr_op,
-    div_op : init_div_op,
-    mul_op : init_mul_op,
-    bit_op : init_bit_op,
-    exception : 0,
-    ecause : 0,
-    etval : 0,
+    instr : init_instruction,
+    enable : 0,
     stall : 0,
     clear : 1
   };

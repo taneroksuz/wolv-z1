@@ -71,14 +71,14 @@ module fetch_stage
       v.fence = 0;
       v.spec = 1;
       v.addr = csr_out.mepc;
-    end else if (d.d.jump == 1) begin
+    end else if (d.d.instr.op.jump == 1) begin
       v.fence = 0;
       v.spec = 1;
-      v.addr = d.d.address;
-    end else if (d.d.fence == 1) begin
+      v.addr = d.d.instr.address;
+    end else if (d.d.instr.op.fence == 1) begin
       v.fence = 1;
       v.spec = 1;
-      v.addr = d.d.npc;
+      v.addr = d.d.instr.npc;
     end else if (v.stall == 0) begin
       v.fence = 0;
       v.spec = 0;

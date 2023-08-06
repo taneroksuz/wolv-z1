@@ -46,7 +46,7 @@ module decoder
   logic [0  : 0] load;
   logic [0  : 0] store;
   logic [0  : 0] nop;
-  logic [0  : 0] csrreg;
+  logic [0  : 0] csreg;
   logic [0  : 0] division;
   logic [0  : 0] mult;
   logic [0  : 0] mulc;
@@ -117,7 +117,7 @@ module decoder
     load = 0;
     store = 0;
     nop = 0;
-    csrreg = 0;
+    csreg = 0;
     division = 0;
     mult = 0;
     mulc = 0;
@@ -487,39 +487,39 @@ module decoder
           cwren = 1;
           crden = nonzero_waddr;
           csr_op.csrrw = 1;
-          csrreg = 1;
+          csreg = 1;
         end else if (funct3 == 2) begin
           wren = nonzero_waddr;
           rden1 = 1;
           cwren = nonzero_raddr1;
           crden = 1;
           csr_op.csrrs = 1;
-          csrreg = 1;
+          csreg = 1;
         end else if (funct3 == 3) begin
           wren = nonzero_waddr;
           rden1 = 1;
           cwren = nonzero_raddr1;
           crden = 1;
           csr_op.csrrc = 1;
-          csrreg = 1;
+          csreg = 1;
         end else if (funct3 == 5) begin
           wren = nonzero_waddr;
           cwren = 1;
           crden = nonzero_waddr;
           csr_op.csrrwi = 1;
-          csrreg = 1;
+          csreg = 1;
         end else if (funct3 == 6) begin
           wren = nonzero_waddr;
           cwren = nonzero_imm_c;
           crden = 1;
           csr_op.csrrsi = 1;
-          csrreg = 1;
+          csreg = 1;
         end else if (funct3 == 7) begin
           wren = nonzero_waddr;
           cwren = nonzero_imm_c;
           crden = 1;
           csr_op.csrrci = 1;
-          csrreg = 1;
+          csreg = 1;
         end
       end
       default : valid = 0;
@@ -548,7 +548,7 @@ module decoder
     decoder_out.load = load;
     decoder_out.store = store;
     decoder_out.nop = nop;
-    decoder_out.csrreg = csrreg;
+    decoder_out.csreg = csreg;
     decoder_out.division = division;
     decoder_out.mult = mult;
     decoder_out.mulc = mulc;

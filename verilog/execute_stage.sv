@@ -39,220 +39,155 @@ module execute_stage
 
     v = r;
 
-    v.pc = d.d.pc;
-    v.npc = d.d.npc;
-    v.imm = d.d.imm;
-    v.wren = d.d.wren;
-    v.rden1 = d.d.rden1;
-    v.rden2 = d.d.rden2;
-    v.cwren = d.d.cwren;
-    v.crden = d.d.crden;
-    v.waddr = d.d.waddr;
-    v.raddr1 = d.d.raddr1;
-    v.raddr2 = d.d.raddr2;
-    v.caddr = d.d.caddr;
-    v.auipc = d.d.auipc;
-    v.lui = d.d.lui;
-    v.jal = d.d.jal;
-    v.jalr = d.d.jalr;
-    v.branch = d.d.branch;
-    v.load = d.d.load;
-    v.store = d.d.store;
-    v.nop = d.d.nop;
-    v.csrreg = d.d.csrreg;
-    v.division = d.d.division;
-    v.mult = d.d.mult;
-    v.mulc = d.d.mulc;
-    v.bitm = d.d.bitm;
-    v.bitc = d.d.bitc;
-    v.fence = d.d.fence;
-    v.ecall = d.d.ecall;
-    v.ebreak = d.d.ebreak;
-    v.mret = d.d.mret;
-    v.wfi = d.d.wfi;
-    v.valid = d.d.valid;
-    v.rdata1 = d.d.rdata1;
-    v.rdata2 = d.d.rdata2;
-    v.cdata = d.d.cdata;
-    v.address = d.d.address;
-    v.byteenable = d.d.byteenable;
-    v.alu_op = d.d.alu_op;
-    v.bcu_op = d.d.bcu_op;
-    v.lsu_op = d.d.lsu_op;
-    v.csr_op = d.d.csr_op;
-    v.div_op = d.d.div_op;
-    v.mul_op = d.d.mul_op;
-    v.bit_op = d.d.bit_op;
-    v.exception = d.d.exception;
-    v.ecause = d.d.ecause;
-    v.etval = d.d.etval;
+    v.instr = d.d.instr;
 
     if (d.e.stall == 1) begin
       v = r;
+      v.instr.op = r.instr.op_b;
     end
-
-    v.clear = csr_out.trap | csr_out.mret | d.e.clear;
 
     v.stall = 0;
+    v.clear = csr_out.trap | csr_out.mret | d.e.clear;
 
-    alu_in.rdata1 = v.rdata1;
-    alu_in.rdata2 = v.rdata2;
-    alu_in.imm = v.imm;
-    alu_in.sel = v.rden2;
-    alu_in.alu_op = v.alu_op;
+    v.enable = ~(d.e.stall | v.clear);
 
-    v.wdata = alu_out.result;
+    alu_in.rdata1 = v.instr.rdata1;
+    alu_in.rdata2 = v.instr.rdata2;
+    alu_in.imm = v.instr.imm;
+    alu_in.sel = v.instr.op.rden2;
+    alu_in.alu_op = v.instr.alu_op;
 
-    bit_alu_in.rdata1 = v.rdata1;
-    bit_alu_in.rdata2 = v.rdata2;
-    bit_alu_in.imm = v.imm;
-    bit_alu_in.sel = v.rden2;
-    bit_alu_in.bit_op = v.bit_op;
+    v.instr.wdata = alu_out.result;
 
-    v.bdata = bit_alu_out.result;
+    bit_alu_in.rdata1 = v.instr.rdata1;
+    bit_alu_in.rdata2 = v.instr.rdata2;
+    bit_alu_in.imm = v.instr.imm;
+    bit_alu_in.sel = v.instr.op.rden2;
+    bit_alu_in.bit_op = v.instr.bit_op;
 
-    mul_in.rdata1 = v.rdata1;
-    mul_in.rdata2 = v.rdata2;
-    mul_in.enable = v.mult & ~(d.e.clear | d.e.stall);
-    mul_in.op = v.mul_op;
+    v.instr.bdata = bit_alu_out.result;
 
-    v.mdata = mul_out.result;
+    mul_in.rdata1 = v.instr.rdata1;
+    mul_in.rdata2 = v.instr.rdata2;
+    mul_in.enable = v.instr.op.mult & v.enable;
+    mul_in.op = v.instr.mul_op;
 
-    if (v.auipc == 1) begin
-      v.wdata = v.address;
-    end else if (v.lui == 1) begin
-      v.wdata = v.imm;
-    end else if (v.jal == 1) begin
-      v.wdata = v.npc;
-    end else if (v.jalr == 1) begin
-      v.wdata = v.npc;
-    end else if (v.crden == 1) begin
-      v.wdata = v.cdata;
-    end else if (v.mult == 1) begin
-      v.wdata = v.mdata;
-    end else if (v.bitm == 1) begin
-      v.wdata = v.bdata;
-    end
+    v.instr.mdata = mul_out.result;
+    v.instr.mready = mul_out.ready;
 
-    csr_alu_in.cdata = v.cdata;
-    csr_alu_in.rdata1 = v.rdata1;
-    csr_alu_in.imm = v.imm;
-    csr_alu_in.sel = v.rden1;
-    csr_alu_in.csr_op = v.csr_op;
+    csr_alu_in.cdata = v.instr.crdata;
+    csr_alu_in.rdata1 = v.instr.rdata1;
+    csr_alu_in.imm = v.instr.imm;
+    csr_alu_in.sel = v.instr.op.rden1;
+    csr_alu_in.csr_op = v.instr.csr_op;
 
-    v.cdata = csr_alu_out.cdata;
+    v.instr.cwdata = csr_alu_out.cdata;
 
-    div_in.rdata1 = v.rdata1;
-    div_in.rdata2 = v.rdata2;
-    div_in.enable = v.division & ~(d.e.clear | d.e.stall);
-    div_in.op = v.div_op;
+    div_in.rdata1 = v.instr.rdata1;
+    div_in.rdata2 = v.instr.rdata2;
+    div_in.enable = v.instr.op.division & v.enable;
+    div_in.op = v.instr.div_op;
 
-    bit_clmul_in.rdata1 = v.rdata1;
-    bit_clmul_in.rdata2 = v.rdata2;
-    bit_clmul_in.enable = v.bitm & ~(d.e.clear | d.e.stall);
-    bit_clmul_in.op = v.bit_op.bit_zbc;
+    v.instr.ddata = div_out.result;
+    v.instr.dready = div_out.ready;
+
+    bit_clmul_in.rdata1 = v.instr.rdata1;
+    bit_clmul_in.rdata2 = v.instr.rdata2;
+    bit_clmul_in.enable = v.instr.op.bitc & v.enable;
+    bit_clmul_in.op = v.instr.bit_op.bit_zbc;
+
+    v.instr.bcdata = mul_out.result;
+    v.instr.bcready = mul_out.ready;
 
     lsu_in.ldata = dmem_out.mem_rdata;
-    lsu_in.byteenable = v.byteenable;
-    lsu_in.lsu_op = v.lsu_op;
+    lsu_in.byteenable = v.instr.byteenable;
+    lsu_in.lsu_op = v.instr.lsu_op;
 
-    v.ldata = lsu_out.result;
+    v.instr.ldata = lsu_out.result;
 
-    if (v.division == 1) begin
-      if (div_out.ready == 0) begin
-        v.stall = 1;
-      end else if (div_out.ready == 1) begin
-        v.wren = |v.waddr;
-        v.wdata = div_out.result;
-      end
-    end else if (v.mult == 1 && v.mulc == 1) begin
-      if (mul_out.ready == 0) begin
-        v.stall = 1;
-      end else if (mul_out.ready == 1) begin
-        v.wren = |v.waddr;
-        v.wdata = mul_out.result;
-      end
-    end else if (v.bitm == 1 && v.bitc == 1) begin
-      if (bit_clmul_out.ready == 0) begin
-        v.stall = 1;
-      end else if (bit_clmul_out.ready == 1) begin
-        v.wren = |v.waddr;
-        v.wdata = bit_clmul_out.result;
-      end
+    if (v.instr.op.auipc == 1) begin
+      v.instr.wdata = v.instr.address;
+    end else if (v.instr.op.lui == 1) begin
+      v.instr.wdata = v.instr.imm;
+    end else if (v.instr.op.jal == 1) begin
+      v.instr.wdata = v.instr.npc;
+    end else if (v.instr.op.jalr == 1) begin
+      v.instr.wdata = v.instr.npc;
+    end else if (v.instr.op.crden == 1) begin
+      v.instr.wdata = v.instr.crdata;
+    end else if (v.instr.op.bitc == 1) begin
+      v.instr.wdata = v.instr.bcdata;
+    end else if (v.instr.op.bitm == 1) begin
+      v.instr.wdata = v.instr.bdata;
+    end else if (v.instr.op.mult == 1) begin
+      v.instr.wdata = v.instr.mdata;
+    end else if (v.instr.op.division == 1) begin
+      v.instr.wdata = v.instr.ddata;
     end
 
-    if (v.load == 1 | v.store == 1) begin
-      if (dmem_out.mem_ready == 0) begin
-        v.stall = 1;
-      end else if (dmem_out.mem_ready == 1) begin
-        v.wren = v.load & |v.waddr;
-        v.wdata = v.ldata;
-      end
+    if (v.instr.op.mulc == 1) begin
+      v.stall = ~v.instr.mready;
+    end else if (v.instr.op.bitc == 1) begin
+      v.stall = ~v.instr.bcready;
+    end else if (v.instr.op.division == 1) begin
+      v.stall = ~v.instr.dready;
     end
+
+    if (v.instr.op.load == 1) begin
+      v.instr.wdata = v.instr.ldata;
+      v.stall = ~dmem_out.mem_ready;
+    end else if (v.instr.op.store == 1) begin
+      v.stall = ~dmem_out.mem_ready;
+    end
+
+    if (v.instr.op.load == 1) begin
+      v.instr.wdata = v.instr.ldata;
+      v.stall = ~dmem_out.mem_ready;
+    end else if (v.instr.op.store == 1) begin
+      v.stall = ~dmem_out.mem_ready;
+    end
+
+    v.instr.op_b = v.instr.op;
 
     if ((v.stall | v.clear) == 1) begin
-      v.wren = 0;
-      v.cwren = 0;
-      v.auipc = 0;
-      v.lui = 0;
-      v.jal = 0;
-      v.jalr = 0;
-      v.branch = 0;
-      v.nop = 0;
-      v.csrreg = 0;
-      v.fence = 0;
-      v.ecall = 0;
-      v.ebreak = 0;
-      v.mret = 0;
-      v.wfi = 0;
-      v.exception = 0;
-      v.clear = 0;
+      v.instr.op = init_operation;
     end
 
     if (v.clear == 1) begin
+      v.clear = 0;
       v.stall = 0;
     end
 
-    if (v.nop == 1) begin
-      v.valid = 0;
+    if (v.instr.op.nop == 1) begin
+      v.instr.op.valid = 0;
     end
 
-    register_win.wren = v.wren & |(v.waddr);
-    register_win.waddr = v.waddr;
-    register_win.wdata = v.wdata;
+    register_win.wren = v.instr.op.wren;
+    register_win.waddr = v.instr.waddr;
+    register_win.wdata = v.instr.wdata;
 
-    forwarding_ein.wren = v.wren;
-    forwarding_ein.waddr = v.waddr;
-    forwarding_ein.wdata = v.wdata;
+    forwarding_ein.wren = v.instr.op.wren;
+    forwarding_ein.waddr = v.instr.waddr;
+    forwarding_ein.wdata = v.instr.wdata;
 
-    csr_ein.valid = v.valid;
-    csr_ein.cwren = v.cwren;
-    csr_ein.cwaddr = v.caddr;
-    csr_ein.cdata = v.cdata;
+    csr_ein.valid = v.instr.op.valid;
+    csr_ein.cwren = v.instr.op.cwren;
+    csr_ein.cwaddr = v.instr.caddr;
+    csr_ein.cdata = v.instr.cwdata;
 
-    csr_ein.mret = v.mret;
-    csr_ein.exception = v.exception;
-    csr_ein.epc = v.pc;
-    csr_ein.ecause = v.ecause;
-    csr_ein.etval = v.etval;
+    csr_ein.mret = v.instr.op.mret;
+    csr_ein.exception = v.instr.op.exception;
+    csr_ein.epc = v.instr.pc;
+    csr_ein.ecause = v.instr.ecause;
+    csr_ein.etval = v.instr.etval;
 
     rin = v;
 
-    y.cwren = v.cwren;
-    y.division = v.division;
-    y.mult = v.mult;
-    y.mulc = v.mulc;
-    y.bitm = v.bitm;
-    y.bitc = v.bitc;
+    y.instr = v.instr;
     y.stall = v.stall;
     y.clear = v.clear;
 
-    q.cwren = r.cwren;
-    q.division = r.division;
-    q.mult = r.mult;
-    q.mulc = r.mulc;
-    q.bitm = r.bitm;
-    q.bitc = r.bitc;
+    q.instr = r.instr;
     q.stall = r.stall;
     q.clear = r.clear;
 
