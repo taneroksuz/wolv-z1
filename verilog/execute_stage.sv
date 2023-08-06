@@ -96,8 +96,8 @@ module execute_stage
     bit_clmul_in.enable = v.instr.op.bitc & v.enable;
     bit_clmul_in.op = v.instr.bit_op.bit_zbc;
 
-    v.instr.bcdata = mul_out.result;
-    v.instr.bcready = mul_out.ready;
+    v.instr.bcdata = bit_clmul_out.result;
+    v.instr.bcready = bit_clmul_out.ready;
 
     lsu_in.ldata = dmem_out.mem_rdata;
     lsu_in.byteenable = v.instr.byteenable;
@@ -131,13 +131,6 @@ module execute_stage
       v.stall = ~v.instr.bcready;
     end else if (v.instr.op.division == 1) begin
       v.stall = ~v.instr.dready;
-    end
-
-    if (v.instr.op.load == 1) begin
-      v.instr.wdata = v.instr.ldata;
-      v.stall = ~dmem_out.mem_ready;
-    end else if (v.instr.op.store == 1) begin
-      v.stall = ~dmem_out.mem_ready;
     end
 
     if (v.instr.op.load == 1) begin

@@ -182,9 +182,9 @@ module decode_stage
       v.stall = 1;
     end else if (a.e.instr.op.division == 1) begin
       v.stall = 1;
-    end else if (a.e.instr.op.mult == 1 && a.e.instr.op.mulc == 1) begin
+    end else if (a.e.instr.op.mulc == 1) begin
       v.stall = 1;
-    end else if (a.e.instr.op.bitm == 1 && a.e.instr.op.bitc == 1) begin
+    end else if (a.e.instr.op.bitc == 1) begin
       v.stall = 1;
     end
 
