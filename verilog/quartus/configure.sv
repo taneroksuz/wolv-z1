@@ -4,7 +4,7 @@ package configure;
 
   parameter mul_performance = 1;
 
-  parameter buffer_depth = 16;
+  parameter buffer_depth = 8;
 
   parameter rom_base_addr = 32'h0;
   parameter rom_top_addr  = 32'h80;
