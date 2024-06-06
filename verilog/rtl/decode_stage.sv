@@ -127,6 +127,8 @@ module decode_stage
     v.instr.rdata1 = forwarding_out.data1;
     v.instr.rdata2 = forwarding_out.data2;
 
+    v.instr.sdata = v.instr.rdata2;
+
     bcu_in.rdata1 = v.instr.rdata1;
     bcu_in.rdata2 = v.instr.rdata2;
     bcu_in.bcu_op = v.instr.bcu_op;
@@ -201,7 +203,7 @@ module decode_stage
     dmem_in.mem_spec = 0;
     dmem_in.mem_instr = 0;
     dmem_in.mem_addr = v.instr.address;
-    dmem_in.mem_wdata = store_data(v.instr.rdata2,v.instr.lsu_op.lsu_sb,v.instr.lsu_op.lsu_sh,v.instr.lsu_op.lsu_sw);
+    dmem_in.mem_wdata = store_data(v.instr.sdata,v.instr.lsu_op.lsu_sb,v.instr.lsu_op.lsu_sh,v.instr.lsu_op.lsu_sw);
     dmem_in.mem_wstrb = (v.instr.op.load == 1) ? 4'h0 : v.instr.byteenable;
 
     csr_din.crden = v.instr.op.crden;
