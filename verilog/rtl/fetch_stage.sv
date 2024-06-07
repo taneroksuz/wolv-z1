@@ -131,10 +131,9 @@ module fetch_stage
       end
     endcase
 
-    buffer_in.pc = {r.addr[31:2],2'b00};
+    buffer_in.pc = r.addr;
     buffer_in.rdata = v.rdata;
     buffer_in.ready = v.ready;
-    buffer_in.align = v.addr[1];
     buffer_in.clear = v.spec;
     buffer_in.stall = a.d.stall | a.e.stall;
 
