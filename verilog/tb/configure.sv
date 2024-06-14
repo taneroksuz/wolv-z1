@@ -6,6 +6,9 @@ package configure;
 
   parameter buffer_depth = 8;
 
+  parameter tim_width = 32;
+  parameter tim_depth = 8192;
+
   parameter ram_depth = 262144;
 
   parameter rom_base_addr = 32'h0;
@@ -17,12 +20,15 @@ package configure;
   parameter clint_base_addr = 32'h2000000;
   parameter clint_top_addr  = 32'h200C000;
 
+  parameter tim_base_addr = 32'h10000000;
+  parameter tim_top_addr  = 32'h10100000;
+
   parameter ram_base_addr = 32'h80000000;
   parameter ram_top_addr  = 32'h90000000;
 
   parameter clk_freq = 100000000; // 100MHz
   parameter rtc_freq = 10000000; // 10MHz
-  parameter slow_freq = 100000000; // 10MHz
+  parameter slow_freq = 10000000; // 10MHz
 
   parameter clk_divider_rtc = (clk_freq/rtc_freq)/2-1;
   parameter clk_divider_slow = clk_freq/slow_freq;

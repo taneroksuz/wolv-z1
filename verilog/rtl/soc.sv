@@ -4,6 +4,7 @@ module soc
 (
   input  logic reset,
   input  logic clock,
+  input  logic clock_slow,
   output logic [0  : 0] uart_valid,
   output logic [0  : 0] uart_instr,
   output logic [31 : 0] uart_addr,
@@ -54,6 +55,14 @@ module soc
   logic [31 : 0] clint_rdata;
   logic [0  : 0] clint_ready;
 
+  logic [0  : 0] tim_valid;
+  logic [0  : 0] tim_instr;
+  logic [31 : 0] tim_addr;
+  logic [31 : 0] tim_wdata;
+  logic [3  : 0] tim_wstrb;
+  logic [31 : 0] tim_rdata;
+  logic [0  : 0] tim_ready;
+
   logic [0  : 0] ram_valid;
   logic [0  : 0] ram_instr;
   logic [31 : 0] ram_addr;
@@ -61,6 +70,14 @@ module soc
   logic [3  : 0] ram_wstrb;
   logic [31 : 0] ram_rdata;
   logic [0  : 0] ram_ready;
+
+  logic [0  : 0] ram_slow_valid;
+  logic [0  : 0] ram_slow_instr;
+  logic [31 : 0] ram_slow_addr;
+  logic [31 : 0] ram_slow_wdata;
+  logic [3  : 0] ram_slow_wstrb;
+  logic [31 : 0] ram_slow_rdata;
+  logic [0  : 0] ram_slow_ready;
 
   logic [0 : 0] meip;
   logic [0 : 0] msip;
@@ -77,6 +94,7 @@ module soc
     rom_valid = 0;
     uart_valid = 0;
     clint_valid = 0;
+    tim_valid = 0;
     ram_valid = 0;
 
     base_addr = 0;
@@ -85,6 +103,9 @@ module soc
       if (memory_addr >= ram_base_addr && memory_addr < ram_top_addr) begin
           ram_valid = memory_valid;
           base_addr = ram_base_addr;
+      end else if (memory_addr >= tim_base_addr && memory_addr < tim_top_addr) begin
+          tim_valid = memory_valid;
+          base_addr = tim_base_addr;
       end else if (memory_addr >= clint_base_addr && memory_addr < clint_top_addr) begin
           clint_valid = memory_valid;
           base_addr = clint_base_addr;
@@ -112,6 +133,11 @@ module soc
     clint_wdata = memory_wdata;
     clint_wstrb = memory_wstrb;
 
+    tim_instr = memory_instr;
+    tim_addr = mem_addr;
+    tim_wdata = memory_wdata;
+    tim_wstrb = memory_wstrb;
+
     ram_instr = memory_instr;
     ram_addr = mem_addr;
     ram_wdata = memory_wdata;
@@ -126,6 +152,9 @@ module soc
     end else if  (clint_ready == 1) begin
       memory_rdata = clint_rdata;
       memory_ready = clint_ready;
+    end else if (tim_ready == 1) begin
+      memory_rdata = tim_rdata;
+      memory_ready = tim_ready;
     end else if (ram_ready == 1) begin
       memory_rdata = ram_rdata;
       memory_ready = ram_ready;
@@ -214,17 +243,53 @@ module soc
     .clint_mtime (mtime)
   );
 
-  ram ram_comp
+  tim tim_comp
   (
     .reset (reset),
     .clock (clock),
-    .ram_valid (ram_valid),
-    .ram_instr (ram_instr),
-    .ram_addr (ram_addr),
-    .ram_wdata (ram_wdata),
-    .ram_wstrb (ram_wstrb),
-    .ram_rdata (ram_rdata),
-    .ram_ready (ram_ready)
+    .tim_valid (tim_valid),
+    .tim_instr (tim_instr),
+    .tim_addr (tim_addr),
+    .tim_wdata (tim_wdata),
+    .tim_wstrb (tim_wstrb),
+    .tim_rdata (tim_rdata),
+    .tim_ready (tim_ready)
+  );
+
+  ccd #(
+    .clock_rate (clk_divider_slow)
+  ) ccd_comp
+  (
+    .reset (reset),
+    .clock (clock),
+    .clock_slow (clock_slow),
+    .memory_valid (ram_valid),
+    .memory_instr (ram_instr),
+    .memory_addr (ram_addr),
+    .memory_wdata (ram_wdata),
+    .memory_wstrb (ram_wstrb),
+    .memory_rdata (ram_rdata),
+    .memory_ready (ram_ready),
+    .memory_slow_valid (ram_slow_valid),
+    .memory_slow_instr (ram_slow_instr),
+    .memory_slow_addr (ram_slow_addr),
+    .memory_slow_wdata (ram_slow_wdata),
+    .memory_slow_wstrb (ram_slow_wstrb),
+    .memory_slow_rdata (ram_slow_rdata),
+    .memory_slow_ready (ram_slow_ready)
+  );
+
+  ram ram_comp
+  (
+    .reset (reset),
+    .clock (clock_slow),
+    .ram_valid (ram_slow_valid),
+    .ram_instr (ram_slow_instr),
+    .ram_addr (ram_slow_addr),
+    .ram_wdata (ram_slow_wdata),
+    .ram_wstrb (ram_slow_wstrb),
+    .ram_rdata (ram_slow_rdata),
+    .ram_ready (ram_slow_ready)
   );
 
 endmodule
