@@ -48,7 +48,6 @@ module tb_soc();
   initial begin
     reset = 0;
     clock = 1;
-    clock_slow = 1;
   end
 
   initial begin
@@ -56,7 +55,6 @@ module tb_soc();
   end
 
   always #0.5 clock = ~clock;
-  always #5.0 clock_slow = ~clock_slow;
 
   initial begin
     string filename;
@@ -130,6 +128,15 @@ module tb_soc();
       end
     end
   end
+
+  clk_div #(
+    .clock_rate (clk_divider_slow)
+  ) clk_div_comp
+  (
+    .reset (reset),
+    .clock (clock),
+    .clock_slow (clock_slow)
+  );
 
   soc soc_comp
   (
